@@ -1,9 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!--bootstrap-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -18,8 +12,6 @@
     <link rel="stylesheet" href="http://localhost:8012/Acodemia/NavBar/navbar.css">
 
 
-</head>
-<body>
 
 
 
@@ -67,7 +59,7 @@
             </div>
 
             <!--Search bar-->
-            <div class=" col-xl-8 col-lg-8 col-md-8 col-sm-12">
+            <div class=" col-xl-8 col-lg-8 col-md-8 col-sm-12" style="margin: 1%;">
                 <form action="#" class="search-wrap">
                     <div class="input-group w-100"> <input type="text" class="form-control search-form" style="width:55%;" placeholder="Search">
                         <div class="input-group-append"> <button class="btn btn-primary search-button" type="submit"> <i class="fa fa-search"></i> </button> </div>
@@ -115,7 +107,7 @@
         
 
             <div class="row">
-                <div class="col-sm-12 text-center abc">
+                <div class="col-sm-12 text-center">
                     <!-- Default form login -->
                     <form action="#!">
                         <p class="h4 mb-4 text-left">Login to continue</p>
@@ -137,5 +129,3 @@
         </div>
     </div>
 
-</body>
-</html>
