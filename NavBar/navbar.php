@@ -59,9 +59,9 @@
             </div>
 
             <!--Search bar-->
-            <div class=" col-xl-8 col-lg-8 col-md-8 col-sm-12" style="margin: 1%;">
+            <div class=" col-xl-8 col-lg-8 col-md-8 col-sm-12" style="margin-top: 1%;">
                 <form action="#" class="search-wrap">
-                    <div class="input-group w-100"> <input type="text" class="form-control search-form" style="width:55%;" placeholder="Search">
+                    <div class="input-group w-100"> <input type="text" class="form-control search-form" style="width:55%; " placeholder="Search">
                         <div class="input-group-append"> <button class="btn btn-primary search-button" type="submit"> <i class="fa fa-search"></i> </button> </div>
                     </div>
                 </form>

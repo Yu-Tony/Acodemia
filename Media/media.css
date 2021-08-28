@@ -1,0 +1,99 @@
+/*!* Parallax video styles*!*/
+.video-parallax {
+  clip: rect(
+    0,
+    100vw,
+    1000px,
+    0
+  ); /*!* Change second and third value to manipulate the width and height of your video *!*/
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  visibility: hidden;
+  z-index: -100;
+}
+
+.view .video-parall {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  min-width: 100vw;
+  min-height: 100vh;
+  max-width: none;
+  max-height: none;
+  visibility: visible;
+  z-index: -1;
+}
+
+.image-parallax {
+  /* The image used */
+  background-image: url("http://localhost:8012/Acodemia/Media/img-bg-sample-parallax-header.jpg");
+
+  /* Set a specific height */
+  min-height: 500px;
+
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/**/
+
+.bgimg-1, .bgimg-2, .bgimg-3 {
+    position: relative;
+    opacity: 0.65;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  
+  }
+
+  /*https://unsplash.com/photos/ZgZsKFnSbEA?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink*/
+  .bgimg-1 {
+    background-image: url("http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg");
+    min-height: 400px;
+  }
+
+  /* https://unsplash.com/photos/rfg4l6_lu3c?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink*/
+  .bgimg-2 {
+    background-image: url("http://localhost:8012/Acodemia/Media/marius-niveri-rfg4l6_lu3c-unsplash.jpg");
+    min-height: 400px;
+  }
+  
+  /*https://unsplash.com/photos/SrewPUfo2c0?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink*/
+  .bgimg-3 {
+    background-image: url("http://localhost:8012/Acodemia/Media/david-schultz-SrewPUfo2c0-unsplash.jpg");
+    min-height: 400px;
+  }
+  
+  .caption {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    color: #000;
+  }
+  
+  .caption span.border {
+    background-color: #111;
+    color: #fff;
+    padding: 18px;
+    font-size: 25px;
+    letter-spacing: 10px;
+  }
+  
+  h3 {
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    font: 20px "Lato", sans-serif;
+    color: #111;
+  }
