@@ -12,10 +12,38 @@
     <link rel="stylesheet" href="http://localhost:8012/Acodemia/NavBar/navbar.css">
 
 
+    <script>
+        function daysInMonth(month, year) {
+      return new Date(year, month, 0).getDate();
+    }
+    
+        $('#yearDropdown, #monthDropdown').change(function() {
+    
+          if ($('#yearDropdown').val().length > 0 && $('#monthDropdown').val().length > 0) 
+          {
+            $('#dayDropdown').prop('disabled', false);
+            $('#dayDropdown').find('option').remove();
+    
+            //var days = new Date($('#monthDropdown').val(), $('#yearDropdown').val(), 0).getDate();
+            var daysInSelectedMonth = daysInMonth($('#monthDropdown').val(), $('#yearDropdown').val());
+    
+            for (var i = 1; i <= daysInSelectedMonth; i++) {
+              $('#dayDropdown').append($("<option></option>").attr("value", i).text(i));
+            }
+    
+    
+          } 
+          else {
+            $('#dayDropdown').prop('disabled', true);
+          }
+    
+    
+        });
+
+    </script>
 
 
-
-<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top" style="padding-right: 3%; padding-left: 3%; ">
+<nav class="navbar navbar-expand-md sticky-top" style="padding-right: 3%; padding-left: 3%; ">
         <!--Logo de la pagina-->
         <a href="#" class="navbar-brand">Brand</a>
 
@@ -30,7 +58,7 @@
             <!--Dropdown-->
             <div class="navbar-nav">
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Categorias</a>
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" style="color: whitesmoke;">Categorias</a>
 
                     <ul class="dropdown-menu add-to-ul" aria-labelledby="navbarDropdownMenuLink">
 
@@ -89,36 +117,172 @@
 
                 <!--Cuando no hay usuario loggeado-->
          
-                <button type="button" class="btn btn-primary" style="margin: 1%;" data-toggle="modal" data-target="#exampleModalCenter">Crear Cuenta</button>
+                <button type="button" class="btn btn-primary" style="margin: 1%;" data-toggle="modal" data-target="#ModalSign">Crear Cuenta</button>
 
-                <button type="button" class="btn btn-secondary" style="margin: 1%;">Iniciar Sesion</button>
+                <button type="button" class="btn btn-secondary" style="margin: 1%;" data-toggle="modal" data-target="#ModalLog">Iniciar Sesion</button>
                 <!---->
             </div>
         </div>
 
     </nav>
 
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+    <!-- Modal Sign In-->
+    <div class="modal fade" id="ModalSign" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+               
+                <div class="modal-body" style="padding-top: 2%; padding-bottom: 2%;">
+            
+    
+                <div class="row">
+                    <div class="col-lg-6 col-md-12 col-sm-12 text-center">
+                        <!-- Default form login -->
+                        <form action="#!" style="margin: 5%;">
+                            <p class="h4 mb-4 text-left">¡Comencemos!</p>
+                            <p class="text-left">Crea una cuenta para explorar nuestros cursos</p> 
+
+                            <div class="input-group" style="margin-bottom: 15px;"> 
+
+                                <div class="row" style="margin-bottom: 10px;">
+                                    <div class="col-12">
+                                        <img src="https://www.edmundsgovtech.com/wp-content/uploads/2020/01/default-picture_0_0.png" id="imagen_perfil" class="img-fluid rounded-circle" alt="Imagen de perfil" style="margin-bottom: 20px; width: 300px;  "/>
+                          
+                                        <input type="file" name="profile_pic" id="profile_pic" hidden onchange="readURL(this);"  accept="image/x-png,image/jpeg" />
+                                        <label for="profile_pic" class="btn btn-outline-primary center">Choose file</label>
+                                    </div>
+                                </div>
+                        
+                                <input id="nombre" type="text" class="form-control input-sm" placeholder="Nombres" name="nombre" required oninput="validateFName();" />
+                                <input id="apellidos" type="text" class="form-control input-sm" placeholder="Apellidos" name="apellidos" required oninput="validateLName();" /> 
+                      
+                              </div> 
+
+                              <div class="form-group">
+                                <label for="exampleFormControlSelect1">Género</label>
+                                <select class="form-control" id="exampleFormControlSelect1">
+                                  <option>1</option>
+                                  <option>2</option>
+                                  <option>3</option>
+                                  <option>4</option>
+                                  <option>5</option>
+                                </select>
+                              </div>
+
+                              <label for="Birthday"><b>Fecha de nacimiento</b></label>
+                              <div class="form-row">
+                                 
+                                                  
+                                <div class="form-group col-md-4">
+                                  <div class="form-group">
+                          
+                                     <select class="form-control" style="margin-top: 8px;" id="yearDropdown">
+                                     <option value="">Seleccionar a�o</option>
+                      
+                                    </select>
+
+                                      <script>
+                                        let dateDropdown = document.getElementById('yearDropdown'); 
+
+                                        let currentYear = new Date().getFullYear();    
+                                        let earliestYear = 1970;     
+                                        while (currentYear >= earliestYear) {      
+                                          let dateOption = document.createElement('option');          
+                                          dateOption.text = currentYear;      
+                                          dateOption.value = currentYear;        
+                                          dateDropdown.add(dateOption);      
+                                          currentYear -= 1;    
+                                        }
+                                      </script>
+                                  </div>
+                                </div>
+                                  
+                                <div class="form-group col-md-4">
+                                  <div class="form-group">
+                          
+                                    <select class="form-control"  style="margin-top: 8px;" id="monthDropdown">
+                                        <option value="">Seleccionar mes</option>
+                                     <option value="1">January</option>
+                                        <option value="2">February</option>
+                                        <option value="3">March</option>
+                                        <option value="4">April</option>
+                                        <option value="5">May</option>
+                                        <option value="6">June</option>
+                                        <option value="7">July</option>
+                                        <option value="8">August</option>
+                                        <option value="9">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">Novermber</option>
+                                        <option value="12">December</option>
+                      
+                                    </select>
+                                  </div>
+                                </div>
+      
+                                  
+                                <div class="form-group col-md-4">
+                                  <div class="form-group">
+                          
+                                    <select class="form-control"  style="margin-top: 8px;" id="dayDropdown" disabled>
+                                              <option value="">Seleccionar dia</option>      
+                                    </select>
+                                      
+                   
+                                  </div>
+                                </div>
+                      
+                          
+                      
+                              </div>
+                            
+                            <!-- Email --> <label for="mail" class="in">Usuario</label> <input type="email" id="defaultSigninFormEmail" class="form-control mb-4" placeholder="Ingresa tu usuario"> 
+                            <!-- Password --> <label for="pass" class="in">Contraseña</label> <input type="password" id="defaultSigninFormPassword" class="form-control mb-4" placeholder="Ingresa tu contraseña">
+                            <div class="d-flex ">
+                                
+                                <a href="" class="">¿Olvidaste tu contraseña?</a>
+                                <!-- Sign in button --> <button class="btn btn-info btn-block " style="  width: 50%;" type="submit">Iniciar Sesión</button> 
+                            
+                            </div> 
+                        </form>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12 text-center">
+    
+                    </div>
+      
+                </div>
+    
+         
+                </div>
+               </div>
+            </div>
+    </div>
+
+
+    <!--Modal Log In-->
+    <div class="modal fade" id="ModalLog" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
            
-            <div class="modal-body">
+            <div class="modal-body" style="padding-top: 10%; padding-bottom: 10%;">
         
 
             <div class="row">
-                <div class="col-sm-12 text-center">
+                <div class="col-lg-6 col-md-12 col-sm-12 text-center">
                     <!-- Default form login -->
-                    <form action="#!">
-                        <p class="h4 mb-4 text-left">Login to continue</p>
-                        <p class="text-left">Signin to create, discover and connect with the global community</p> <!-- Email --> <label for="mail" class="in">Username</label> <input type="email" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="Enter Username"> <!-- Password --> <label for="pass" class="in">Password</label> <input type="password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Enter Password">
-                        <div class="d-flex justify-content-left">
-                            <div>
-                                <!-- Remember me -->
-                                <div class="custom-control custom-checkbox text-left"> <input type="checkbox" class="custom-control-input"> <label class="custom-control-label" for="defaultLoginFormRemember">Remember me</label> </div>
-                            </div>
-                        </div> <!-- Sign in button --> <button class="btn btn-info btn-block " type="submit" style="background-image: url(https://i.imgur.com/6YuRxJA.png)">LOGIN</button> <button class="btn btn-info btn-block my" type="submit">Forgot Password?</button>
+                    <form action="#!" style="margin: 5%;">
+                        <p class="h4 mb-4 text-left">¡Hola de vuelta!</p>
+                        <p class="text-left">Inicia sesión para continuar con tus cursos</p> 
+                        <!-- Email --> <label for="mail" class="in">Usuario</label> <input type="email" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="Ingresa tu usuario"> 
+                        <!-- Password --> <label for="pass" class="in">Contraseña</label> <input type="password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Ingresa tu contraseña">
+                        <div class="d-flex ">
+                            
+                            <a href="" class="">¿Olvidaste tu contraseña?</a>
+                            <!-- Sign in button --> <button class="btn btn-info btn-block " style="  width: 50%;" type="submit">Iniciar Sesión</button> 
+                        
+                        </div> 
                     </form>
+                </div>
+                <div class="col-lg-6 col-md-12 col-sm-12 text-center">
+
                 </div>
   
             </div>

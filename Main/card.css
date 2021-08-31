@@ -1,9 +1,3 @@
-.container{
-    width: 1000px;
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-}
 
 .container .card{
     position: relative;
@@ -12,7 +6,7 @@
 }
 
 .container .card .face{
-    width: 300px;
+    width: 100%;
     height: 200px;
     transition: 0.5s;
    
@@ -88,4 +82,40 @@
 .container .card .face.face2 .content a:hover{
     background: #333;
     color: #fff;
+}
+
+/**/
+
+.cards-wrapper {
+  display: flex;
+  justify-content: center;
+}
+.card img {
+  max-width: 100%;
+  max-height: 100%;
+}
+.card {
+  margin: 0 1.5em;
+  box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
+  border: none;
+  border-radius: 0;
+}
+.carousel-inner {
+  padding: 1em;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  background-color: #e1e1e1;
+  width: 5vh;
+  height: 5vh;
+  border-radius: 50%;
+  top: 60%;
+  
+}
+
+@media (min-width: 768px) {
+  .card.carousel img {
+    height: 15em;
+  }
 }
