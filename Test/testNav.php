@@ -2,7 +2,7 @@
 <script>
     function daysInMonth(month, year) {
   return new Date(year, month, 0).getDate();
-}
+  }
 
   /*$('ul').on('click', 'a',function() {
       //if(this==$('#leEstaCosa'))

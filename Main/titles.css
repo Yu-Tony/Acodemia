@@ -13,5 +13,25 @@
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif !important;
 }
 
+.subtitle-text
+{
+    font-weight: 500 !important;
+    text-transform: uppercase !important;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif !important;
+}
+
+.list-group-item {
+    background-color: transparent !important;
+    border-bottom: 1px solid #ddd !important;
+    color: #b8d2e5 !important;
+    }
+
+ .list-group-item:hover {
+     background-color: #80b5e2 !important;
+     border-bottom: 1px solid #ddd !important;
+     border-radius: 50px !important;
+     color: #143669 !important;
+     }
+
 
 

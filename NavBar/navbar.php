@@ -11,15 +11,28 @@
     <!--css-->
     <link rel="stylesheet" href="http://localhost:8012/Acodemia/NavBar/navbar.css">
 
+    <!--iconos-->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
 
-    <script>
+    <!--Media-->
+    <link rel="stylesheet" href="http://localhost:8012/Acodemia/Media/media.css">
+    <link rel="stylesheet" href="http://localhost:8012/Acodemia/Main/card.css">
+    <link rel="stylesheet" href="http://localhost:8012/Acodemia/Main/tabs.css">
+    <link rel="stylesheet" href="http://localhost:8012/Acodemia/Main/titles.css">
+
+<script type="text/javascript">
+
+
+
+        
         function daysInMonth(month, year) {
       return new Date(year, month, 0).getDate();
     }
-    
-        $('#yearDropdown, #monthDropdown').change(function() {
-    
-          if ($('#yearDropdown').val().length > 0 && $('#monthDropdown').val().length > 0) 
+
+    $(function(){ /* DOM ready */
+    $("#yearDropdown, #monthDropdown").change(function() {
+        //alert('The option with value ' + $(this).val());
+        if ($('#yearDropdown').val().length > 0 && $('#monthDropdown').val().length > 0) 
           {
             $('#dayDropdown').prop('disabled', false);
             $('#dayDropdown').find('option').remove();
@@ -36,9 +49,10 @@
           else {
             $('#dayDropdown').prop('disabled', true);
           }
-    
-    
-        });
+    });
+});
+        
+
 
     </script>
 
@@ -48,8 +62,8 @@
         <a href="#" class="navbar-brand">Brand</a>
 
         <!--Rallitas al minimizarlo-->
-        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-            <span class="navbar-toggler-icon"></span>
+        <button style="background-color: #5c89b0;" type="button" class="navbar-toggler custom-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+            <span class="navbar-toggler-icon" ></span>
         </button>
 
 
@@ -143,6 +157,7 @@
 
                             <div class="input-group" style="margin-bottom: 15px;"> 
 
+                            
                                 <div class="row" style="margin-bottom: 10px;">
                                     <div class="col-12">
                                         <img src="https://www.edmundsgovtech.com/wp-content/uploads/2020/01/default-picture_0_0.png" id="imagen_perfil" class="img-fluid rounded-circle" alt="Imagen de perfil" style="margin-bottom: 20px; width: 300px;  "/>
@@ -151,32 +166,78 @@
                                         <label for="profile_pic" class="btn btn-outline-primary center">Choose file</label>
                                     </div>
                                 </div>
+
+                            
+                                       
+                         
+                            
+
                         
-                                <input id="nombre" type="text" class="form-control input-sm" placeholder="Nombres" name="nombre" required oninput="validateFName();" />
-                                <input id="apellidos" type="text" class="form-control input-sm" placeholder="Apellidos" name="apellidos" required oninput="validateLName();" /> 
-                      
+                                <div class="row" style="padding-bottom: 2%;">
+
+                                  <div class="col-12">
+                                    <label >Tipo de cuenta</label>
+                                  </div>
+                                
+                                  <div class="col-6">
+                                   
+                                    <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                    Alumno
+                                    </label>
+                                  </div>
+                                  </div>
+
+                                  <div class="col-6">
+                                    <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                      Escuela
+                                    </label>
+                                  </div>
+                                  </div>
+
+                                </div>
+                               
+                                <hr style=" border-top: 8px solid #bbb;
+                                border-radius: 5px;">
+                  
+                               
+
+                                  <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="nombre">Nombre</label>
+                                      <input id="nombre" type="text" class="form-control input-sm" placeholder="Ingresa tu nombre" name="nombre" required oninput="validateFName();" />
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                      <label for="apellidos">Apellido</label>
+                                      <input id="apellidos" type="text" class="form-control input-sm" placeholder="Ingresa tu apellido" name="apellidos" required oninput="validateLName();" /> 
+                                    </div>
+                                  </div>
+                           
                               </div> 
 
                               <div class="form-group">
-                                <label for="exampleFormControlSelect1">Género</label>
-                                <select class="form-control" id="exampleFormControlSelect1">
-                                  <option>1</option>
-                                  <option>2</option>
-                                  <option>3</option>
-                                  <option>4</option>
-                                  <option>5</option>
+                                <label for="GenderForm">Género</label>
+                                <select class="form-control" id="GenderForm">
+                                  <option value="">Seleccionar</option>
+                                  <option>Hombre</option>
+                                  <option>Mujer</option>
+                                  <option>No binario</option>
+                                  <option>Ninguno/Agénero</option>
+                                  <option>Prefiero no decir</option>
                                 </select>
                               </div>
 
-                              <label for="Birthday"><b>Fecha de nacimiento</b></label>
+                              <label for="Birthday">Fecha de nacimiento</label>
                               <div class="form-row">
-                                 
-                                                  
+       
                                 <div class="form-group col-md-4">
                                   <div class="form-group">
                           
                                      <select class="form-control" style="margin-top: 8px;" id="yearDropdown">
-                                     <option value="">Seleccionar a�o</option>
+                                     <option value="">Seleccionar año</option>
                       
                                     </select>
 
@@ -245,7 +306,7 @@
                         </form>
                     </div>
                     <div class="col-lg-6 col-md-12 col-sm-12 text-center">
-    
+
                     </div>
       
                 </div>

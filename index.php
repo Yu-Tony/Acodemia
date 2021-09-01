@@ -1,6 +1,6 @@
 <?php
 include_once 'navbar/navbar.php';
-include_once 'footer/footer.php';
+//include_once 'footer/footer.php';
 ?>
 
 <!--https://mdbootstrap.com/support/other/video-background-with-parallax-effect/-->
@@ -12,11 +12,6 @@ include_once 'footer/footer.php';
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACodemia</title>
-
-    <link rel="stylesheet" href="http://localhost:8012/Acodemia/Media/media.css">
-    <link rel="stylesheet" href="http://localhost:8012/Acodemia/Main/card.css">
-    <link rel="stylesheet" href="http://localhost:8012/Acodemia/Main/tabs.css">
-    <link rel="stylesheet" href="http://localhost:8012/Acodemia/Main/titles.css">
 
 
 </head>
@@ -48,17 +43,18 @@ include_once 'footer/footer.php';
             </div>
     </section>
 
+    
 <!--Mejores cursos-->
-    <div style="height:700px; background-color:rgb(167, 220, 255);">
+    <div style="height:700px; background-color:#5c89b0;">
       
-        <!--Tabs-->
+        <!--Tab 1-->
         <!-- https://jsfiddle.net/bootstrapious/rb3e10jk/ -->
         <ul id="myTab2" role="tablist" class="nav nav-tabs nav-pills with-arrow text-center nav-justified">
             <li class="nav-item flex-sm-fill">
-              <a id="home2-tab" data-toggle="tab" href="#home2" role="tab" aria-controls="home2" aria-selected="true" class="nav-link text-uppercase font-weight-bold mr-sm-3 rounded-0 active">Cursos Mejor Calificados</a>
+              <a id="home2-tab" data-toggle="tab" href="#home2" role="tab" aria-controls="home2" aria-selected="true" class="nav-link text-uppercase mr-sm-3 rounded-0 active">Cursos Mejor Calificados</a>
             </li>
             <li class="nav-item flex-sm-fill">
-              <a id="profile2-tab" data-toggle="tab" href="#profile2" role="tab" aria-controls="profile2" aria-selected="false" class="nav-link text-uppercase font-weight-bold mr-sm-3 rounded-0">Cursos Mas Vendidos</a>
+              <a id="profile2-tab" data-toggle="tab" href="#profile2" role="tab" aria-controls="profile2" aria-selected="false" class="nav-link text-uppercase mr-sm-3 rounded-0">Cursos Mas Vendidos</a>
             </li>
           
           </ul>
@@ -71,93 +67,136 @@ include_once 'footer/footer.php';
                         <div class="carousel-inner" >
 
                         <div class="carousel-item active">
+                            <!--Card-->
                             <div class="cards-wrapper">
-                            <div class="card carousel">
-                            <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <div class="card carousel">
+                                    <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <a href="#">
+                                            <h5 class="font-weight-normal">Titulo del curso 1</h5>
+                                        </a>
+                                        <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
+                                        <div class="d-flex my-4">
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i></div>
+                                        <div class="d-flex justify-content-between">
+                                            <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
+                                            <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card carousel d-none d-md-block">
+                                    <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <a href="#">
+                                            <h5 class="font-weight-normal">Titulo del curso 2</h5>
+                                        </a>
+                                        <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
+                                        <div class="d-flex my-4">
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i></div>
+                                        <div class="d-flex justify-content-between">
+                                            <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
+                                            <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card carousel d-none d-md-block">
+                                    <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <a href="#">
+                                            <h5 class="font-weight-normal">Titulo del curso 3</h5>
+                                        </a>
+                                        <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
+                                        <div class="d-flex my-4">
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-secondary"></i></div>
+                                        <div class="d-flex justify-content-between">
+                                            <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
+                                            <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
-                            </div>
-                            <div class="card carousel d-none d-md-block">
-                                <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                            </div>
-                            <div class="card carousel d-none d-md-block">
-                            <img src="..." class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                            </div>
-                        </div>
                         </div>
 
                         <div class="carousel-item">
                             <div class="cards-wrapper">
-                            <div class="card carousel">
-                                <img src="..." class="card-img-top" alt="...">
-                                <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <div class="card carousel">
+                                    <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <a href="#">
+                                            <h5 class="font-weight-normal">Titulo del curso 4</h5>
+                                        </a>
+                                        <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
+                                        <div class="d-flex my-4">
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i></div>
+                                        <div class="d-flex justify-content-between">
+                                            <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
+                                            <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="card carousel d-none d-md-block">
-                                <img src="..." class="card-img-top" alt="...">
-                                <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <div class="card carousel d-none d-md-block">
+                                    <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <a href="#">
+                                            <h5 class="font-weight-normal">Titulo del curso 5</h5>
+                                        </a>
+                                        <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
+                                        <div class="d-flex my-4">
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i></div>
+                                        <div class="d-flex justify-content-between">
+                                            <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
+                                            <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="card carousel d-none d-md-block">
-                                <img src="..." class="card-img-top" alt="...">
-                                <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <div class="card carousel d-none d-md-block">
+                                    <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <a href="#">
+                                            <h5 class="font-weight-normal">Titulo del curso 6</h5>
+                                        </a>
+                                        <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
+                                        <div class="d-flex my-4">
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i>
+                                            <i class="star fas fa-star text-warning"></i></div>
+                                        <div class="d-flex justify-content-between">
+                                            <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
+                                            <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="carousel-item">
-                            <div class="cards-wrapper">
-                            <div class="card carousel">
-                                <img src="..." class="card-img-top" alt="...">
-                                <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                                </div>
-                            </div>
-                            <div class="card carousel d-none d-md-block">
-                                <img src="..." class="card-img-top" alt="...">
-                                <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                                </div>
-                            </div>
-                            <div class="card carousel d-none d-md-block">
-                                <img src="..." class="card-img-top" alt="...">
-                                <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                                </div>
-                            </div>
                             </div>
                         </div>
 
+              
+
                         </div>
 
+                        <!--Controles carrusel-->
                         <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" style="margin-left: 2%;">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="sr-only">Previous</span>
@@ -170,6 +209,8 @@ include_once 'footer/footer.php';
 
                    </div>
             </div>
+
+            <!--Tab 2-->
             <div id="profile2" role="tabpanel" aria-labelledby="profile-tab" class="tab-pane fade px-4 py-5">
 
             </div>
@@ -182,19 +223,20 @@ include_once 'footer/footer.php';
 
     </div>      
            
-<!--Primea descripcion de la pagina-->
+<!--Primera descripcion de la pagina-->
 
       <div class="bgimg-2">
 
         <div class="container">
-            <div class="row" style="padding-top: 12%;">
+            <div class="row" style="padding-top: 8%;">
                 <div class="col-4">
-                    <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" alt="" style="width: 100%;">
+                    <!--https://unsplash.com/photos/ipARHaxETRk?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink -->
+                    <img src="http://localhost:8012/Acodemia/Media/kobu-agency-ipARHaxETRk-unsplash.jpg" alt="" style="width: 100%;">
                 </div>
-                <div class=col-8>
-                    <div class="caption">
+                <div class=col-8 >
+                    <div class="caption" >
 
-                        <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">Texto 1</span>
+                        <span style="background-color:transparent; font-size:25px; color: #f7f7f7; text-align: right; display:flex;">Aprende a programar de inmediato con nuestros distintos cursos </span>
                 
                         </div>
                 </div>
@@ -214,18 +256,19 @@ include_once 'footer/footer.php';
       <!--Segunda descripcion de la pagina-->
       <div class="bgimg-3">
         <div class="container">
-            <div class="row" style="padding-top: 12%;">
+            <div class="row" style="padding-top: 8%;">
                 
                 <div class=col-8 >
                     <div class="caption">
 
-                        <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">Texto 1</span>
+                        <span style="background-color:transparent;font-size:25px;color: #f7f7f7; text-align: left; display:flex;">Adentrate al mundo de la programacion con cursos gratuitos y de paga</span>
                 
                         </div>
                 </div>
 
                 <div class="col-4" >
-                    <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" alt="" style="width: 100%;">
+                    <!--https://unsplash.com/photos/idmvPhF8t4E?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink -->
+                    <img src="http://localhost:8012/Acodemia/Media/goran-ivos-idmvPhF8t4E-unsplash.jpg" alt="" style="width: 100%;">
                 </div>
             </div>
 
@@ -247,7 +290,7 @@ include_once 'footer/footer.php';
                     <div class="col-xl-4 col-sm-6">
                         <div class="card">
                             <div class="face face1">
-                                <div class="content">
+                                <div class="content" >
                                     <img src="https://github.com/Jhonierpc/WebDevelopment/blob/master/CSS%20Card%20Hover%20Effects/img/code_128.png?raw=true">
                           
                                 </div>
@@ -273,12 +316,9 @@ include_once 'footer/footer.php';
       
       <div class="bgimg-1">
         <div class="caption">
-        <span class="border">Texto 3</span>
+        <span class="border">Comienza ahora a aprender</span>
         </div>
       </div>
-
-
-
 
 
 </body>
