@@ -14,8 +14,6 @@ include_once 'navbar/navbar.php';
     <!--Para el date picker-->
     <!--https://gijgo.com/datepicker/example/daterangepicker -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
     <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 
@@ -44,7 +42,7 @@ include_once 'navbar/navbar.php';
         <div class="col-2"></div>
 
         <!--Principal-->
-        <div class="col-8" style="background-color: #0f2540; padding-left: 4%; padding-right: 4%;">
+        <div class="col-8" style="background-color: #073352; padding-left: 4%; padding-right: 4%;">
         
             <div class="text-left " style="padding-top:2%; ">
                <h4 style="color: whitesmoke;" class="subtitle-text">100 resultados para  ....</h4>
