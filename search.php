@@ -304,6 +304,7 @@ include_once 'navbar/navbar.php';
                         
                       </div>
 
+                      <!--navigation-->
                       <div class="row">
                           <div class="col-4"></div>
                           <div class="col-4">
