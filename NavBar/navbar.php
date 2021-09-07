@@ -10,6 +10,7 @@
 
     <!--css-->
     <link rel="stylesheet" href="http://localhost:8012/Acodemia/NavBar/navbar.css">
+    <script src="http://localhost:8012/Acodemia/NavBar/navbar.js"></script>
 
     <!--iconos-->
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
@@ -20,11 +21,8 @@
     <link rel="stylesheet" href="http://localhost:8012/Acodemia/Main/tabs.css">
     <link rel="stylesheet" href="http://localhost:8012/Acodemia/Main/titles.css">
 
-<script type="text/javascript">
+  <script type="text/javascript">
 
-
-
-        
         function daysInMonth(month, year) {
       return new Date(year, month, 0).getDate();
     }
@@ -51,7 +49,10 @@
           }
     });
 });
-        
+       
+
+
+
 
 
     </script>
@@ -59,7 +60,7 @@
 
 <nav class="navbar navbar-expand-md sticky-top" style="padding-right: 3%; padding-left: 3%; ">
         <!--Logo de la pagina-->
-        <a href="#" class="navbar-brand">Brand</a>
+        <a href="http://localhost:8012/Acodemia/" class="navbar-brand">Brand</a>
 
         <!--Rallitas al minimizarlo-->
         <button style="background-color: #5c89b0;" type="button" class="navbar-toggler custom-toggler" data-toggle="collapse" data-target="#navbarCollapse">
@@ -72,26 +73,26 @@
             <!--Dropdown-->
             <div class="navbar-nav">
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" style="color: whitesmoke;">Categorias</a>
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" style="color: whitesmoke;">Categorías</a>
 
                     <ul class="dropdown-menu add-to-ul" aria-labelledby="navbarDropdownMenuLink">
 
-                        <li><a class="dropdown-item" href="#">Categ 1</a></li>
+                        <li><a class="dropdown-item" href="http://localhost:8012/Acodemia/search.php">HTML</a></li>
 
-                        <li class="dropdown-submenu"><a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">Something else here</a>
+                        <li class="dropdown-submenu"><a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">CSS</a>
                             <div class="dropdown-menu top add-to-dropdown-div">
-                                <a class="dropdown-item" href="#">A</a>
-                                <a class="dropdown-item" href="#">b</a>
-                                <a class="dropdown-item" href="#">b</a>
-                                <a class="dropdown-item" href="#">b</a>
-                                <a class="dropdown-item" href="#">b</a> <a class="dropdown-item" href="#">b</a> <a class="dropdown-item" href="#">b</a>
+                            <a class="dropdown-item" href="#">Selectores</a>
+                                <a class="dropdown-item" href="#">Comentarios</a>
                             </div>
                         </li>
 
-                        <li class="dropdown-submenu"><a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">Something else here</a>
+                        <li class="dropdown-submenu"><a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">JS</a>
                             <div class="dropdown-menu top add-to-dropdown-div">
-                                <a class="dropdown-item" href="#">Nya</a>
-                                <a class="dropdown-item" href="#">b</a>
+                            <a class="dropdown-item" href="#">Variables</a>
+                                <a class="dropdown-item" href="#">Eventos</a>
+                                <a class="dropdown-item" href="#">Comentarios</a>
+                                <a class="dropdown-item" href="#">Operadores</a>
+                                <a class="dropdown-item" href="#">Metodos</a> 
    
                             </div>
                         </li>
@@ -102,8 +103,8 @@
 
             <!--Search bar-->
             <div class=" col-xl-8 col-lg-8 col-md-8 col-sm-12" style="margin-top: 1%;">
-                <form action="#" class="search-wrap">
-                    <div class="input-group w-100"> <input type="text" class="form-control search-form" style="width:55%; " placeholder="Search">
+                <form action="http://localhost:8012/Acodemia/search.php" class="search-wrap">
+                    <div class="input-group w-100"> <input type="text" class="form-control search-form" style="width:55%; " placeholder="Buscar">
                         <div class="input-group-append"> <button class="btn btn-primary search-button" type="submit"> <i class="fa fa-search"></i> </button> </div>
                     </div>
                 </form>
@@ -114,27 +115,32 @@
             <div class="navbar-nav ">
                
                 <!--Cuando el usuario esta loggeado-->
-                <!--
+                <!--  -->
                 <div class="navbar-nav">
-                    <button type="button" class="btn btn-primary" >Mis Cursos</button>
-                    <a href="#" class="nav-item nav-link messages"><i class="fa fa-envelope-o"></i><span class="badge">10</span></a></a>
-                    <div class="nav-item dropdown">
-                        <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"><img style="height:30px;" src="https://64.media.tumblr.com/c3a5c053d6575c728ca15780c6752d90/286f48adcddead0a-e3/s2048x3072/42a32e6408fbd276bb14a1d243ca67c128c5bc49.jpg" class="avatar" alt="Avatar"> Paula Wilson <b class="caret"></b></a>
-                        <div class="dropdown-menu">
-                            <a href="#" class="dropdown-item"><i class="fa fa-user-o"></i> Perfil</a></a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item"><i class="material-icons">&#xE8AC;</i> Cerrar Sesion</a></a>
-                        </div>
-                    </div>
+                    <button type="button" onClick="window.location.href='http://localhost:8012/Acodemia/create.php';" class="btn btn-primary" >Crear Curso</button>
+
+                    <div class="btn-group">
+                      <button type="button" style="width: 200%; margin-left: 5%;" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Nakamoto Yuta <img style="height:35px;" src="https://64.media.tumblr.com/c3a5c053d6575c728ca15780c6752d90/286f48adcddead0a-e3/s2048x3072/42a32e6408fbd276bb14a1d243ca67c128c5bc49.jpg" class="avatar" alt="Avatar"> 
+                      </button>
+                      <div class="dropdown-menu dropdown-menu-right">
+                        <a href="http://localhost:8012/Acodemia/profile.php" class="dropdown-item"><i class="fa fa-user-o"></i> Perfil</a></a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Cerrar Sesion</a></a>
+                      </div>
+                  </div>
+
+
+                
                 </div>
-                -->
+              
 
                 <!--Cuando no hay usuario loggeado-->
-         
+         <!-- 
                 <button type="button" class="btn btn-primary" style="margin: 1%;" data-toggle="modal" data-target="#ModalSign">Crear Cuenta</button>
 
                 <button type="button" class="btn btn-secondary" style="margin: 1%;" data-toggle="modal" data-target="#ModalLog">Iniciar Sesion</button>
-                <!---->
+               -->
             </div>
         </div>
 
@@ -205,14 +211,14 @@
                   
                                
 
-                                  <div class="form-row">
+                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="nombre">Nombre</label>
-                                      <input id="nombre" type="text" class="form-control input-sm" placeholder="Ingresa tu nombre" name="nombre" required oninput="validateFName();" />
+                                        <label for="nameSign">Nombre</label>
+                                      <input id="nameSign" type="text" class="form-control input-sm" placeholder="Ingresa tu nombre" name="nombre" required oninput="validateFName();" />
                                     </div>
                                     <div class="form-group col-md-6">
-                                      <label for="apellidos">Apellido</label>
-                                      <input id="apellidos" type="text" class="form-control input-sm" placeholder="Ingresa tu apellido" name="apellidos" required oninput="validateLName();" /> 
+                                      <label for="lastSign">Apellido</label>
+                                      <input id="lastSign" type="text" class="form-control input-sm" placeholder="Ingresa tu apellido" name="apellidos" required oninput="validateLName();" /> 
                                     </div>
                                   </div>
                            
@@ -220,7 +226,7 @@
 
                               <div class="form-group">
                                 <label for="GenderForm">Género</label>
-                                <select class="form-control" id="GenderForm">
+                                <select class="form-control" id="GenderForm" required>
                                   <option value="">Seleccionar</option>
                                   <option>Hombre</option>
                                   <option>Mujer</option>
@@ -236,7 +242,7 @@
                                 <div class="form-group col-md-4">
                                   <div class="form-group">
                           
-                                     <select class="form-control" style="margin-top: 8px;" id="yearDropdown">
+                                     <select class="form-control" style="margin-top: 8px;" id="yearDropdown" required>
                                      <option value="">Seleccionar año</option>
                       
                                     </select>
@@ -260,7 +266,7 @@
                                 <div class="form-group col-md-4">
                                   <div class="form-group">
                           
-                                    <select class="form-control"  style="margin-top: 8px;" id="monthDropdown">
+                                    <select class="form-control"  style="margin-top: 8px;" id="monthDropdown" required>
                                         <option value="">Seleccionar mes</option>
                                      <option value="1">January</option>
                                         <option value="2">February</option>
@@ -283,7 +289,7 @@
                                 <div class="form-group col-md-4">
                                   <div class="form-group">
                           
-                                    <select class="form-control"  style="margin-top: 8px;" id="dayDropdown" disabled>
+                                    <select class="form-control"  style="margin-top: 8px;" id="dayDropdown" disabled required>
                                               <option value="">Seleccionar dia</option>      
                                     </select>
                                       
@@ -295,8 +301,16 @@
                       
                               </div>
                             
-                            <!-- Email --> <label for="mail" class="in">Usuario</label> <input type="email" id="defaultSigninFormEmail" class="form-control mb-4" placeholder="Ingresa tu usuario"> 
-                            <!-- Password --> <label for="pass" class="in">Contraseña</label> <input type="password" id="defaultSigninFormPassword" class="form-control mb-4" placeholder="Ingresa tu contraseña">
+                            <!-- Email --> 
+                            <label class="in">Correo</label> 
+                            <input type="email" id="mailSign" class="form-control mb-4" placeholder="Ingresa tu correo" required oninput="validateMail();"> 
+                            <!-- Password --> 
+                            <label  class="in">Contraseña</label> 
+                            <input type="password" id="passwordSign" class="form-control mb-4" placeholder="Ingresa tu contraseña" required oninput="validatePassword();">
+                           
+                            <label  class="in">Confirmar contraseña</label> 
+                            <input id="passwordSign2" type="password" class="form-control mb-4" placeholder="Ingresar contraseña de nuevo" required oninput="validatePassword();"/> 
+                            
                             <div class="d-flex ">
                                 
                                 <a href="" class="">¿Olvidaste tu contraseña?</a>
@@ -306,7 +320,7 @@
                         </form>
                     </div>
                     <div class="col-lg-6 col-md-12 col-sm-12 text-center">
-
+                      <img src="https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png" class="img-fluid" style="padding-top:80%;" alt="">
                     </div>
       
                 </div>
@@ -343,7 +357,7 @@
                     </form>
                 </div>
                 <div class="col-lg-6 col-md-12 col-sm-12 text-center">
-
+                <img src="https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png" class="img-fluid"  alt="">
                 </div>
   
             </div>

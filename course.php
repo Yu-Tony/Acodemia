@@ -26,6 +26,8 @@ include_once 'navbar/navbar.php';
         <link rel="stylesheet" href="http://localhost:8012/Acodemia/course/star.css">
         <script src="http://localhost:8012/Acodemia/course/star.js"></script>
         <link rel="stylesheet" href="http://localhost:8012/Acodemia/Payment/pay.css">
+        <link rel="stylesheet" href="http://localhost:8012/Acodemia/diploma/diploma.css">
+
     
 </head>
 <body style="background-color: #0b1925;">
@@ -95,10 +97,39 @@ include_once 'navbar/navbar.php';
                                      </div>
  
                                      <button type="button" class="btn btn-primary" style="margin-top: 10%;" data-toggle="modal" data-target="#ModalPay" >Comprar</button>
-                                     <button class="btn btn-danger" style="margin-top: 10%;">Eliminar</button>
+                                     <button class="btn btn-secondary" style="margin-top: 2%;">Editar</button>
+
+
+                                    <button data-toggle="modal" data-target="#modalDelete" class="btn btn-danger" style="margin-top: 2%;">Eliminar</button>
+
+
  
                                  </div>
                              </div>
+
+                             
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">    
+  
+                                            <div class="modal-header">
+             
+                                            <h4 class="modal-title">Eliminar curso</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                            ¿Borrar este curso?
+                                            </div>
+                                            <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-danger" >Eliminar</button>
+
+                                            </div>
+                                        </div>
+                                        
+                                        </div>
+                                    </div>
              </div>
             </div>
            
@@ -119,7 +150,7 @@ include_once 'navbar/navbar.php';
                              </div>
                              <div class="text-left " style="padding-top:20%; ">
                                 <h6 style="color: whitesmoke;" class="subtitle-text">Nombre de la escuela 
-                                    <button style="width: 10%; margin-left: 2%; margin-top: 0px;" class="btn btn-secondary"><i class="fas fa-envelope"></i></button>
+                                    <button onClick="window.location.href='http://localhost:8012/Acodemia/message.php';" style="width: 10%; margin-left: 2%; margin-top: 0px;" class="btn btn-secondary"><i class="fas fa-envelope"></i></button>
                                 </h6>
                              </div>
                         </div>
@@ -143,6 +174,29 @@ include_once 'navbar/navbar.php';
 
             <div class="col-12" style="padding-left: 10%; padding-right: 4%; ">
               
+            <div class="row" style="padding-bottom: 2%;">
+                <div class="col-12 text-left" style="padding-top:2%; ">
+                   
+                  <h5 style="color: whitesmoke;" class="subtitle-text">Progreso del curso</h5>
+                    
+                </div>
+                <div class="col-6">
+                    <div class="progress" style="z-index: 5px;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary" style="margin-top: 10%; width: 30%;" data-toggle="modal" data-target="#ModalDip" >Obtener diploma</button>
+                        
+               </div>
+      
+                
+                
+                
+
+               </div>
+
+
+
                <div class="row" style="padding-bottom: 2%;">
                    <div class="text-left " style="padding-top:2%; ">
                        <h5 style="color: whitesmoke;" class="subtitle-text">Contenido del curso</h5>
@@ -330,6 +384,40 @@ include_once 'navbar/navbar.php';
 
     </div>
 
+        <!-- Modal Diploma-->
+        <div class="modal fade" id="ModalDip" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                   
+                    <div class="modal-body" style="padding-top: 2%; padding-bottom: 2%;">
+                
+        
+                    <div class="row">
+                       <!--
+                        <img src="http://localhost:8012/Acodemia/diploma/Diploma.png" class="img-fluid" alt="Responsive image">
+          -->
+
+          <div id="box-search">
+            <div class="thumbnail">
+                <img src="http://localhost:8012/Acodemia/diploma/Diploma.png" class="img-fluid" alt="Responsive image">
+                <div class="caption">
+                    <h1>Certificado de finalización</h1>
+                    <h4>Se certifica que </h4>
+                    <h2>???</h2>
+                    <h6>Ha terminado satisfactoriamente el curso de ??? el dia ?? del mes ?? del año ????</h6>
+                </div>
+            </div>
+        </div>
+
+
+                    </div>
+        
+             
+                    </div>
+                   </div>
+                </div>
+        </div>
+
     <!--Modal Pay-->
     <!--https://bbbootstrap.com/snippets/payment-form-three-different-payment-options-13285516 -->
     <div class="modal fade" id="ModalPay" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -416,5 +504,7 @@ include_once 'navbar/navbar.php';
         </div>
     </div>
     
+ 
+
 </body>
 </html>

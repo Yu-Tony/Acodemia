@@ -126,7 +126,7 @@ include_once 'navbar/navbar.php';
                         <div class="card">
                             <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                             <div class="card-body">
-                                <a href="#">
+                                <a href="http://localhost:8012/Acodemia/course.php">
                                     <h5 class="font-weight-normal">Titulo del curso 1</h5>
                                 </a>
                                 <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
