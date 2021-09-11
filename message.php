@@ -35,16 +35,14 @@ include_once 'navbar/navbar.php';
                       <div class="received_msg">
                         <div class="received_withd_msg">
                            John Suh
-                          <p>Test which is a new approach to have all
-                            solutions</p>
+                          <p>Incoming text</p>
                           <span class="time_date"> 11:01 AM    |    June 9</span></div>
                       </div>
                     </div>
                     <div class="outgoing_msg">
                       <div class="sent_msg">
                          Jisung Park
-                        <p>Test which is a new approach to have all
-                          solutions</p>
+                        <p>Outgoing text</p>
                         <span class="time_date"> 11:01 AM    |    June 9</span> </div>
                     </div>
                     <div class="incoming_msg">
@@ -52,14 +50,14 @@ include_once 'navbar/navbar.php';
                       <div class="received_msg">
                         <div class="received_withd_msg">
                           John Suh
-                          <p>Test, which is a new approach to have</p>
+                          <p>Incoming text</p>
                           <span class="time_date"> 11:01 AM    |    Yesterday</span></div>
                       </div>
                     </div>
                     <div class="outgoing_msg">
                       <div class="sent_msg">
                         Jisung Park
-                        <p>Apollo University, Delhi, India Test</p>
+                        <p>Outgoing text</p>
                         <span class="time_date"> 11:01 AM    |    Today</span> </div>
                     </div>
                     <div class="incoming_msg">
@@ -77,28 +75,28 @@ include_once 'navbar/navbar.php';
                     <div class="outgoing_msg">
                       <div class="sent_msg">
                         Jisung Park
-                        <p>Apollo University, Delhi, India Test</p>
+                        <p>Outgoing text</p>
                         <span class="time_date"> 11:01 AM    |    Today</span> </div>
                     </div>
 
                     <div class="outgoing_msg">
                       <div class="sent_msg">
                         Jisung Park
-                        <p>Apollo University, Delhi, India Test</p>
+                        <p>Outgoing text</p>
                         <span class="time_date"> 11:01 AM    |    Today</span> </div>
                     </div>
 
                     <div class="outgoing_msg">
                       <div class="sent_msg">
                         Jisung Park
-                        <p>Apollo University, Delhi, India Test</p>
+                        <p>Outgoing text</p>
                         <span class="time_date"> 11:01 AM    |    Today</span> </div>
                     </div>
 
                     <div class="outgoing_msg">
                       <div class="sent_msg">
                         Jisung Park
-                        <p>Apollo University, Delhi, India Test</p>
+                        <p>Outgoing text</p>
                         <span class="time_date"> 11:01 AM    |    Today</span> </div>
                     </div>
                   </div>

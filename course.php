@@ -24,6 +24,7 @@ include_once 'navbar/navbar.php';
 
         <link rel="stylesheet" href="http://localhost:8012/Acodemia/course/comments.css">
         <link rel="stylesheet" href="http://localhost:8012/Acodemia/course/star.css">
+        <link rel="stylesheet" href="http://localhost:8012/Acodemia/course/buttons.css">
         <script src="http://localhost:8012/Acodemia/course/star.js"></script>
         <link rel="stylesheet" href="http://localhost:8012/Acodemia/Payment/pay.css">
         <link rel="stylesheet" href="http://localhost:8012/Acodemia/diploma/diploma.css">
@@ -37,80 +38,90 @@ include_once 'navbar/navbar.php';
 
         <!--Principal-->
         <div class="col-8" style="background-color: #073352; padding:0px">
-        
+
             <div class="row" >
                 <div class="col-8"></div>
                 <div class="col-4">
                     <div class="card card-desc" style=" background-color: white; position: absolute; z-index: 1; ">
-                                 <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
-                                 <div class="card-body" style="padding-left: 10%;">
-                                     
-                                     <div class="row">
-                                         <span class="text-muted font-small d-block mb-2">Categorias</span>
-                                     </div>
- 
-                                     <div class="row">
-                                         <span class="text-muted font-small d-block mb-2">Calificacion del curso</span>
-                                     </div>
-                                     
-                                     <!--
-                                     <div class="d-flex my-4" style="margin-top: 0px !important;">
-                                         <i class="star fas fa-star text-warning"></i>
-                                         <i class="star fas fa-star text-warning"></i>
-                                         <i class="star fas fa-star text-warning"></i>
-                                         <i class="star fas fa-star text-warning"></i>
-                                         <i class="star fas fa-star text-warning"></i>
-                                     </div>-->
- 
-                                     <section class='rating-widget'>
+
+                    <video id="my-video" class="video-js vjs-16-9 " controls  preload="auto" poster="http://localhost:8012/Acodemia/Media/david-schultz-SrewPUfo2c0-unsplash.jpg" data-setup="{}">  
+                      <source src="http://localhost:8012/Acodemia/Media/videoplayback.mp4" type="video/mp4" />
+                      <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that
+                          <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                      </p>
+                    </video>
+
+                        <div class="card-body" style="padding-left: 10%;">
+                            
+                            <div class="row">
+                                <span class="text-muted font-small d-block mb-2">Categorias</span>
+                               
+                            </div>
+                            <button class="btn btn-primary btn-category">HTML</button>
    
-                                         <!-- Rating Stars Box -->
-                                         <!--https://codepen.io/depy/pen/vEWWdw -->
-                                         <div class='rating-stars text-left'>
-                                           <ul id='stars'>
-                                             <li class='star' title='Poor' data-value='1'>
-                                               <i class='fa fa-star fa-fw'></i>
-                                             </li>
-                                             <li class='star' title='Fair' data-value='2'>
-                                               <i class='fa fa-star fa-fw'></i>
-                                             </li>
-                                             <li class='star' title='Good' data-value='3'>
-                                               <i class='fa fa-star fa-fw'></i>
-                                             </li>
-                                             <li class='star' title='Excellent' data-value='4'>
-                                               <i class='fa fa-star fa-fw'></i>
-                                             </li>
-                                             <li class='star' title='WOW!!!' data-value='5'>
-                                               <i class='fa fa-star fa-fw'></i>
-                                             </li>
-                                           </ul>
-                                         </div>
-                                        
-                                         
-                                         
-                                       </section>
+                            <div class="row" style="margin-top: 4%">
+                                <span class="text-muted font-small d-block mb-2">Calificacion del curso: </span>
+    
+                            </div>
+
+                                <span class="text-muted font-small d-block mb-2">5.0</span>
+                            
+                            <!--
+                            <div class="d-flex my-4" style="margin-top: 0px !important;">
+                                <i class="star fas fa-star text-warning"></i>
+                                <i class="star fas fa-star text-warning"></i>
+                                <i class="star fas fa-star text-warning"></i>
+                                <i class="star fas fa-star text-warning"></i>
+                                <i class="star fas fa-star text-warning"></i>
+                            </div>-->
+ 
+                            <section class='rating-widget'>
    
- 
-                                     <div class="d-flex justify-content-between">
-                                         <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
-                                         <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
-                                     </div>
- 
-                                     <button type="button" class="btn btn-primary" style="margin-top: 10%;" data-toggle="modal" data-target="#ModalPay" >Comprar</button>
-                                     <button class="btn btn-secondary" style="margin-top: 2%;">Editar</button>
-
-
-                                    <button data-toggle="modal" data-target="#modalDelete" class="btn btn-danger" style="margin-top: 2%;">Eliminar</button>
-
-
- 
+                                 <!-- Rating Stars Box -->
+                                 <!--https://codepen.io/depy/pen/vEWWdw -->
+                                 <div class='rating-stars text-left'>
+                                   <ul id='stars'>
+                                     <li class='star' title='Poor' data-value='1'>
+                                       <i class='fa fa-star fa-2x'></i>
+                                     </li>
+                                     <li class='star' title='Fair' data-value='2'>
+                                       <i class='fa fa-star fa-fw'></i>
+                                     </li>
+                                     <li class='star' title='Good' data-value='3'>
+                                       <i class='fa fa-star fa-fw'></i>
+                                     </li>
+                                     <li class='star' title='Excellent' data-value='4'>
+                                       <i class='fa fa-star fa-fw'></i>
+                                     </li>
+                                     <li class='star' title='WOW!!!' data-value='5'>
+                                       <i class='fa fa-star fa-fw'></i>
+                                     </li>
+                                   </ul>
                                  </div>
-                             </div>
+                                
+                                 
+                                 
+                            </section>
+   
+ 
+                            <div class="d-flex justify-content-between">
+                                 <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$800.00</span></div>
+                                 <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">3</span></div>
+                            </div>
+ 
+                            <button type="button" class="btn btn-primary" style="margin-top: 10%;" data-toggle="modal" data-target="#ModalPay" >Comprar</button>
+                            <button class="btn btn-secondary" style="margin-top: 2%;">Editar</button>
 
-                             
 
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <button data-toggle="modal" data-target="#modalDelete" class="btn btn-danger" style="margin-top: 2%;">Eliminar</button>
+
+
+ 
+                            </div>
+                        </div>
+
+                                                   <!-- Modal Eliminar -->
+                        <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">    
   
@@ -129,27 +140,50 @@ include_once 'navbar/navbar.php';
                                         </div>
                                         
                                         </div>
-                                    </div>
+                        </div>
+
+                         <!-- Modal Comprar -->
+                         <div class="modal fade" id="modalPurchased" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">    
+  
+                                                <div class="modal-header">
+             
+                                                    <h4 class="modal-title">Comprar curso</h4>
+                                                </div>
+
+                                                <div class="modal-body">
+                                                    Curso comprado con exito
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+                                                </div>
+
+                                            </div>
+                                        
+                                        </div>
+                        </div>
              </div>
             </div>
            
 
             <!--Titulo del curso-->
-            <div class="bgimg-2">
+            <div class="bgimg-4" style="background-image: url('https://i.ytimg.com/vi/rbuYtrNUxg4/maxresdefault.jpg'); min-height: 400px;">
 
-                <div class="container">
-                    <div class="row" style="padding-top: 8%;">
+                <div class="container" style=" background-color: rgba(0, 0, 0, 0.705);">
+                    <div class="row" style="padding-top: 8%; color: whitesmoke;">
 
                         <!--Descripcion curso-->
                         <div class="col-xl-8 col-sm-8 col-12">
                             <div class="text-left " style="padding-top:2%; ">
-                                <h1 style="color: whitesmoke;" class="subtitle-text">Titulo del curso</h1>
+                                <h1  class="subtitle-text">Desarrollo Web Completo con HTML5</h1>
                              </div>
                              <div class="text-left " style="padding-top:2%; ">
-                                <h4 style="color: whitesmoke;" class="subtitle-text">Descpripcion del curso</h4>
+                                <h4 class="subtitle-text">Aprende Desarrollo Web con este curso 100% práctico, paso a paso y sin conocimientos previos</h4>
                              </div>
                              <div class="text-left " style="padding-top:20%; ">
-                                <h6 style="color: whitesmoke;" class="subtitle-text">Nombre de la escuela 
+                                <h6 class="subtitle-text">Yuta Nakamoto 
                                     <button onClick="window.location.href='http://localhost:8012/Acodemia/message.php';" style="width: 10%; margin-left: 2%; margin-top: 0px;" class="btn btn-secondary"><i class="fas fa-envelope"></i></button>
                                 </h6>
                              </div>
@@ -177,7 +211,7 @@ include_once 'navbar/navbar.php';
             <div class="row" style="padding-bottom: 2%;">
                 <div class="col-12 text-left" style="padding-top:2%; ">
                    
-                  <h5 style="color: whitesmoke;" class="subtitle-text">Progreso del curso</h5>
+                  <h5 style="color: whitesmoke;" class="subtitle-text">Progreso del curso : 75%</h5>
                     
                 </div>
                 <div class="col-6">
@@ -207,49 +241,81 @@ include_once 'navbar/navbar.php';
                <!--Nivel-->
                <div class="row" style="color: black;">
         
-                        <div class="col-sm-5 col-8" style=" background-color: #80b5e2;">
-                        <p  >
-                            Nivel 1
-                        </p>               
-                        </div>
-        
-                        <div class="col-sm-1 col-4" style="background-color: #80b5e2;">
-                            <button style="margin-top: 6%;" type="button" class="btn btn-primary VerMas"><i class="fa fa-plus"></i></button>
-                        </div>
-        
-                        <div class="col-sm-6"></div>
-        
-                        <div class="col-sm-6">
-                            <div class="DescripcionCurso" style="background-color: #b8d2e5; display: none; margin-bottom: 2%;" >
-                                Descripcion del nivel 1
-                                <br>
-                                Mas texto
-                            </div>
-                        </div>
-        
-               </div>
-        
-               <div class="row" style="color: black;">
-        
                 <div class="col-sm-5 col-8" style=" background-color: #80b5e2;">
-                <p  >
-                    Nivel 2
-                </p>               
+                <h4>
+                    Nivel 1
+                </h4>               
                 </div>
-
+        
                 <div class="col-sm-1 col-4" style="background-color: #80b5e2;">
                     <button style="margin-top: 6%;" type="button" class="btn btn-primary VerMas"><i class="fa fa-plus"></i></button>
                 </div>
-
+        
                 <div class="col-sm-6"></div>
-
+        
                 <div class="col-sm-6">
-                    <div class="DescripcionCurso" style="background-color: #b8d2e5; display: none; margin-bottom: 2%;" >
-                        uwu
+                    <div class="DescripcionCurso" style="background-color: #b8d2e5; display: none; padding:2%; margin-bottom: 2%;" >
+                        <h5>Descripcion del nivel 1</h5>
+                        <br>
+                        <h5>Costo del nivel: $0.00</h5>
+                        <button data-toggle="modal" data-target="#modalPurchased" class="btn btn-primary btn-category" style="margin-top: 2%;">Comprar este nivel</button>
                     </div>
                 </div>
+        
+               </div>
 
-       </div>
+                <div class="row" style="color: black;">
+        
+                    <div class="col-sm-5 col-8" style=" background-color: #80b5e2;">
+                    <h4>
+                        Nivel 2
+                    </h4>               
+                    </div>
+
+                    <div class="col-sm-1 col-4" style="background-color: #80b5e2;">
+                        <button style="margin-top: 6%;" type="button" class="btn btn-primary VerMas"><i class="fa fa-plus"></i></button>
+                    </div>
+
+                    <div class="col-sm-6"></div>
+
+                    <div class="col-sm-6">
+                        <div class="DescripcionCurso" style="background-color: #b8d2e5; display: none; padding:2%; margin-bottom: 2%;" >
+                            <h5>Descripcion del nivel 2</h5>
+                            <br>
+                            <h5>Costo del nivel: $400.00</h5>
+                            <button type="button" class="btn btn-primary btn-category" data-toggle="modal" data-target="#ModalPay" >Comprar este nivel</button>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row" style="color: black;">
+        
+                    <div class="col-sm-5 col-8" style=" background-color: #80b5e2;">
+                    <h4>
+                        Nivel 3
+                    </h4>               
+                    </div>
+
+                    <div class="col-sm-1 col-4" style="background-color: #80b5e2;">
+                        <button style="margin-top: 6%;" type="button" class="btn btn-primary VerMas"><i class="fa fa-plus"></i></button>
+                    </div>
+
+                    <div class="col-sm-6"></div>
+
+                    <div class="col-sm-6">
+                        <div class="DescripcionCurso" style="background-color: #b8d2e5; display: none; padding:2%; margin-bottom: 2%;" >
+                            <h5>Descripcion del nivel 3</h5>
+                            <br>
+                           <button type="button" onClick="window.location.href='http://localhost:8012/Acodemia/level.php';" class="btn btn-primary btn-category" >Ir al nivel</button>
+
+                        </div>
+                    </div>
+
+                </div>
+        
+      
          
  <!--Comentarios-->
                <div class="row">
@@ -372,6 +438,39 @@ include_once 'navbar/navbar.php';
 
                         </div>
 
+                            <!--Navigation-->
+                            <div class="row" style="margin-top: 5%;">
+                                <div class="col-4"></div>
+    
+                                <div class="col-4">
+                                  <nav aria-label="Page navigation example">
+                                      <ul class="pagination">
+    
+                                        <li class="page-item">
+                                          <a class="page-link" href="#" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                            <span class="sr-only">Previous</span>
+                                          </a>
+                                        </li>
+    
+                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+    
+                                        <li class="page-item">
+                                          <a class="page-link" href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                            <span class="sr-only">Next</span>
+                                          </a>
+                                        </li>
+    
+                                      </ul>
+                                    </nav>
+                                </div>
+    
+                                <div class="col-4"></div>
+                              </div>
+
                    </div>
                </div>
         
@@ -399,7 +498,7 @@ include_once 'navbar/navbar.php';
 
           <div id="box-search">
             <div class="thumbnail">
-                <img src="http://localhost:8012/Acodemia/diploma/Diploma.png" class="img-fluid" alt="Responsive image">
+                <img src="http://localhost:8012/Acodemia/diploma/Diploma.png" class="img-fluid diploma" alt="Responsive image">
                 <div class="caption">
                     <h1>Certificado de finalización</h1>
                     <h4>Se certifica que </h4>
@@ -432,7 +531,6 @@ include_once 'navbar/navbar.php';
                             <ul role="tablist" class="nav bg-light nav-pills rounded nav-fill mb-3">
                                 <li class="nav-item"> <a data-toggle="pill" href="#credit-card" class="nav-link active "> <i class="fas fa-credit-card mr-2"></i> Credit Card </a> </li>
                                 <li class="nav-item"> <a data-toggle="pill" href="#paypal" class="nav-link "> <i class="fab fa-paypal mr-2"></i> Paypal </a> </li>
-                                <li class="nav-item"> <a data-toggle="pill" href="#net-banking" class="nav-link "> <i class="fas fa-mobile-alt mr-2"></i> Net Banking </a> </li>
                             </ul>
                         </div> <!-- End -->
                         <!-- Credit card form content -->
@@ -464,7 +562,8 @@ include_once 'navbar/navbar.php';
                                                 </label> <input type="text" required class="form-control"> </div>
                                         </div>
                                     </div>
-                                    <div class="card-footer"> <button type="button" class="subscribe btn btn-primary btn-block shadow-sm"> Confirm Payment </button>
+                                    <div class="card-footer"> 
+                                        <button type="button" class="subscribe btn btn-primary btn-block shadow-sm"> Confirm Payment </button>
                                 </form>
                             </div>
                         </div> <!-- End -->
@@ -474,28 +573,6 @@ include_once 'navbar/navbar.php';
                             <div class="form-group "> <label class="radio-inline"> <input type="radio" name="optradio" checked> Domestic </label> <label class="radio-inline"> <input type="radio" name="optradio" class="ml-5">International </label></div>
                             <p> <button type="button" class="btn btn-primary "><i class="fab fa-paypal mr-2"></i> Log into my Paypal</button> </p>
                             <p class="text-muted"> Note: After clicking on the button, you will be directed to a secure gateway for payment. After completing the payment process, you will be redirected back to the website to view details of your order. </p>
-                        </div> <!-- End -->
-                        <!-- bank transfer info -->
-                        <div id="net-banking" class="tab-pane fade pt-3">
-                            <div class="form-group "> <label for="Select Your Bank">
-                                    <h6>Select your Bank</h6>
-                                </label> <select class="form-control" id="ccmonth">
-                                    <option value="" selected disabled>--Please select your Bank--</option>
-                                    <option>Bank 1</option>
-                                    <option>Bank 2</option>
-                                    <option>Bank 3</option>
-                                    <option>Bank 4</option>
-                                    <option>Bank 5</option>
-                                    <option>Bank 6</option>
-                                    <option>Bank 7</option>
-                                    <option>Bank 8</option>
-                                    <option>Bank 9</option>
-                                    <option>Bank 10</option>
-                                </select> </div>
-                            <div class="form-group">
-                                <p> <button type="button" class="btn btn-primary "><i class="fas fa-mobile-alt mr-2"></i> Proceed Payment</button> </p>
-                            </div>
-                            <p class="text-muted">Note: After clicking on the button, you will be directed to a secure gateway for payment. After completing the payment process, you will be redirected back to the website to view details of your order. </p>
                         </div> <!-- End -->
                         <!-- End -->
                     </div>

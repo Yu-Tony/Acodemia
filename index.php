@@ -70,12 +70,14 @@ include_once 'navbar/navbar.php';
                             <!--Card-->
                             <div class="cards-wrapper">
                                 <div class="card carousel">
-                                    <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                                    <img src="https://i.ytimg.com/vi/rbuYtrNUxg4/maxresdefault.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <a href="http://localhost:8012/Acodemia/course.php">
-                                            <h5 class="font-weight-normal">Titulo del curso 1</h5>
+                                            <h5 class="font-weight-normal">Desarrollo Web Completo con HTML5</h5>
                                         </a>
-                                        <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
+                                        <div class="post-meta"><span class="small lh-120">Aprende Desarrollo Web con este curso 100% práctico,
+                                            <br> 
+                                            paso a paso y sin conocimientos previos</span></div>
                                         <div class="d-flex my-4">
                                             <i class="star fas fa-star text-warning"></i>
                                             <i class="star fas fa-star text-warning"></i>
@@ -83,8 +85,8 @@ include_once 'navbar/navbar.php';
                                             <i class="star fas fa-star text-warning"></i>
                                             <i class="star fas fa-star text-warning"></i></div>
                                         <div class="d-flex justify-content-between">
-                                            <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
-                                            <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
+                                            <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$800.00</span></div>
+                                            <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">3</span></div>
                                         </div>
                                     </div>
                                 </div>

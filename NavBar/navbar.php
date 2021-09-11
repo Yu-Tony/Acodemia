@@ -21,6 +21,16 @@
     <link rel="stylesheet" href="http://localhost:8012/Acodemia/Main/tabs.css">
     <link rel="stylesheet" href="http://localhost:8012/Acodemia/Main/titles.css">
 
+    <!--Jquery plugin bootstrap-select-->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+    <!--Video plugin-->
+    <link href="https://vjs.zencdn.net/7.14.3/video-js.css" rel="stylesheet" />
+    <script src="https://vjs.zencdn.net/7.14.3/video.min.js"></script>
+
   <script type="text/javascript">
 
         function daysInMonth(month, year) {
@@ -28,27 +38,27 @@
     }
 
     $(function(){ /* DOM ready */
-    $("#yearDropdown, #monthDropdown").change(function() {
-        //alert('The option with value ' + $(this).val());
-        if ($('#yearDropdown').val().length > 0 && $('#monthDropdown').val().length > 0) 
-          {
-            $('#dayDropdown').prop('disabled', false);
-            $('#dayDropdown').find('option').remove();
-    
-            //var days = new Date($('#monthDropdown').val(), $('#yearDropdown').val(), 0).getDate();
-            var daysInSelectedMonth = daysInMonth($('#monthDropdown').val(), $('#yearDropdown').val());
-    
-            for (var i = 1; i <= daysInSelectedMonth; i++) {
-              $('#dayDropdown').append($("<option></option>").attr("value", i).text(i));
+      $("#yearDropdown, #monthDropdown").change(function() {
+          //alert('The option with value ' + $(this).val());
+          if ($('#yearDropdown').val().length > 0 && $('#monthDropdown').val().length > 0) 
+            {
+              $('#dayDropdown').prop('disabled', false);
+              $('#dayDropdown').find('option').remove();
+      
+              //var days = new Date($('#monthDropdown').val(), $('#yearDropdown').val(), 0).getDate();
+              var daysInSelectedMonth = daysInMonth($('#monthDropdown').val(), $('#yearDropdown').val());
+      
+              for (var i = 1; i <= daysInSelectedMonth; i++) {
+                $('#dayDropdown').append($("<option></option>").attr("value", i).text(i));
+              }
+      
+      
+            } 
+            else {
+              $('#dayDropdown').prop('disabled', true);
             }
-    
-    
-          } 
-          else {
-            $('#dayDropdown').prop('disabled', true);
-          }
+      });
     });
-});
        
 
 
@@ -60,7 +70,7 @@
 
 <nav class="navbar navbar-expand-md sticky-top" style="padding-right: 3%; padding-left: 3%; ">
         <!--Logo de la pagina-->
-        <a href="http://localhost:8012/Acodemia/" class="navbar-brand">Brand</a>
+        <a href="http://localhost:8012/Acodemia/" class="navbar-brand">Acodemia</a>
 
         <!--Rallitas al minimizarlo-->
         <button style="background-color: #5c89b0;" type="button" class="navbar-toggler custom-toggler" data-toggle="collapse" data-target="#navbarCollapse">
@@ -115,13 +125,13 @@
             <div class="navbar-nav ">
                
                 <!--Cuando el usuario esta loggeado-->
-                <!--  -->
+                <!--   -->
                 <div class="navbar-nav">
                     <button type="button" onClick="window.location.href='http://localhost:8012/Acodemia/create.php';" class="btn btn-primary" >Crear Curso</button>
 
                     <div class="btn-group">
                       <button type="button" style="width: 200%; margin-left: 5%;" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Nakamoto Yuta <img style="height:35px;" src="https://64.media.tumblr.com/c3a5c053d6575c728ca15780c6752d90/286f48adcddead0a-e3/s2048x3072/42a32e6408fbd276bb14a1d243ca67c128c5bc49.jpg" class="avatar" alt="Avatar"> 
+                        Yuta Nakamoto <img style="height:35px;" src="https://64.media.tumblr.com/2d670bdba5057dddf2e747e441412798/e6c29b6fecca43a4-cf/s1280x1920/28e06a4b3ab18fff6e733cb9a3701c3eadc731a4.jpg" class="avatar" alt="Avatar"> 
                       </button>
                       <div class="dropdown-menu dropdown-menu-right">
                         <a href="http://localhost:8012/Acodemia/profile.php" class="dropdown-item"><i class="fa fa-user-o"></i> Perfil</a></a>
@@ -129,18 +139,15 @@
                         <a href="#" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Cerrar Sesion</a></a>
                       </div>
                   </div>
-
-
-                
                 </div>
-              
+             
 
                 <!--Cuando no hay usuario loggeado-->
-         <!-- 
+        
                 <button type="button" class="btn btn-primary" style="margin: 1%;" data-toggle="modal" data-target="#ModalSign">Crear Cuenta</button>
 
-                <button type="button" class="btn btn-secondary" style="margin: 1%;" data-toggle="modal" data-target="#ModalLog">Iniciar Sesion</button>
-               -->
+                  <button type="button" class="btn btn-secondary" style="margin: 1%;" data-toggle="modal" data-target="#ModalLog">Iniciar Sesion</button>
+              <!-- -->
             </div>
         </div>
 
@@ -187,21 +194,12 @@
                                 
                                   <div class="col-6">
                                    
-                                    <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
-                                    <label class="form-check-label" for="flexRadioDefault2">
-                                    Alumno
-                                    </label>
-                                  </div>
-                                  </div>
+                                    <select class="selectpicker" data-width="200%" title="Selecciona un tipo de cuenta..." required>
+                                      <option>Maestro</option>
+                                      <option>Alumno</option>
+                                    </select>
+                                    
 
-                                  <div class="col-6">
-                                    <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                                    <label class="form-check-label" for="flexRadioDefault1">
-                                      Escuela
-                                    </label>
-                                  </div>
                                   </div>
 
                                 </div>
@@ -346,8 +344,8 @@
                     <form action="#!" style="margin: 5%;">
                         <p class="h4 mb-4 text-left">¡Hola de vuelta!</p>
                         <p class="text-left">Inicia sesión para continuar con tus cursos</p> 
-                        <!-- Email --> <label for="mail" class="in">Usuario</label> <input type="email" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="Ingresa tu usuario"> 
-                        <!-- Password --> <label for="pass" class="in">Contraseña</label> <input type="password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Ingresa tu contraseña">
+                        <!-- Email --> <label for="mail" class="in">Usuario</label> <input type="email" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="Ingresa tu usuario" required> 
+                        <!-- Password --> <label for="pass" class="in">Contraseña</label> <input type="password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Ingresa tu contraseña" required>
                         <div class="d-flex ">
                             
                             <a href="" class="">¿Olvidaste tu contraseña?</a>
