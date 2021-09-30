@@ -12,6 +12,94 @@ include_once 'navbar/navbar.php';
     <title>Document</title>
 
     <script>
+
+    //--------------------------------Comenzar imagen--------------------//
+    $(document).ready()
+    {
+      
+      showUpdateAccountForm();
+    }
+
+    //----------------------------Mostrar Info--------------------------//
+     function showUpdateAccountForm(){
+        // validate jwt to verify access
+        var jwt = getCookie('jwt');
+        $.post("api/validate_token.php", JSON.stringify({ jwt:jwt })).done(function(result) {
+    
+          document.getElementById("firstnameP").value = result.data.firstname;
+          document.getElementById("lastnameP").value = result.data.lastname;
+          document.getElementById("emailP").value = result.data.email;
+            
+           
+        })
+    
+        // on error/fail, tell the user he needs to login to show the account page
+        .fail(function(result){
+  
+            $('#mensaje').html("<div class='alert alert-danger'>Please login to access the account page.</div>");
+        });
+    }
+
+    //-------------------------Hacer update------------------------//
+    // trigger when 'update account' form is submitted
+    $(document).on('submit', '#update_account_form', function(){
+    
+      // handle for update_account_form
+      var update_account_form=$(this);
+
+      // validate jwt to verify access
+      var jwt = getCookie('jwt');
+
+      // get form data
+      var update_account_form_obj = update_account_form.serializeObject()
+      
+      // add jwt on the object
+      update_account_form_obj.jwt = jwt;
+      
+      // convert object to json string
+      var form_data=JSON.stringify(update_account_form_obj);
+      alert("updating " + form_data);
+      // submit form data to api
+      $.ajax({
+          url: "api/update_user.php",
+          type : "POST",
+          contentType : 'application/json',
+          data : form_data,
+          success : function(result) {
+      
+              // tell the user account was updated
+              $('#mensaje').html("<div class='alert alert-success'>Account was updated.</div>");
+      
+              // store new jwt to coookie
+              setCookie("jwt", result.jwt, 1);
+
+              $('input[type=text], input[type=email], input[type=password]').prop('readonly', true);
+              $('.save-things').css( "display", "none" );
+              $('.cancel-things').css( "display", "none" );
+             
+              $(this).css( "display", "none" );
+              $('.edit-things').css( "display", "" );
+          },
+      
+          // show error message to user
+          error: function(xhr, resp, text){
+              if(xhr.responseJSON.message=="Unable to update user."){
+                  $('#mensaje').html("<div class='alert alert-danger'>Unable to update account.</div>");
+              }
+          
+              else if(xhr.responseJSON.message=="Access denied."){
+                  showLoginPage();
+                  $('#mensaje').html("<div class='alert alert-success'>Access denied. Please login</div>");
+              }
+
+          }
+      });
+
+      return false;
+  });
+
+//-------------------------------------------------------------------------Habilitar editar----------------------------------------------------//
+
       $(function(){ /* DOM ready */
           $(".edit-things").click(function() {
               //alert('best take my own advice ');
@@ -46,6 +134,9 @@ include_once 'navbar/navbar.php';
                 else $(this).parent().parent().find('.DescripcionCurso').css('display','none'); 
             }); 
         }); 
+
+
+        
     
 
   </script>
@@ -81,66 +172,76 @@ include_once 'navbar/navbar.php';
                   </div>
                 </div>
                 <div class="col-lg-8">
-                  <div class="card" style="background-color: whitesmoke;">
-                    <div class="card-body">
-                      <div class="row mb-3">
-                        <div class="col-sm-3">
-                          <h6 class="mb-0">Nombre</h6>
+                  <form style="width: 100%; margin: 0px;" id='update_account_form'>
+                    <div class="card" style="background-color: whitesmoke;">
+                      <div class="card-body">
+                        <div class="row mb-3">
+                          <div class="col-sm-3">
+                            <h6 class="mb-0">Nombre</h6>
+                          </div>
+                          <div class="col-sm-3 text-secondary">
+                            <input type="text" class="form-control" name="firstnameP" id="firstnameP" required readonly />
+                          </div>
+                          <div class="col-sm-3">
+                            <h6 class="mb-0">Apellido</h6>
+                          </div>
+                          <div class="col-sm-3 text-secondary">
+                            <input type="text" class="form-control" name="lastnameP" id="lastnameP" required readonly />
+                          </div>
                         </div>
-                        <div class="col-sm-3 text-secondary">
-                          <input type="text" class="form-control" value="Yuta" readonly>
+                        <div class="row mb-3">
+                          <div class="col-sm-3">
+                            <h6 class="mb-0">Email</h6>
+                          </div>
+                          <div class="col-sm-9 text-secondary">
+                            <input type="email" class="form-control" name="emailP" id="emailP" required readonly />
+                          </div>
                         </div>
-                         <div class="col-sm-3">
-                          <h6 class="mb-0">Apellido</h6>
+                        <div class="row mb-3">
+                          <div class="col-sm-3">
+                            <h6 class="mb-0">Género</h6>
+                          </div>
+                          <div class="col-sm-9 text-secondary">
+                            <input type="text" class="form-control" value="Hombre" readonly>
+                          </div>
                         </div>
-                        <div class="col-sm-3 text-secondary">
-                          <input type="text" class="form-control" value="Nakamoto" readonly>
+                        <div class="row mb-3">
+                          <div class="col-sm-3">
+                            <h6 class="mb-0">Fecha de nacimiento</h6>
+                          </div>
+                          <div class="col-sm-9 text-secondary">
+                            <input type="text" class="form-control" value="26/10/1995" readonly>
+                          </div>
                         </div>
-                      </div>
-                      <div class="row mb-3">
-                        <div class="col-sm-3">
-                          <h6 class="mb-0">Email</h6>
+                        <div class="row mb-3">
+                          <div class="col-sm-3">
+                            <h6 class="mb-0">Contraseña</h6>
+                          </div>
+                          <div class="col-sm-9 text-secondary">
+                            <input type="password" class="form-control" name="passwordP" id="passwordP" readonly />
+                          </div>
+
+                        
                         </div>
-                        <div class="col-sm-9 text-secondary">
-                          <input type="email" class="form-control" value="nayu@gmail.com" readonly>
+                        <div class="row">
+                          <div id="mensaje" class="col-sm-12"></div>
+
+                        
+
+                          <div class="col-sm-4"></div>
+                          <div class="col-sm-4 text-secondary">
+                            <button type='submit' class='btn btn-primary save-things' style="display: none;"> Save Changes</button>
+                          </div>
+                          <div class="col-sm-4">
+                            <input type="button" class="btn btn-primary edit-things" value="Editar">
+                            <input type="button" class="btn btn-primary cancel-things" style="display: none;" onclick="showUpdateAccountForm();" value="Cancelar">
+
                         </div>
-                      </div>
-                      <div class="row mb-3">
-                        <div class="col-sm-3">
-                          <h6 class="mb-0">Género</h6>
                         </div>
-                        <div class="col-sm-9 text-secondary">
-                          <input type="text" class="form-control" value="Hombre" readonly>
-                        </div>
-                      </div>
-                      <div class="row mb-3">
-                        <div class="col-sm-3">
-                          <h6 class="mb-0">Fecha de nacimiento</h6>
-                        </div>
-                        <div class="col-sm-9 text-secondary">
-                          <input type="text" class="form-control" value="26/10/1995" readonly>
-                        </div>
-                      </div>
-                      <div class="row mb-3">
-                        <div class="col-sm-3">
-                          <h6 class="mb-0">Contraseña</h6>
-                        </div>
-                        <div class="col-sm-9 text-secondary">
-                          <input type="password" class="form-control" value="Mark020899" readonly>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-sm-4"></div>
-                        <div class="col-sm-4 text-secondary">
-                          <input type="button" class="btn btn-primary px-4 save-things" value="Guarda cambios" style="display: none;">
-                        </div>
-                        <div class="col-sm-4">
-                          <button class="btn btn-primary edit-things">Editar</button>
-                          <button class="btn btn-primary cancel-things" style="display: none;">Cancelar</button>
-                       </div>
                       </div>
                     </div>
-                  </div>
+                  </form>
+          
 
                   <!--ALUMNOS-->
                   <!--Historial de cursos-->

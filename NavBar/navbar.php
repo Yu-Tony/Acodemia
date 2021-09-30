@@ -1,7 +1,7 @@
 
     <!--bootstrap-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
@@ -31,9 +31,47 @@
     <link href="https://vjs.zencdn.net/7.14.3/video-js.css" rel="stylesheet" />
     <script src="https://vjs.zencdn.net/7.14.3/video.min.js"></script>
 
+    <!---JS-->
+
+
   <script type="text/javascript">
 
-        function daysInMonth(month, year) {
+//------------------------------------------USER IS LOGGED OR NOT---------------------------------
+    $(document).ready()
+    {
+      getTypeAccount();
+    }
+
+    function getTypeAccount()
+    {
+        // validate jwt to verify access
+        var jwt = getCookie('jwt');
+        $.post("api/validate_token.php", JSON.stringify({ jwt:jwt })).done(function(result) {
+          document.getElementById("NavUserLog").style.display = "inline";
+          document.getElementById("NavUserNotLog").style.display = "none";
+
+         // alert(result.data.typeAccount);
+          if(result.data.typeAccount==1)
+          {
+            console.log("TYPE 1");
+            document.getElementById("btn-crear-curso").style.display = "inline";
+          }
+          else
+          {
+            console.log("TYPE 0");
+            document.getElementById("btn-crear-curso").style.display = "none";
+          }
+
+        })
+
+        // show login page on error
+        .fail(function(result){
+            document.getElementById("NavUserLog").style.display = "none";
+          document.getElementById("NavUserNotLog").style.display = "inline";   
+        });
+    }
+    /*---------------------------------------DAY MONTH YEAR FUNCTION------------------------*/
+    function daysInMonth(month, year) {
       return new Date(year, month, 0).getDate();
     }
 
@@ -59,10 +97,134 @@
             }
       });
     });
+    
+    /*----------------------------------------------SIGN IN---------------------------------------*/
+
+     // trigger when registration form is submitted
+    $(document).on('submit', '#sign_up_form', function(){
+    
+        // get form data
+        var sign_up_form=$(this);
+        var form_data=JSON.stringify(sign_up_form.serializeObject());
+
+        alert(form_data);
+        // submit form data to api
+        $.ajax({
+            url: "api/create_user.php",
+            type : "POST",
+            contentType : 'application/json',
+            data : form_data,
+            success : function(result) {
+                // if response is a success, tell the user it was a successful sign up & empty the input boxes
+                $('#response').html("<div class='alert alert-success'>Successful sign up. Please login.</div>");
+                $('#ModalSign').modal('hide');
+                sign_up_form.find('input').val('');
+            },
+            error: function(xhr, resp, text){
+                // on error, tell the user sign up failed
+                $('#response').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+            }
+        });
+
+        return false;
+    });
+
+    /*--------------------------------------------------LOGIN--------------------------------------*/
+    // trigger when login form is submitted
+    $(document).on('submit', '#login_form', function()
+    {
+     
+
+        // get form data
+        var login_form=$(this);
+        var form_data=JSON.stringify(login_form.serializeObject());
        
+        // submit form data to api
+        $.ajax({
+            url: "api/login.php",
+            type : "POST",
+            contentType : 'application/json',
+            data : form_data,
+            success : function(result){
+       
+                // store jwt to cookie
+                setCookie("jwt", result.jwt, 1);
+                console.log("sucess");
+                // show home page & tell the user it was a successful login
+                /*showHomePage();*/
+                $('#response').html("<div class='alert alert-success'>Successful login.</div>");
+                $('#ModalLog').modal('hide');
+                login_form.find('input').val('');
+                document.getElementById("NavUserLog").style.display = "inline";
+                document.getElementById("NavUserNotLog").style.display = "none";
 
+                getTypeAccount();
+               
+            },
+            error: function(xhr, resp, text){
+              console.log("fail");
+                // on error, tell the user login has failed & empty the input boxes
+                $('#response').html("<div class='alert alert-danger'>Login failed. Email or password is incorrect.</div>");
+                login_form.find('input').val('');
+            }
+        });
 
+        return false;
+    });
 
+    // function to set cookie
+    function setCookie(cname, cvalue, exdays) {
+                var d = new Date();
+                d.setTime(d.getTime() + (exdays*24*60*60*1000));
+                var expires = "expires="+ d.toUTCString();
+                document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+            }
+
+    // get or read cookie
+    function getCookie(cname){
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' '){
+                c = c.substring(1);
+            }
+    
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    // function to make form values to json format
+    $.fn.serializeObject = function()
+    {
+      var o = {};
+      var a = this.serializeArray();
+      $.each(a, function() {
+          if (o[this.name] !== undefined) {
+              if (!o[this.name].push) {
+                  o[this.name] = [o[this.name]];
+              }
+              o[this.name].push(this.value || '');
+          } else {
+              o[this.name] = this.value || '';
+          }
+      });
+      return o;
+    };
+
+    function clearResponse(){
+        $('#response').html('');
+    }
+
+    function LogOut()
+    {
+      setCookie("jwt", "", 1);
+      location.replace("http://localhost:8012/Acodemia/")
+    }
 
 
     </script>
@@ -80,7 +242,7 @@
 
         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
             
-            <!--Dropdown-->
+          <!--Dropdown-->
             <div class="navbar-nav">
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" style="color: whitesmoke;">Categorías</a>
@@ -125,9 +287,9 @@
             <div class="navbar-nav ">
                
                 <!--Cuando el usuario esta loggeado-->
-                <!--   -->
-                <div class="navbar-nav">
-                    <button type="button" onClick="window.location.href='http://localhost:8012/Acodemia/create.php';" class="btn btn-primary" >Crear Curso</button>
+                <!--  -->
+                <div class="navbar-nav" id="NavUserLog" style="display: none;">
+                    <button type="button" style="display: none;" onClick="window.location.href='http://localhost:8012/Acodemia/create.php';" class="btn btn-primary" id="btn-crear-curso" >Crear Curso</button>
 
                     <div class="btn-group">
                       <button type="button" style="width: 200%; margin-left: 5%;" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -136,17 +298,19 @@
                       <div class="dropdown-menu dropdown-menu-right">
                         <a href="http://localhost:8012/Acodemia/profile.php" class="dropdown-item"><i class="fa fa-user-o"></i> Perfil</a></a>
                         <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Cerrar Sesion</a></a>
+                        <a href="#" class="dropdown-item" onclick="LogOut()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesion</a></a>
                       </div>
                   </div>
                 </div>
              
-
+ 
                 <!--Cuando no hay usuario loggeado-->
-        
-                <button type="button" class="btn btn-primary" style="margin: 1%;" data-toggle="modal" data-target="#ModalSign">Crear Cuenta</button>
+                <div class="navbar-nav" id="NavUserNotLog">
+                  <button type="button" id="SignBtn" class="btn btn-primary" onclick="clearResponse();" style="margin: 1%;" data-toggle="modal" data-target="#ModalSign">Crear Cuenta</button>
 
-                  <button type="button" class="btn btn-secondary" style="margin: 1%;" data-toggle="modal" data-target="#ModalLog">Iniciar Sesion</button>
+                  <button type="button" id="LoginBtn" class="btn btn-secondary" onclick="clearResponse();" style="margin: 1%;" data-toggle="modal" data-target="#ModalLog">Iniciar Sesion</button>
+
+                </div>
               <!-- -->
             </div>
         </div>
@@ -163,159 +327,156 @@
     
                 <div class="row">
                     <div class="col-lg-6 col-md-12 col-sm-12 text-center">
-                        <!-- Default form login -->
-                        <form action="#!" style="margin: 5%;">
-                            <p class="h4 mb-4 text-left">¡Comencemos!</p>
-                            <p class="text-left">Crea una cuenta para explorar nuestros cursos</p> 
+                      
+                      <p class="h4 mb-4 text-left">¡Comencemos!</p>
+                      <p class="text-left">Crea una cuenta para explorar nuestros cursos</p> 
 
-                            <div class="input-group" style="margin-bottom: 15px;"> 
+                        <!-- FORM -->
+                        <form method="POST" id="sign_up_form" style="margin: 5%;">
 
-                            
-                                <div class="row" style="margin-bottom: 10px;">
-                                    <div class="col-12">
-                                        <img src="https://www.edmundsgovtech.com/wp-content/uploads/2020/01/default-picture_0_0.png" id="imagen_perfil" class="img-fluid rounded-circle" alt="Imagen de perfil" style="margin-bottom: 20px; width: 300px;  "/>
-                          
-                                        <input type="file" name="profile_pic" id="profile_pic" hidden onchange="readURL(this);"  accept="image/x-png,image/jpeg" />
-                                        <label for="profile_pic" class="btn btn-outline-primary center">Choose file</label>
-                                    </div>
-                                </div>
+                          <div class="row" style="margin-bottom: 10px;">
+                              <div class="col-12">
+                                  <img src="https://www.edmundsgovtech.com/wp-content/uploads/2020/01/default-picture_0_0.png" id="imagen_perfil" class="img-fluid rounded-circle" alt="Imagen de perfil" style="margin-bottom: 20px; width: 300px;  "/>
+                    
+                                  <input type="file" name="profile_pic" id="profile_pic" hidden onchange="readURL(this);"  accept="image/x-png,image/jpeg" />
+                                  <label for="profile_pic" class="btn btn-outline-primary center">Choose file</label>
+                              </div>
+                          </div>
 
-                            
-                                       
-                         
-                            
+                          <div class="row" style="padding-bottom: 2%;">
 
+                            <div class="col-12">
+                              <label >Tipo de cuenta</label>
+                            </div>
                         
-                                <div class="row" style="padding-bottom: 2%;">
-
-                                  <div class="col-12">
-                                    <label >Tipo de cuenta</label>
-                                  </div>
-                                
-                                  <div class="col-6">
-                                   
-                                    <select class="selectpicker" data-width="200%" title="Selecciona un tipo de cuenta..." required>
-                                      <option>Maestro</option>
-                                      <option>Alumno</option>
-                                    </select>
-                                    
-
-                                  </div>
-
-                                </div>
-                               
-                                <hr style=" border-top: 8px solid #bbb;
-                                border-radius: 5px;">
-                  
-                               
-
-                                 <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="nameSign">Nombre</label>
-                                      <input id="nameSign" type="text" class="form-control input-sm" placeholder="Ingresa tu nombre" name="nombre" required oninput="validateFName();" />
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                      <label for="lastSign">Apellido</label>
-                                      <input id="lastSign" type="text" class="form-control input-sm" placeholder="Ingresa tu apellido" name="apellidos" required oninput="validateLName();" /> 
-                                    </div>
-                                  </div>
-                           
-                              </div> 
-
-                              <div class="form-group">
-                                <label for="GenderForm">Género</label>
-                                <select class="form-control" id="GenderForm" required>
-                                  <option value="">Seleccionar</option>
-                                  <option>Hombre</option>
-                                  <option>Mujer</option>
-                                  <option>No binario</option>
-                                  <option>Ninguno/Agénero</option>
-                                  <option>Prefiero no decir</option>
-                                </select>
-                              </div>
-
-                              <label for="Birthday">Fecha de nacimiento</label>
-                              <div class="form-row">
-       
-                                <div class="form-group col-md-4">
-                                  <div class="form-group">
-                          
-                                     <select class="form-control" style="margin-top: 8px;" id="yearDropdown" required>
-                                     <option value="">Seleccionar año</option>
-                      
-                                    </select>
-
-                                      <script>
-                                        let dateDropdown = document.getElementById('yearDropdown'); 
-
-                                        let currentYear = new Date().getFullYear();    
-                                        let earliestYear = 1970;     
-                                        while (currentYear >= earliestYear) {      
-                                          let dateOption = document.createElement('option');          
-                                          dateOption.text = currentYear;      
-                                          dateOption.value = currentYear;        
-                                          dateDropdown.add(dateOption);      
-                                          currentYear -= 1;    
-                                        }
-                                      </script>
-                                  </div>
-                                </div>
-                                  
-                                <div class="form-group col-md-4">
-                                  <div class="form-group">
-                          
-                                    <select class="form-control"  style="margin-top: 8px;" id="monthDropdown" required>
-                                        <option value="">Seleccionar mes</option>
-                                     <option value="1">January</option>
-                                        <option value="2">February</option>
-                                        <option value="3">March</option>
-                                        <option value="4">April</option>
-                                        <option value="5">May</option>
-                                        <option value="6">June</option>
-                                        <option value="7">July</option>
-                                        <option value="8">August</option>
-                                        <option value="9">September</option>
-                                        <option value="10">October</option>
-                                        <option value="11">Novermber</option>
-                                        <option value="12">December</option>
-                      
-                                    </select>
-                                  </div>
-                                </div>
-      
-                                  
-                                <div class="form-group col-md-4">
-                                  <div class="form-group">
-                          
-                                    <select class="form-control"  style="margin-top: 8px;" id="dayDropdown" disabled required>
-                                              <option value="">Seleccionar dia</option>      
-                                    </select>
-                                      
-                   
-                                  </div>
-                                </div>
-                      
-                          
-                      
-                              </div>
+                            <div class="col-6">
                             
-                            <!-- Email --> 
-                            <label class="in">Correo</label> 
-                            <input type="email" id="mailSign" class="form-control mb-4" placeholder="Ingresa tu correo" required oninput="validateMail();"> 
-                            <!-- Password --> 
-                            <label  class="in">Contraseña</label> 
-                            <input type="password" id="passwordSign" class="form-control mb-4" placeholder="Ingresa tu contraseña" required oninput="validatePassword();">
-                           
+                              <select class="selectpicker" data-width="200%" title="Selecciona un tipo de cuenta..." required>
+                                <option>Maestro</option>
+                                <option>Alumno</option>
+                              </select>
+                              
+
+                            </div>
+                      
+                          </div>
+                
+                          <hr style=" border-top: 8px solid #bbb; border-radius: 5px;">
+
+                          <div class="form-row">
+
+                            <div class="form-group col-md-6">
+                              <label for="firstname">Nombre</label>
+                              <input type="text" class="form-control" name="firstname" id="firstname" required placeholder="Ingresa tu nombre" oninput="validateFName();"/>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                              <label for="lastname">Apellido</label>
+                              <input type="text" class="form-control" name="lastname" id="lastname" required placeholder="Ingresa tu apellido" oninput="validateLName();" />
+                            </div>
+
+                          </div>
+          
+          
+                          <div class="form-group">
+                              <label for="email">Correo</label>
+                              <input type="email" class="form-control" name="email" id="email" required />
+                          </div>
+          
+                          <div class="form-group">
+                              <label for="password">Contraseña</label>
+                              <input type="password" class="form-control" name="password" id="password" required />
+                          </div>
+
+                          <div class="form-group">
                             <label  class="in">Confirmar contraseña</label> 
                             <input id="passwordSign2" type="password" class="form-control mb-4" placeholder="Ingresar contraseña de nuevo" required oninput="validatePassword();"/> 
-                            
-                            <div class="d-flex ">
-                                
-                                <a href="" class="">¿Olvidaste tu contraseña?</a>
-                                <!-- Sign in button --> <button class="btn btn-info btn-block " style="  width: 50%;" type="submit">Iniciar Sesión</button> 
-                            
-                            </div> 
+                          </div>
+
+                          <div class="form-group">
+                            <label for="GenderForm">Género</label>
+                            <select class="form-control" id="GenderForm" required>
+                              <option value="">Seleccionar</option>
+                              <option>Hombre</option>
+                              <option>Mujer</option>
+                              <option>No binario</option>
+                              <option>Ninguno/Agénero</option>
+                              <option>Prefiero no decir</option>
+                            </select>
+                          </div>
+
+                          <label for="Birthday">Fecha de nacimiento</label>
+                          <div class="form-row">
+
+                            <div class="form-group col-md-4">
+                              <div class="form-group">
+                      
+                                <select class="form-control" style="margin-top: 8px;" id="yearDropdown" required>
+                                <option value="">Seleccionar año</option>
+                  
+                                </select>
+
+                                  <script>
+                                    let dateDropdown = document.getElementById('yearDropdown'); 
+
+                                    let currentYear = new Date().getFullYear();    
+                                    let earliestYear = 1970;     
+                                    while (currentYear >= earliestYear) {      
+                                      let dateOption = document.createElement('option');          
+                                      dateOption.text = currentYear;      
+                                      dateOption.value = currentYear;        
+                                      dateDropdown.add(dateOption);      
+                                      currentYear -= 1;    
+                                    }
+                                  </script>
+                              </div>
+                            </div>
+                              
+                            <div class="form-group col-md-4">
+                              <div class="form-group">
+                      
+                                <select class="form-control"  style="margin-top: 8px;" id="monthDropdown" required>
+                                    <option value="">Seleccionar mes</option>
+                                <option value="1">January</option>
+                                    <option value="2">February</option>
+                                    <option value="3">March</option>
+                                    <option value="4">April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">Novermber</option>
+                                    <option value="12">December</option>
+                  
+                                </select>
+                              </div>
+                            </div>
+
+                              
+                            <div class="form-group col-md-4">
+                              <div class="form-group">
+                      
+                                <select class="form-control"  style="margin-top: 8px;" id="dayDropdown" disabled required>
+                                          <option value="">Seleccionar dia</option>      
+                                </select>
+                                  
+              
+                              </div>
+                            </div>
+                  
+                      
+                  
+                          </div>
+
+                          <div id="response"></div>
+
+                          <div class="d-flex ">
+                            <button class="btn btn-info btn-block " style="  width: 50%;" type="submit">Crear Cuenta</button> 
+                          </div> 
                         </form>
+                       
                     </div>
                     <div class="col-lg-6 col-md-12 col-sm-12 text-center">
                       <img src="https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png" class="img-fluid" style="padding-top:80%;" alt="">
@@ -335,24 +496,44 @@
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
            
+         
             <div class="modal-body" style="padding-top: 10%; padding-bottom: 10%;">
         
 
             <div class="row">
                 <div class="col-lg-6 col-md-12 col-sm-12 text-center">
-                    <!-- Default form login -->
-                    <form action="#!" style="margin: 5%;">
-                        <p class="h4 mb-4 text-left">¡Hola de vuelta!</p>
-                        <p class="text-left">Inicia sesión para continuar con tus cursos</p> 
-                        <!-- Email --> <label for="mail" class="in">Usuario</label> <input type="email" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="Ingresa tu usuario" required> 
-                        <!-- Password --> <label for="pass" class="in">Contraseña</label> <input type="password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Ingresa tu contraseña" required>
-                        <div class="d-flex ">
-                            
-                            <a href="" class="">¿Olvidaste tu contraseña?</a>
-                            <!-- Sign in button --> <button class="btn btn-info btn-block " style="  width: 50%;" type="submit">Iniciar Sesión</button> 
-                        
-                        </div> 
-                    </form>
+                  <p class="h4 mb-4 text-left">¡Hola de vuelta!</p>
+                  <p class="text-left">Inicia sesión para continuar con tus cursos</p> 
+                  <!-- FORM -->
+                  
+
+                    <form id="login_form" style="margin: 5%;" method="post" >
+                      
+                      <div class='form-group'>
+                        <!-- Email --> 
+                        <label for="email" class="in">Corre Electronico</label> 
+                        <input type="email" id="email" name='email' class="form-control mb-4" placeholder="Ingresa tu correo" required> 
+                      </div>
+          
+                      <div class='form-group'>
+                          <!-- Password --> 
+                          <label for="password" class="in">Contraseña</label> 
+                          <input type="password" name='password' id="password" class="form-control mb-4" placeholder="Ingresa tu contraseña" required>
+                      </div>
+
+                      <div id="response"></div>
+
+                      <div class="d-flex ">
+                          
+                          <a href="" class="">¿Olvidaste tu contraseña?</a>
+                          <!-- Sign in button --> 
+                          <button class="btn btn-info btn-block " style="  width: 50%;" type="submit">Iniciar Sesión</button> 
+                      
+                      </div> 
+                  </form>
+
+
+                 
                 </div>
                 <div class="col-lg-6 col-md-12 col-sm-12 text-center">
                 <img src="https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png" class="img-fluid"  alt="">

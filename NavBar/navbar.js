@@ -4,7 +4,7 @@ function validatePassword(){
     var re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 
-    var password = document.getElementById("passwordSign");
+    var password = document.getElementById("password");
     var confirm_password = document.getElementById("passwordSign2");
   
     if( !password.value ) 
@@ -37,7 +37,7 @@ function validatePassword(){
   function validateFName()
 {
   var re = /^[ñA-Za-z _]*[ñA-Za-z][ñA-Za-z _]*$/;
-  var firstName = document.getElementById("nameSign");
+  var firstName = document.getElementById("firstname");
 
   if( !firstName.value ) 
   {
@@ -61,7 +61,7 @@ function validatePassword(){
 function validateLName()
 {
   var re = /^[ñA-Za-z _]*[ñA-Za-z][ñA-Za-z _]*$/;
-  var lastName = document.getElementById("lastSign");
+  var lastName = document.getElementById("lastname");
 
   if( !lastName.value ) 
   {
@@ -85,7 +85,7 @@ function validateLName()
 function validateMail()
 {
   var re = /([a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]{1,64})@([a-zA-Z0-9-]{2,253})\.([a-zA-Z0-9-]{2,3})/;
-  var mail = document.getElementById("mailSign");
+  var mail = document.getElementById("email");
 
   if( !mail.value ) 
   {
@@ -104,5 +104,6 @@ function validateMail()
 
 
 }
+
 
 
