@@ -62,6 +62,16 @@
             document.getElementById("btn-crear-curso").style.display = "none";
           }
 
+ 
+          $fname = result.data.firstname; 
+          $space = " ";
+       
+          $lname = result.data.lastname; 
+
+          
+          $("#UserNameLog").html($fname+$space+$lname);
+
+
         })
 
         // show login page on error
@@ -107,7 +117,7 @@
         var sign_up_form=$(this);
         var form_data=JSON.stringify(sign_up_form.serializeObject());
 
-        alert(form_data);
+        //alert(form_data);
         // submit form data to api
         $.ajax({
             url: "api/create_user.php",
@@ -116,13 +126,14 @@
             data : form_data,
             success : function(result) {
                 // if response is a success, tell the user it was a successful sign up & empty the input boxes
-                $('#response').html("<div class='alert alert-success'>Successful sign up. Please login.</div>");
+                $('#response-sign').html("<div class='alert alert-success'>Successful sign up. Please login.</div>");
                 $('#ModalSign').modal('hide');
                 sign_up_form.find('input').val('');
             },
             error: function(xhr, resp, text){
                 // on error, tell the user sign up failed
-                $('#response').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+                alert("Error al crear cuenta  " + text);
+                $('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
             }
         });
 
@@ -152,7 +163,7 @@
                 console.log("sucess");
                 // show home page & tell the user it was a successful login
                 /*showHomePage();*/
-                $('#response').html("<div class='alert alert-success'>Successful login.</div>");
+                $('#response-log').html("<div class='alert alert-success'>Successful login.</div>");
                 $('#ModalLog').modal('hide');
                 login_form.find('input').val('');
                 document.getElementById("NavUserLog").style.display = "inline";
@@ -164,7 +175,8 @@
             error: function(xhr, resp, text){
               console.log("fail");
                 // on error, tell the user login has failed & empty the input boxes
-                $('#response').html("<div class='alert alert-danger'>Login failed. Email or password is incorrect.</div>");
+                alert("Error al iniciar sesion  " + text);
+                $('#response-log').html("<div class='alert alert-danger'>Login failed. Email or password is incorrect.</div>");
                 login_form.find('input').val('');
             }
         });
@@ -217,7 +229,8 @@
     };
 
     function clearResponse(){
-        $('#response').html('');
+        $('#response-log').html('');
+        $('#response-sign').html('');
     }
 
     function LogOut()
@@ -289,11 +302,12 @@
                 <!--Cuando el usuario esta loggeado-->
                 <!--  -->
                 <div class="navbar-nav" id="NavUserLog" style="display: none;">
-                    <button type="button" style="display: none;" onClick="window.location.href='http://localhost:8012/Acodemia/create.php';" class="btn btn-primary" id="btn-crear-curso" >Crear Curso</button>
+                    <button type="button" style="width: 200px;margin: 0 auto;display: none;" onClick="window.location.href='http://localhost:8012/Acodemia/create.php';" class="btn btn-primary" id="btn-crear-curso" >Crear Curso</button>
 
                     <div class="btn-group">
-                      <button type="button" style="width: 200%; margin-left: 5%;" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Yuta Nakamoto <img style="height:35px;" src="https://64.media.tumblr.com/2d670bdba5057dddf2e747e441412798/e6c29b6fecca43a4-cf/s1280x1920/28e06a4b3ab18fff6e733cb9a3701c3eadc731a4.jpg" class="avatar" alt="Avatar"> 
+       
+                      <button type="button"  id="UserNameLog" style="width: 200%; margin-left: 5%;" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img style="height:35px;" src="https://64.media.tumblr.com/2d670bdba5057dddf2e747e441412798/e6c29b6fecca43a4-cf/s1280x1920/28e06a4b3ab18fff6e733cb9a3701c3eadc731a4.jpg" class="avatar" alt="Avatar"> 
                       </button>
                       <div class="dropdown-menu dropdown-menu-right">
                         <a href="http://localhost:8012/Acodemia/profile.php" class="dropdown-item"><i class="fa fa-user-o"></i> Perfil</a></a>
@@ -306,9 +320,9 @@
  
                 <!--Cuando no hay usuario loggeado-->
                 <div class="navbar-nav" id="NavUserNotLog">
-                  <button type="button" id="SignBtn" class="btn btn-primary" onclick="clearResponse();" style="margin: 1%;" data-toggle="modal" data-target="#ModalSign">Crear Cuenta</button>
+                  <button type="button" id="SignBtn" class="btn btn-primary" onclick="clearResponse();" style="width: 200px;margin: 0 auto;display: inline;" data-toggle="modal" data-target="#ModalSign">Crear Cuenta</button>
 
-                  <button type="button" id="LoginBtn" class="btn btn-secondary" onclick="clearResponse();" style="margin: 1%;" data-toggle="modal" data-target="#ModalLog">Iniciar Sesion</button>
+                  <button type="button" id="LoginBtn" class="btn btn-secondary" onclick="clearResponse();" style="width: 200px;margin: 0 auto;display: inline;" data-toggle="modal" data-target="#ModalLog">Iniciar Sesion</button>
 
                 </div>
               <!-- -->
@@ -351,9 +365,9 @@
                         
                             <div class="col-6">
                             
-                              <select class="selectpicker" data-width="200%" title="Selecciona un tipo de cuenta..." required>
-                                <option>Maestro</option>
-                                <option>Alumno</option>
+                              <select class="selectpicker" name="typeAccount" data-width="200%" title="Selecciona un tipo de cuenta..." required>
+                                <option value="1">Maestro</option>
+                                <option value="0">Alumno</option>
                               </select>
                               
 
@@ -385,7 +399,7 @@
           
                           <div class="form-group">
                               <label for="password">Contraseña</label>
-                              <input type="password" class="form-control" name="password" id="password" required />
+                              <input type="password" class="form-control" name="password" id="password" required oninput="validatePassword();"  />
                           </div>
 
                           <div class="form-group">
@@ -470,7 +484,7 @@
                   
                           </div>
 
-                          <div id="response"></div>
+                          <div id="response-sign"></div>
 
                           <div class="d-flex ">
                             <button class="btn btn-info btn-block " style="  width: 50%;" type="submit">Crear Cuenta</button> 
@@ -521,7 +535,7 @@
                           <input type="password" name='password' id="password" class="form-control mb-4" placeholder="Ingresa tu contraseña" required>
                       </div>
 
-                      <div id="response"></div>
+                      <div id="response-log"></div>
 
                       <div class="d-flex ">
                           

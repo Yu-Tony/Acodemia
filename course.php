@@ -20,12 +20,16 @@ include_once 'navbar/navbar.php';
                 else $(this).parent().parent().find('.DescripcionCurso').css('display','none'); 
             }); 
         }); 
-        </script>
+
+    </script>
+
+        <script src="https://www.paypal.com/sdk/js?client-id=AXzXMA6dPo-ziWAA-D7i-6ON8yxv5j0chRAwEISbmc2dVwWESiFkZdhsrDzRjcRBj-oYQCflacN0Qjyx&currency=MXN"></script>
+   
 
         <link rel="stylesheet" href="http://localhost:8012/Acodemia/course/comments.css">
         <link rel="stylesheet" href="http://localhost:8012/Acodemia/course/star.css">
         <link rel="stylesheet" href="http://localhost:8012/Acodemia/course/buttons.css">
-        <script src="http://localhost:8012/Acodemia/course/star.js"></script>
+        <script src="http://localhost:8012/Acodemia/Payment/payment.js"></script>
         <link rel="stylesheet" href="http://localhost:8012/Acodemia/Payment/pay.css">
         <link rel="stylesheet" href="http://localhost:8012/Acodemia/diploma/diploma.css">
 
@@ -40,16 +44,16 @@ include_once 'navbar/navbar.php';
         <div class="col-8" style="background-color: #073352; padding:0px">
 
             <div class="row" >
-                <div class="col-8"></div>
-                <div class="col-4">
-                    <div class="card card-desc" style=" background-color: white; position: absolute; z-index: 1; ">
+                <div class="col-lg-8"></div>
+                <div class="col-lg-4 col-md-12 col-sm-12 col-12">
+                    <div class="card card-desc buy-card" >
 
-                    <video id="my-video" class="video-js vjs-16-9 " controls  preload="auto" poster="http://localhost:8012/Acodemia/Media/david-schultz-SrewPUfo2c0-unsplash.jpg" data-setup="{}">  
-                      <source src="http://localhost:8012/Acodemia/Media/videoplayback.mp4" type="video/mp4" />
-                      <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that
-                          <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                      </p>
-                    </video>
+                        <video id="my-video" class="video-js vjs-16-9 " controls  preload="auto" poster="http://localhost:8012/Acodemia/Media/david-schultz-SrewPUfo2c0-unsplash.jpg" data-setup="{}">  
+                        <source src="http://localhost:8012/Acodemia/Media/videoplayback.mp4" type="video/mp4" />
+                        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that
+                            <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                        </p>
+                        </video>
 
                         <div class="card-body" style="padding-left: 10%;">
                             
@@ -64,7 +68,7 @@ include_once 'navbar/navbar.php';
     
                             </div>
 
-                                <span class="text-muted font-small d-block mb-2">5.0</span>
+                            <span class="text-muted font-small d-block mb-2">5.0</span>
                             
                             <!--
                             <div class="d-flex my-4" style="margin-top: 0px !important;">
@@ -117,8 +121,8 @@ include_once 'navbar/navbar.php';
 
 
  
-                            </div>
                         </div>
+                    </div>
 
                                                    <!-- Modal Eliminar -->
                         <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -164,7 +168,7 @@ include_once 'navbar/navbar.php';
                                         
                                         </div>
                         </div>
-             </div>
+                </div>
             </div>
            
 
@@ -208,28 +212,22 @@ include_once 'navbar/navbar.php';
 
             <div class="col-12" style="padding-left: 10%; padding-right: 4%; ">
               
-            <div class="row" style="padding-bottom: 2%;">
-                <div class="col-12 text-left" style="padding-top:2%; ">
-                   
-                  <h5 style="color: whitesmoke;" class="subtitle-text">Progreso del curso : 75%</h5>
+                <div class="row" style="padding-bottom: 2%;">
+                    <div class="col-lg-12 col-12 text-left" style="padding-top:2%; ">
                     
-                </div>
-                <div class="col-6">
-                    <div class="progress" style="z-index: 5px;">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                    <h5 style="color: whitesmoke;" class="subtitle-text">Progreso del curso : 75%</h5>
+                        
+                    </div>
+                    <div class="col-lg-6 col-12">
+                        <div class="progress" style="z-index: 5px;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
                         </div>
 
                         <button type="button" class="btn btn-primary" style="margin-top: 10%; width: 30%;" data-toggle="modal" data-target="#ModalDip" >Obtener diploma</button>
-                        
-               </div>
-      
-                
-                
-                
+                            
+                    </div>
 
-               </div>
-
-
+                </div>
 
                <div class="row" style="padding-bottom: 2%;">
                    <div class="text-left " style="padding-top:2%; ">
@@ -237,23 +235,22 @@ include_once 'navbar/navbar.php';
                    </div>
                </div>
         
-              
                <!--Nivel-->
                <div class="row" style="color: black;">
         
-                <div class="col-sm-5 col-8" style=" background-color: #80b5e2;">
+                <div class="col-lg-5 col-8" style=" background-color: #80b5e2;">
                 <h4>
                     Nivel 1
                 </h4>               
                 </div>
         
-                <div class="col-sm-1 col-4" style="background-color: #80b5e2;">
+                <div class="col-lg-1 col-4" style="background-color: #80b5e2;">
                     <button style="margin-top: 6%;" type="button" class="btn btn-primary VerMas"><i class="fa fa-plus"></i></button>
                 </div>
         
-                <div class="col-sm-6"></div>
+                <div class="col-lg-5 col-8"></div>
         
-                <div class="col-sm-6">
+                <div class="col-lg-6 col-12">
                     <div class="DescripcionCurso" style="background-color: #b8d2e5; display: none; padding:2%; margin-bottom: 2%;" >
                         <h5>Descripcion del nivel 1</h5>
                         <br>
@@ -264,21 +261,21 @@ include_once 'navbar/navbar.php';
         
                </div>
 
-                <div class="row" style="color: black;">
+               <div class="row" style="color: black;">
         
-                    <div class="col-sm-5 col-8" style=" background-color: #80b5e2;">
+                    <div class="col-lg-5 col-8" style=" background-color: #80b5e2;">
                     <h4>
                         Nivel 2
                     </h4>               
                     </div>
-
-                    <div class="col-sm-1 col-4" style="background-color: #80b5e2;">
+            
+                    <div class="col-lg-1 col-4" style="background-color: #80b5e2;">
                         <button style="margin-top: 6%;" type="button" class="btn btn-primary VerMas"><i class="fa fa-plus"></i></button>
                     </div>
-
-                    <div class="col-sm-6"></div>
-
-                    <div class="col-sm-6">
+            
+                    <div class="col-lg-5 col-8"></div>
+            
+                    <div class="col-lg-6 col-12">
                         <div class="DescripcionCurso" style="background-color: #b8d2e5; display: none; padding:2%; margin-bottom: 2%;" >
                             <h5>Descripcion del nivel 2</h5>
                             <br>
@@ -287,39 +284,41 @@ include_once 'navbar/navbar.php';
 
                         </div>
                     </div>
-
-                </div>
-
-                <div class="row" style="color: black;">
         
-                    <div class="col-sm-5 col-8" style=" background-color: #80b5e2;">
-                    <h4>
-                        Nivel 3
-                    </h4>               
-                    </div>
+               </div>
 
-                    <div class="col-sm-1 col-4" style="background-color: #80b5e2;">
-                        <button style="margin-top: 6%;" type="button" class="btn btn-primary VerMas"><i class="fa fa-plus"></i></button>
-                    </div>
-
-                    <div class="col-sm-6"></div>
-
-                    <div class="col-sm-6">
-                        <div class="DescripcionCurso" style="background-color: #b8d2e5; display: none; padding:2%; margin-bottom: 2%;" >
-                            <h5>Descripcion del nivel 3</h5>
-                            <br>
-                           <button type="button" onClick="window.location.href='http://localhost:8012/Acodemia/level.php';" class="btn btn-primary btn-category" >Ir al nivel</button>
-
-                        </div>
-                    </div>
-
+               <div class="row" style="color: black;">
+        
+                <div class="col-lg-5 col-8" style=" background-color: #80b5e2;">
+                <h4>
+                    Nivel 3
+                </h4>               
                 </div>
         
+                <div class="col-lg-1 col-4" style="background-color: #80b5e2;">
+                    <button style="margin-top: 6%;" type="button" class="btn btn-primary VerMas"><i class="fa fa-plus"></i></button>
+                </div>
+        
+                <div class="col-lg-5 col-8"></div>
+        
+                <div class="col-lg-6 col-12">
+                    <div class="DescripcionCurso" style="background-color: #b8d2e5; display: none; padding:2%; margin-bottom: 2%;" >
+                        <h5>Descripcion del nivel 3</h5>
+                        <br>
+                       <button type="button" onClick="window.location.href='http://localhost:8012/Acodemia/level.php';" class="btn btn-primary btn-category" >Ir al nivel</button>
+
+                    </div>
+                </div>
+    
+           </div>
+         
+
+
       
          
  <!--Comentarios-->
                <div class="row">
-                   <div class="col-12 col-sm-6">
+                   <div class="col-12 col-lg-6">
                         <hr style="border: 2px solid #b8d2e5; border-radius: 5px;">
                        
 
@@ -569,10 +568,15 @@ include_once 'navbar/navbar.php';
                         </div> <!-- End -->
                         <!-- Paypal info -->
                         <div id="paypal" class="tab-pane fade pt-3">
-                            <h6 class="pb-2">Select your paypal account type</h6>
-                            <div class="form-group "> <label class="radio-inline"> <input type="radio" name="optradio" checked> Domestic </label> <label class="radio-inline"> <input type="radio" name="optradio" class="ml-5">International </label></div>
-                            <p> <button type="button" class="btn btn-primary "><i class="fab fa-paypal mr-2"></i> Log into my Paypal</button> </p>
-                            <p class="text-muted"> Note: After clicking on the button, you will be directed to a secure gateway for payment. After completing the payment process, you will be redirected back to the website to view details of your order. </p>
+                          
+                        <div id="paypal-payment-button">
+                        </div>
+                        
+
+                        <p class="text-muted"> Note: After clicking on the button, you will be directed to a secure gateway for payment. After completing the payment process, you will be redirected back to the website to view details of your order. </p>
+                            
+        
+
                         </div> <!-- End -->
                         <!-- End -->
                     </div>

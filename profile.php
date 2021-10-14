@@ -18,8 +18,10 @@ include_once 'navbar/navbar.php';
     {
       
       showUpdateAccountForm();
+      getTypeAccount();
+      
     }
-
+    
     //----------------------------Mostrar Info--------------------------//
      function showUpdateAccountForm(){
         // validate jwt to verify access
@@ -29,6 +31,16 @@ include_once 'navbar/navbar.php';
           document.getElementById("firstnameP").value = result.data.firstname;
           document.getElementById("lastnameP").value = result.data.lastname;
           document.getElementById("emailP").value = result.data.email;
+
+
+          $fname = result.data.firstname; 
+          $space = " ";
+       
+          $lname = result.data.lastname; 
+
+          
+          $("#UserNameProfile").html($fname+$space+$lname);
+        
             
            
         })
@@ -37,6 +49,34 @@ include_once 'navbar/navbar.php';
         .fail(function(result){
   
             $('#mensaje').html("<div class='alert alert-danger'>Please login to access the account page.</div>");
+        });
+    }
+    //--------------------Tipo de cuenta----------------------------//
+    function getTypeAccount()
+    {
+        // validate jwt to verify access
+        var jwt = getCookie('jwt');
+        $.post("api/validate_token.php", JSON.stringify({ jwt:jwt })).done(function(result) {
+        
+         // alert(result.data.typeAccount);
+          if(result.data.typeAccount==1)
+          {
+            console.log("TYPE 1");
+            $('.historial-escuela').css('display','inline');
+            $('.historial-alumnos').css('display','none');
+          }
+          else
+          {
+            console.log("TYPE 0");
+            $('.historial-escuela').css('display','none');
+            $('.historial-alumnos').css('display','inline');
+          }
+
+        })
+
+        // show login page on error
+        .fail(function(result){
+          console.log("Error type");
         });
     }
 
@@ -149,7 +189,7 @@ include_once 'navbar/navbar.php';
         <div class="col-2"></div>
 
         <!--Principal-->
-        <div class="col-8" style="background-color: #073352; padding-left: 4%; padding-right: 4%; color: black;">
+        <div class="col-lg-8 col-12" style="background-color: #073352; padding-left: 4%; padding-right: 4%; color: black;">
 
           <div class="container" style="margin-top: 5%; ">
             <div class="main-body">
@@ -158,9 +198,9 @@ include_once 'navbar/navbar.php';
                   <div class="card" style="background-color: whitesmoke;">
                     <div class="card-body" >
                       <div class="d-flex flex-column align-items-center text-center">
-                        <img src="https://64.media.tumblr.com/2d670bdba5057dddf2e747e441412798/e6c29b6fecca43a4-cf/s1280x1920/28e06a4b3ab18fff6e733cb9a3701c3eadc731a4.jpg" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
+                        <img src="https://www.edmundsgovtech.com/wp-content/uploads/2020/01/default-picture_0_0.png" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
                         <div class="mt-3">
-                          <h4>Yuta Nakamoto</h4>
+                          <h4 id="UserNameProfile"></h4>
                           <h6>Fecha de registro 09/09/2021</h6>
                         </div>
 
@@ -171,6 +211,7 @@ include_once 'navbar/navbar.php';
                     </div>
                   </div>
                 </div>
+
                 <div class="col-lg-8">
                   <form style="width: 100%; margin: 0px;" id='update_account_form'>
                     <div class="card" style="background-color: whitesmoke;">
@@ -218,7 +259,7 @@ include_once 'navbar/navbar.php';
                             <h6 class="mb-0">Contraseña</h6>
                           </div>
                           <div class="col-sm-9 text-secondary">
-                            <input type="password" class="form-control" name="passwordP" id="passwordP" readonly />
+                            <input type="password" class="form-control" name="passwordP" id="passwordP" readonly oninput="validatePasswordEdit();" />
                           </div>
 
                         
@@ -246,8 +287,8 @@ include_once 'navbar/navbar.php';
                   <!--ALUMNOS-->
                   <!--Historial de cursos-->
             
-                  <div class="row" style="margin-top: 5%;">
-                    <div class="col-sm-12">
+                  <div class="row historial-alumnos" style="display: none; margin-top: 5%;  margin-bottom:5%">
+                    <div class="col-sm-12" style="padding: 0%; margin-top: 5%; margin-bottom: 5%;">
                       <div class="card" style="background-color: whitesmoke;">
                         <div class="card-body">
                           <h5 class="d-flex align-items-center mb-3">Historial de cursos</h5>
@@ -340,8 +381,8 @@ include_once 'navbar/navbar.php';
                   <!--ESCUELA-->
                   <!--Cursos creados-->
                 
-                  <div class="row" style="margin-top: 5%; margin-bottom:5%">
-                    <div class="col-sm-12">
+                  <div class="row historial-escuela" style="display: none;">
+                    <div class="col-sm-12" style="padding: 0%; margin-top: 5%; margin-bottom: 5%;">
                       
                       <div class="card" style="background-color: whitesmoke; ">
                         <div class="card-body">
@@ -386,14 +427,14 @@ include_once 'navbar/navbar.php';
                                             
                                             <div class="row p-2"> 
 
-                                              <div class="col-3">
+                                              <div class="col-4 col-lg-4">
                                                 <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img" alt="...">
                                                 <br>
                                                 <h6>Nombre del alumno</h6>
                                            
                                               </div>
 
-                                              <div class="col-9" style="text-align: right;">
+                                              <div class="col-lg-8 col-12" style="text-align: right;">
                                                 Feha de inscripción
                                                 <br>
                                                 28% completado
@@ -413,14 +454,14 @@ include_once 'navbar/navbar.php';
                                             
                                             <div class="row p-2"> 
 
-                                              <div class="col-3">
+                                              <div class="col-4 col-lg-4">
                                                 <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img" alt="...">
                                                 <br>
                                                 <h6>Nombre del alumno</h6>
                                            
                                               </div>
 
-                                              <div class="col-9" style="text-align: right;">
+                                              <div class="col-lg-8 col-12" style="text-align: right;">
                                                 Feha de inscripción
                                                 <br>
                                                 28% completado
@@ -437,7 +478,7 @@ include_once 'navbar/navbar.php';
 
                                             <!--Navigation-->      
                                         <div class="col-sm-12" >
-                                          <div class="DescripcionCurso" style="background-color: #b8d2e5; display: none; margin-bottom: 2%;" >
+                                          <div class="DescripcionCurso" style=" display: none; margin-bottom: 2%;" >
                
                                             <div class="row">
                                               <div class="col-4"></div>
@@ -543,7 +584,7 @@ include_once 'navbar/navbar.php';
 
                                                          <!--Navigation-->      
                                        <div class="col-sm-12" >
-                                          <div class="DescripcionCurso" style="background-color: #b8d2e5; display: none; margin-bottom: 2%;" >
+                                          <div class="DescripcionCurso" style=" display: none; margin-bottom: 2%;" >
                
                                             <div class="row">
                                               <div class="col-4"></div>

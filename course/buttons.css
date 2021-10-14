@@ -2,3 +2,21 @@
 {
     width: fit-content;
 }
+
+.buy-card
+{
+    background-color: white; 
+    position:fixed; 
+    z-index: 1;
+}
+
+
+
+@media (max-width: 1000px) {
+    .buy-card
+    {
+        margin-bottom: 3%;
+        position: relative;
+    }
+}
+  

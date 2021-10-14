@@ -1,7 +1,9 @@
 
 function validatePassword(){
 
-    var re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    var re =  /^(?=.*.\d)(?=.*[@$!%*?&])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+    /*(?=.*[@$!%*?&])
+    (?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\])*/
 
 
     var password = document.getElementById("password");
@@ -27,6 +29,39 @@ function validatePassword(){
             } else {
                 confirm_password.setCustomValidity('');
             }
+    
+        }
+   
+    }
+ 
+  }
+
+  function validatePasswordEdit(){
+
+    var re =  /^(?=.*.\d)(?=.*[@$!%*?&])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+    /*(?=.*[@$!%*?&])
+    (?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\])*/
+
+
+    var password = document.getElementById("passwordP");
+  
+  
+    if( !password.value ) 
+    {
+        password.setCustomValidity("Completa este campo");
+    }
+    else
+    {
+        if(!re.test(password.value))
+        {
+            password.setCustomValidity("La contraseña debe contener al menos 8 caracteres, 1 numero, 1 letra minuscula, 1 letra mayuscula y 1 caracter especial");
+        }
+        else 
+        {
+    
+            password.setCustomValidity('');
+        
+           
     
         }
    
@@ -84,7 +119,7 @@ function validateLName()
 
 function validateMail()
 {
-  var re = /([a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]{1,64})@([a-zA-Z0-9-]{2,253})\.([a-zA-Z0-9-]{2,3})/;
+  var re = /([a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]{1,30})@([a-zA-Z0-9-]{2,30})\.([a-zA-Z0-9-]{2,3})/;
   var mail = document.getElementById("email");
 
   if( !mail.value ) 

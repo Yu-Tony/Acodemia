@@ -12,6 +12,7 @@ class User{
     public $lastname;
     public $email;
     public $password;
+    public $typeAccount;
  
     // constructor
     public function __construct($db){
@@ -27,6 +28,7 @@ class User{
                     firstname = :firstname,
                     lastname = :lastname,
                     email = :email,
+                    typeAccount = :typeAccount,
                     password = :password";
     
         // prepare the query
@@ -38,11 +40,13 @@ class User{
         $this->lastname=htmlspecialchars(strip_tags($this->lastname));
         $this->email=htmlspecialchars(strip_tags($this->email));
         $this->password=htmlspecialchars(strip_tags($this->password));
-    
+        $this->typeAccount=htmlspecialchars(strip_tags($this->typeAccount));
+        
         // bind the values
         $stmt->bindParam(':firstname', $this->firstname);
         $stmt->bindParam(':lastname', $this->lastname);
         $stmt->bindParam(':email', $this->email);
+        $stmt->bindParam(':typeAccount', $this->typeAccount);
     
         // hash the password before saving to database
         $password_hash = password_hash($this->password, PASSWORD_BCRYPT);

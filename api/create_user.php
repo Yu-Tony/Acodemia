@@ -27,6 +27,8 @@ $user->firstname = $data->firstname;
 $user->lastname = $data->lastname;
 $user->email = $data->email;
 $user->password = $data->password;
+$user->typeAccount = $data->typeAccount;
+
  
 // create the user
 if(
