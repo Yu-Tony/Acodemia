@@ -28,9 +28,12 @@ $user->lastname = $data->lastname;
 $user->email = $data->email;
 $user->password = $data->password;
 $user->typeAccount = $data->typeAccount;
+$user->gender = $data->gender;
+$user->birthday = $data->birthday;
 
  
 // create the user
+
 if(
     !empty($user->firstname) &&
     !empty($user->email) &&
@@ -52,6 +55,6 @@ else{
     http_response_code(400);
  
     // display message: unable to create user
-    echo json_encode(array("message" => "Unable to create user."));
+    echo json_encode(array("message" => "Unable to create user"));
 }
 ?>

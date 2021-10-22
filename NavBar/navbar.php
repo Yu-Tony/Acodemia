@@ -39,7 +39,9 @@
 //------------------------------------------USER IS LOGGED OR NOT---------------------------------
     $(document).ready()
     {
+    
       getTypeAccount();
+      
     }
 
     function getTypeAccount()
@@ -80,34 +82,7 @@
           document.getElementById("NavUserNotLog").style.display = "inline";   
         });
     }
-    /*---------------------------------------DAY MONTH YEAR FUNCTION------------------------*/
-    function daysInMonth(month, year) {
-      return new Date(year, month, 0).getDate();
-    }
 
-    $(function(){ /* DOM ready */
-      $("#yearDropdown, #monthDropdown").change(function() {
-          //alert('The option with value ' + $(this).val());
-          if ($('#yearDropdown').val().length > 0 && $('#monthDropdown').val().length > 0) 
-            {
-              $('#dayDropdown').prop('disabled', false);
-              $('#dayDropdown').find('option').remove();
-      
-              //var days = new Date($('#monthDropdown').val(), $('#yearDropdown').val(), 0).getDate();
-              var daysInSelectedMonth = daysInMonth($('#monthDropdown').val(), $('#yearDropdown').val());
-      
-              for (var i = 1; i <= daysInSelectedMonth; i++) {
-                $('#dayDropdown').append($("<option></option>").attr("value", i).text(i));
-              }
-      
-      
-            } 
-            else {
-              $('#dayDropdown').prop('disabled', true);
-            }
-      });
-    });
-    
     /*----------------------------------------------SIGN IN---------------------------------------*/
 
      // trigger when registration form is submitted
@@ -117,7 +92,12 @@
         var sign_up_form=$(this);
         var form_data=JSON.stringify(sign_up_form.serializeObject());
 
-        //alert(form_data);
+
+        ///////
+
+        //////
+
+        alert(form_data);
         // submit form data to api
         $.ajax({
             url: "api/create_user.php",
@@ -133,6 +113,7 @@
             error: function(xhr, resp, text){
                 // on error, tell the user sign up failed
                 alert("Error al crear cuenta  " + text);
+                alert("otro coso  " + xhr.responseText);
                 $('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
             }
         });
@@ -348,14 +329,7 @@
                         <!-- FORM -->
                         <form method="POST" id="sign_up_form" style="margin: 5%;">
 
-                          <div class="row" style="margin-bottom: 10px;">
-                              <div class="col-12">
-                                  <img src="https://www.edmundsgovtech.com/wp-content/uploads/2020/01/default-picture_0_0.png" id="imagen_perfil" class="img-fluid rounded-circle" alt="Imagen de perfil" style="margin-bottom: 20px; width: 300px;  "/>
-                    
-                                  <input type="file" name="profile_pic" id="profile_pic" hidden onchange="readURL(this);"  accept="image/x-png,image/jpeg" />
-                                  <label for="profile_pic" class="btn btn-outline-primary center">Choose file</label>
-                              </div>
-                          </div>
+             
 
                           <div class="row" style="padding-bottom: 2%;">
 
@@ -394,7 +368,7 @@
           
                           <div class="form-group">
                               <label for="email">Correo</label>
-                              <input type="email" class="form-control" name="email" id="email" required />
+                              <input type="email" class="form-control" name="email" id="email" required autocomplete="off"/>
                           </div>
           
                           <div class="form-group">
@@ -407,79 +381,26 @@
                             <input id="passwordSign2" type="password" class="form-control mb-4" placeholder="Ingresar contraseña de nuevo" required oninput="validatePassword();"/> 
                           </div>
 
+
+
                           <div class="form-group">
-                            <label for="GenderForm">Género</label>
-                            <select class="form-control" id="GenderForm" required>
+                            <label for="gender">Género</label>
+                            <select class="form-control" id="gender" name="gender" required>
                               <option value="">Seleccionar</option>
-                              <option>Hombre</option>
-                              <option>Mujer</option>
-                              <option>No binario</option>
-                              <option>Ninguno/Agénero</option>
-                              <option>Prefiero no decir</option>
+                              <option value="1">Hombre</option>
+                              <option value="2">Mujer</option>
+                              <option value="3">No binario</option>
+                              <option value="4">Ninguno/Agénero</option>
+                              <option value="5">Prefiero no decir</option>
                             </select>
                           </div>
 
-                          <label for="Birthday">Fecha de nacimiento</label>
+                          <label for="birthday">Fecha de nacimiento</label>
                           <div class="form-row">
 
-                            <div class="form-group col-md-4">
-                              <div class="form-group">
-                      
-                                <select class="form-control" style="margin-top: 8px;" id="yearDropdown" required>
-                                <option value="">Seleccionar año</option>
-                  
-                                </select>
 
-                                  <script>
-                                    let dateDropdown = document.getElementById('yearDropdown'); 
-
-                                    let currentYear = new Date().getFullYear();    
-                                    let earliestYear = 1970;     
-                                    while (currentYear >= earliestYear) {      
-                                      let dateOption = document.createElement('option');          
-                                      dateOption.text = currentYear;      
-                                      dateOption.value = currentYear;        
-                                      dateDropdown.add(dateOption);      
-                                      currentYear -= 1;    
-                                    }
-                                  </script>
-                              </div>
-                            </div>
-                              
-                            <div class="form-group col-md-4">
-                              <div class="form-group">
-                      
-                                <select class="form-control"  style="margin-top: 8px;" id="monthDropdown" required>
-                                    <option value="">Seleccionar mes</option>
-                                <option value="1">January</option>
-                                    <option value="2">February</option>
-                                    <option value="3">March</option>
-                                    <option value="4">April</option>
-                                    <option value="5">May</option>
-                                    <option value="6">June</option>
-                                    <option value="7">July</option>
-                                    <option value="8">August</option>
-                                    <option value="9">September</option>
-                                    <option value="10">October</option>
-                                    <option value="11">Novermber</option>
-                                    <option value="12">December</option>
-                  
-                                </select>
-                              </div>
-                            </div>
-
-                              
-                            <div class="form-group col-md-4">
-                              <div class="form-group">
-                      
-                                <select class="form-control"  style="margin-top: 8px;" id="dayDropdown" disabled required>
-                                          <option value="">Seleccionar dia</option>      
-                                </select>
-                                  
-              
-                              </div>
-                            </div>
-                  
+                           <input id="birthday"  type="date" name="birthday"  min='1899-01-01' max="<?=date('Y-m-d',strtotime('now'));?>" style="margin-bottom: 5%; "/>
+             
                       
                   
                           </div>
@@ -526,7 +447,7 @@
                       <div class='form-group'>
                         <!-- Email --> 
                         <label for="email" class="in">Corre Electronico</label> 
-                        <input type="email" id="email" name='email' class="form-control mb-4" placeholder="Ingresa tu correo" required> 
+                        <input type="email" id="email" name='email' class="form-control mb-4" placeholder="Ingresa tu correo" required autocomplete="off">  
                       </div>
           
                       <div class='form-group'>

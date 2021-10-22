@@ -13,6 +13,10 @@ class User{
     public $email;
     public $password;
     public $typeAccount;
+    public $gender;
+    public $birthday;
+    
+    
  
     // constructor
     public function __construct($db){
@@ -29,6 +33,8 @@ class User{
                     lastname = :lastname,
                     email = :email,
                     typeAccount = :typeAccount,
+                    birthday = :birthday,
+                    gender = :gender,
                     password = :password";
     
         // prepare the query
@@ -41,13 +47,20 @@ class User{
         $this->email=htmlspecialchars(strip_tags($this->email));
         $this->password=htmlspecialchars(strip_tags($this->password));
         $this->typeAccount=htmlspecialchars(strip_tags($this->typeAccount));
+        $this->gender=htmlspecialchars(strip_tags($this->gender));
+        $this->birthday=htmlspecialchars(strip_tags($this->birthday));
         
+        
+
         // bind the values
         $stmt->bindParam(':firstname', $this->firstname);
         $stmt->bindParam(':lastname', $this->lastname);
         $stmt->bindParam(':email', $this->email);
         $stmt->bindParam(':typeAccount', $this->typeAccount);
-    
+        $stmt->bindParam(':gender', $this->gender);
+        $stmt->bindParam(':birthday', $this->birthday);
+     
+        
         // hash the password before saving to database
         $password_hash = password_hash($this->password, PASSWORD_BCRYPT);
         $stmt->bindParam(':password', $password_hash);
@@ -65,7 +78,7 @@ class User{
     function emailExists(){
     
         // query to check if email exists
-        $query = "SELECT id, firstname, lastname, password, typeAccount
+        $query = "SELECT id, firstname, lastname, password, typeAccount, gender, birthday
                 FROM " . $this->table_name . "
                 WHERE email = ?
                 LIMIT 0,1";
@@ -97,6 +110,9 @@ class User{
             $this->lastname = $row['lastname'];
             $this->password = $row['password'];
             $this->typeAccount = $row['typeAccount'];
+            $this->gender = $row['gender'];
+            $this->birthday = $row['birthday'];
+            
     
             // return true because email exists in the database
             return true;
@@ -117,6 +133,8 @@ class User{
                 SET
                     firstname = :firstname,
                     lastname = :lastname,
+                    birthday = :birthday,
+                    gender = :gender,
                     email = :email
                     {$password_set}
                 WHERE id = :id";
@@ -132,6 +150,8 @@ class User{
         // bind the values from the form
         $stmt->bindParam(':firstname', $this->firstname);
         $stmt->bindParam(':lastname', $this->lastname);
+        $stmt->bindParam(':birthday', $this->birthday);
+        $stmt->bindParam(':gender', $this->gender);
         $stmt->bindParam(':email', $this->email);
     
         // hash the password before saving to database

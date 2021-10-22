@@ -46,6 +46,8 @@ if($jwt){
         $user->email = $data->emailP;
         $user->password = $data->passwordP;
         $user->id = $decoded->data->id;
+        $user->birthday =  $data->birthdayP;
+        $user->gender =  $data->genderP;
         
         // update the user record
         if($user->update()){
@@ -58,7 +60,9 @@ if($jwt){
                     "id" => $user->id,
                     "firstname" => $user->firstname,
                     "lastname" => $user->lastname,
-                    "email" => $user->email
+                    "email" => $user->email,
+                    "birthday" => $user->birthday,
+                    "gender" => $user->gender
                 )
             );
             $jwt = JWT::encode($token, $key);

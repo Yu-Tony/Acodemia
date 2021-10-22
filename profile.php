@@ -3,6 +3,9 @@ include_once 'navbar/navbar.php';
 //include_once 'footer/footer.php';
 ?>
 
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,6 +34,20 @@ include_once 'navbar/navbar.php';
           document.getElementById("firstnameP").value = result.data.firstname;
           document.getElementById("lastnameP").value = result.data.lastname;
           document.getElementById("emailP").value = result.data.email;
+          document.getElementById("SecretMail").value = result.data.email;
+
+          var dd = document.getElementById('genderP');
+          for (var i = 0; i < dd.options.length; i++) {
+              if (dd.options[i].text.toLowerCase() === result.data.gender) {
+                  dd.selectedIndex = i;
+                  break;
+              }
+          }
+
+          //console.log(result.data);
+          document.getElementById('birthdayP').value = result.data.birthday;
+          
+          
 
 
           $fname = result.data.firstname; 
@@ -38,11 +55,35 @@ include_once 'navbar/navbar.php';
        
           $lname = result.data.lastname; 
 
-          
           $("#UserNameProfile").html($fname+$space+$lname);
-        
-            
-           
+          
+          
+        var parametros = {
+                "valorID" : result.data.id
+        };
+        $.ajax({
+                data:  parametros, //datos que se envian a traves de ajax
+                url:   'profile/view.php', //archivo que recibe la peticion
+                type:  'post', //método de envio
+                beforeSend: function () {
+                 
+                        //$("#resultado").html("Procesando, espere por favor...");
+                },
+                success:  function (response) { //una vez que el archivo recibe el request lo procesa y lo devuelve
+                  $("#resultado").html(response);
+                        //alert(response);
+                        //alert("wooo");
+                },
+                error: function(xhr, resp, text){
+                // on error, tell the user sign up failed
+                alert("Error al cargar imagen  " + text);
+                //alert("otro coso  " + xhr.responseText);
+              
+            }
+        });
+
+
+   
         })
     
         // on error/fail, tell the user he needs to login to show the account page
@@ -98,7 +139,7 @@ include_once 'navbar/navbar.php';
       
       // convert object to json string
       var form_data=JSON.stringify(update_account_form_obj);
-      alert("updating " + form_data);
+     // alert("updating " + form_data);
       // submit form data to api
       $.ajax({
           url: "api/update_user.php",
@@ -116,6 +157,9 @@ include_once 'navbar/navbar.php';
               $('input[type=text], input[type=email], input[type=password]').prop('readonly', true);
               $('.save-things').css( "display", "none" );
               $('.cancel-things').css( "display", "none" );
+
+              document.getElementById("birthdayP").disabled = true;
+              document.getElementById("genderP").disabled = true;
              
               $(this).css( "display", "none" );
               $('.edit-things').css( "display", "" );
@@ -145,6 +189,10 @@ include_once 'navbar/navbar.php';
               //alert('best take my own advice ');
               
               $('input[type=text], input[type=email], input[type=password]').removeAttr('readonly');
+
+              document.getElementById("birthdayP").disabled = false;
+              document.getElementById("genderP").disabled = false;
+
               $('.save-things').css( "display", "" );
              
               $(this).css( "display", "none" );
@@ -158,6 +206,8 @@ include_once 'navbar/navbar.php';
               //alert('best take my own advice ');
               
               $('input[type=text], input[type=email], input[type=password]').prop('readonly', true);
+              document.getElementById("birthdayP").disabled = true;
+              document.getElementById("genderP").disabled = true;
               $('.save-things').css( "display", "none" );
              
               $(this).css( "display", "none" );
@@ -177,6 +227,21 @@ include_once 'navbar/navbar.php';
 
 
         
+//-------------------------------------------------------------------------Mostrar imagen seleccionada----------------------------------------------------//
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#profile-pic')
+                        .attr('src', e.target.result)
+                        .width(150)
+                        .height(200);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
     
 
   </script>
@@ -198,14 +263,28 @@ include_once 'navbar/navbar.php';
                   <div class="card" style="background-color: whitesmoke;">
                     <div class="card-body" >
                       <div class="d-flex flex-column align-items-center text-center">
-                        <img src="https://www.edmundsgovtech.com/wp-content/uploads/2020/01/default-picture_0_0.png" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
-                        <div class="mt-3">
-                          <h4 id="UserNameProfile"></h4>
-                          <h6>Fecha de registro 09/09/2021</h6>
-                        </div>
 
-                        <input type="file" name="profile_pic" id="profile_pic" hidden onchange="readURL(this);"  accept="image/x-png,image/jpeg" />
+                        <form action="profile/upload.php" method="post" enctype="multipart/form-data" style="margin: 0px;">
+
+ 
+                        <div id="resultado"></div>
+
+                          <div class="mt-3">
+                            <h4 id="UserNameProfile"></h4>
+                            <h6>Fecha de registro 09/09/2021</h6>
+                          </div>
+
+                             <input type="text" hidden name="SecretMail" id="SecretMail" />
+
+                          <input type="file" name="profile_pic" id="profile_pic" hidden onchange="readURL(this);"  accept="image/x-png,image/jpeg" />
                           <label for="profile_pic" class="btn btn-outline-primary center">Choose file</label>
+
+                          <input type="submit" class="btn btn-outline-primary center" name="submit" value="Upload">
+
+                        </form>
+
+
+                       
                       </div>
 
                     </div>
@@ -243,7 +322,17 @@ include_once 'navbar/navbar.php';
                             <h6 class="mb-0">Género</h6>
                           </div>
                           <div class="col-sm-9 text-secondary">
-                            <input type="text" class="form-control" value="Hombre" readonly>
+                          <div class="form-group">
+                         
+                            <select class="form-control" id="genderP" name="genderP" disabled required>
+                              <option value="">Seleccionar</option>
+                              <option value="1">Hombre</option>
+                              <option value="2">Mujer</option>
+                              <option value="3">No binario</option>
+                              <option value="4">Ninguno/Agénero</option>
+                              <option value="5">Prefiero no decir</option>
+                            </select>
+                          </div>
                           </div>
                         </div>
                         <div class="row mb-3">
@@ -251,7 +340,7 @@ include_once 'navbar/navbar.php';
                             <h6 class="mb-0">Fecha de nacimiento</h6>
                           </div>
                           <div class="col-sm-9 text-secondary">
-                            <input type="text" class="form-control" value="26/10/1995" readonly>
+                            <input id="birthdayP" disabled type="date" name="birthdayP"  min='1899-01-01' max="<?=date('Y-m-d',strtotime('now'));?>" style="margin-bottom: 5%; "/>
                           </div>
                         </div>
                         <div class="row mb-3">
