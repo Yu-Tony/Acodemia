@@ -49,6 +49,8 @@ if($jwt){
         $user->birthday =  $data->birthdayP;
         $user->gender =  $data->genderP;
         
+        
+
         // update the user record
         if($user->update()){
             // we need to re-generate jwt because user details might be different

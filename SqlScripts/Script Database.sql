@@ -17,7 +17,11 @@ usuarioEstado bool not null comment 'Guarda el estado del usuario, true para act
 
 create table Categorias (
 categoriaId int primary key auto_increment comment 'Guarda el id de la categoria', 
-categoriaNombre varchar(30) not null comment 'Guarda el nombre de la categoria'
+categoriaNombre varchar(30) not null comment 'Guarda el nombre de la categoria',
+categoriaDescripcion  varchar(256) not null comment 'Guarda la descripcion de la categoria',
+categoriaFecha date not null comment 'Guarda la fecha en la que se creo de la categoria' ,
+categoriaPersona varchar(256) not null comment 'Guarda el nombre de quien creo la categoria',
+foreign key(categoriaPersona) references Usuario(usuarioId)
 );
 
 create table Curso (

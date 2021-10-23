@@ -4,7 +4,7 @@ class User{
  
     // database connection and table name
     private $conn;
-    private $table_name = "testtable";
+    private $table_name = "usuario";
  
     // object properties
     public $id;
@@ -29,13 +29,13 @@ class User{
         // insert query
         $query = "INSERT INTO " . $this->table_name . "
                 SET
-                    firstname = :firstname,
-                    lastname = :lastname,
-                    email = :email,
-                    typeAccount = :typeAccount,
-                    birthday = :birthday,
-                    gender = :gender,
-                    password = :password";
+                usuarioNombre = :firstname,
+                usuarioApellido = :lastname,
+                usuarioEmail = :email,
+                usuarioTipo = :typeAccount,
+                usuarioFechaNacimiento = :birthday,
+                usuarioGenero = :gender,
+                usuarioContraseña = :password";
     
         // prepare the query
         $stmt = $this->conn->prepare($query);
@@ -78,11 +78,13 @@ class User{
     function emailExists(){
     
         // query to check if email exists
-        $query = "SELECT id, firstname, lastname, password, typeAccount, gender, birthday
+        $query = "SELECT usuarioId, usuarioNombre, usuarioApellido, usuarioContraseña, usuarioTipo, usuarioGenero, usuarioFechaNacimiento
                 FROM " . $this->table_name . "
-                WHERE email = ?
+                WHERE usuarioEmail = ?
                 LIMIT 0,1";
     
+                           
+
         // prepare the query
         $stmt = $this->conn->prepare( $query );
     
@@ -104,14 +106,15 @@ class User{
             // get record details / values
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
     
+
             // assign values to object properties
-            $this->id = $row['id'];
-            $this->firstname = $row['firstname'];
-            $this->lastname = $row['lastname'];
-            $this->password = $row['password'];
-            $this->typeAccount = $row['typeAccount'];
-            $this->gender = $row['gender'];
-            $this->birthday = $row['birthday'];
+            $this->id = $row['usuarioId'];
+            $this->firstname = $row['usuarioNombre'];
+            $this->lastname = $row['usuarioApellido'];
+            $this->password = $row['usuarioContraseña'];
+            $this->typeAccount = $row['usuarioTipo'];
+            $this->gender = $row['usuarioGenero'];
+            $this->birthday = $row['usuarioFechaNacimiento'];
             
     
             // return true because email exists in the database
@@ -121,23 +124,61 @@ class User{
         // return false if email does not exist in the database
         return false;
     }
+
+    function emailCheck(){
+    
+        // query to check if email exists
+        $query = "SELECT usuarioNombre
+                FROM " . $this->table_name . "
+                WHERE usuarioEmail = ?
+                LIMIT 0,1";
+    
+                           
+
+        // prepare the query
+        $stmt = $this->conn->prepare( $query );
+    
+        // sanitize
+        $this->email=htmlspecialchars(strip_tags($this->email));
+    
+        // bind given email value
+        $stmt->bindParam(1, $this->email);
+    
+        // execute the query
+        $stmt->execute();
+    
+        // get number of rows
+        $num = $stmt->rowCount();
+    
+        // if email exists, assign values to object properties for easy access and use for php sessions
+        if($num>0){
+    
+            // return true because email exists in the database
+            return false;
+        }
+    
+        // return false if email does not exist in the database
+        return true;
+    }
  
     // update a user record
     public function update(){
     
         // if password needs to be updated
-        $password_set=!empty($this->password) ? ", password = :password" : "";
+        $password_set=!empty($this->password) ? ", usuarioContraseña = :password" : "";
     
         // if no posted password, do not update the password
         $query = "UPDATE " . $this->table_name . "
                 SET
-                    firstname = :firstname,
-                    lastname = :lastname,
-                    birthday = :birthday,
-                    gender = :gender,
-                    email = :email
+                usuarioNombre = :firstname,
+                usuarioApellido = :lastname,
+                usuarioFechaNacimiento = :birthday,
+                usuarioGenero = :gender,
+                usuarioEmail = :email
                     {$password_set}
                 WHERE id = :id";
+
+
     
         // prepare the query
         $stmt = $this->conn->prepare($query);

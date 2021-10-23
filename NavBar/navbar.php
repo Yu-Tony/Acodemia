@@ -93,11 +93,11 @@
         var form_data=JSON.stringify(sign_up_form.serializeObject());
 
 
-        ///////
+        ///////alert(form_data);
 
         //////
 
-        alert(form_data);
+        
         // submit form data to api
         $.ajax({
             url: "api/create_user.php",
@@ -112,8 +112,8 @@
             },
             error: function(xhr, resp, text){
                 // on error, tell the user sign up failed
-                alert("Error al crear cuenta  " + text);
-                alert("otro coso  " + xhr.responseText);
+                console.log("Error al crear cuenta  " + text);
+                console.log("Response text  " + xhr.responseText);
                 $('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
             }
         });
@@ -130,7 +130,8 @@
         // get form data
         var login_form=$(this);
         var form_data=JSON.stringify(login_form.serializeObject());
-       
+
+        
         // submit form data to api
         $.ajax({
             url: "api/login.php",
@@ -156,7 +157,10 @@
             error: function(xhr, resp, text){
               console.log("fail");
                 // on error, tell the user login has failed & empty the input boxes
-                alert("Error al iniciar sesion  " + text);
+                console.log("Error al iniciar sesion " + text);
+                console.log("Response text  " + xhr.responseText);
+      
+
                 $('#response-log').html("<div class='alert alert-danger'>Login failed. Email or password is incorrect.</div>");
                 login_form.find('input').val('');
             }

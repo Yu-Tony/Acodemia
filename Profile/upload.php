@@ -61,7 +61,10 @@
 
 
 // Include the database configuration file  
-require_once 'db_conn.php'; 
+require_once '../api/config/database.php'; 
+
+$database = new Database();
+$db = $database->getConnection();
  
 // If file upload form is submitted 
 $status = $statusMsg = $mail= ''; 
@@ -89,16 +92,16 @@ if(isset($_POST["submit"])){
 			//echo "<script type='text/javascript'>alert(\"Wrong Username or Password\")</script>";
 			
 
-			$idProfileQuery = $conn->query("SELECT id FROM testtable WHERE email = '".$mail."'"); 
+			$idProfileQuery = $db->query("SELECT usuarioId FROM usuario WHERE usuarioEmail = '".$mail."'"); 
 
 			while ($row = $idProfileQuery->fetch_assoc()) {
-				$idProfile= $row['id'];
+				$idProfile= $row['usuarioId'];
 				//echo '<script type="text/javascript">alert("'.$idProfile.'");</script>';
 			}
 
 
 
-            $insert = $conn->query("UPDATE testtable SET image_url = '$imgContent' WHERE id = '".$idProfile."' "); 
+            $insert = $db->query("UPDATE usuario SET 	usuarioFotoPerfil = '$imgContent' WHERE usuarioId = '".$idProfile."' "); 
 
 	
 

@@ -56,7 +56,7 @@ include_once 'navbar/navbar.php';
           $lname = result.data.lastname; 
 
           $("#UserNameProfile").html($fname+$space+$lname);
-          
+        
           
         var parametros = {
                 "valorID" : result.data.id
@@ -76,8 +76,8 @@ include_once 'navbar/navbar.php';
                 },
                 error: function(xhr, resp, text){
                 // on error, tell the user sign up failed
-                alert("Error al cargar imagen  " + text);
-                //alert("otro coso  " + xhr.responseText);
+                console.log("Error al cargar imagen  " + text);
+                console.log("otro coso  " + xhr.responseText);
               
             }
         });

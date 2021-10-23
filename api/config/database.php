@@ -5,7 +5,7 @@ class Database{
     // specify your own database credentials
     //https://stackoverflow.com/questions/28193713/change-port-of-mysql-server-in-phpmyadmin
     private $host = "127.0.0.1:3307";
-    private $db_name = "acodemia_db";
+    private $db_name = "acodemiadb";
     private $username = "root";
     private $password = "";
     public $conn;
