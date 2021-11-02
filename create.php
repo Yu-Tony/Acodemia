@@ -50,12 +50,10 @@ include_once 'navbar/navbar.php';
                 
     
             $('#newRow').append(html);
-        });
+            });
     
         }); 
-
-         
-                                                                
+                                                   
         // remove row
         $(document).on('click', '#removeRow', function () {
             $(this).closest('#inputFormRow').remove();
@@ -70,90 +68,51 @@ include_once 'navbar/navbar.php';
             }       
         }
 
-        //Solo poner el costo de curso cuando lo tiene
-        $(function(){ /* DOM ready */
-        $("#tipoCosto").change(function() {
-          
-          if ($('#tipoCosto').val() = "Precio por el curso completo") 
-            {
-                alert('todo' );
-              /*$('#dayDropdown').prop('disabled', false);
-              $('#dayDropdown').find('option').remove();*/
-      
-
-      
-      
-            } 
-            else {
-              /*$('#dayDropdown').prop('disabled', true);*/
-            }
-      });
-    });
-
         /*--------------------------------------------------AGREGAR CATEGORIA--------------------------------------*/
-    // trigger when login form is submitted
-    $(document).on('submit', '#category_form', function()
-    {
-     
-
-        // get form data
-        var crearCategoria=$(this);
-        var form_data=JSON.stringify(crearCategoria.serializeObject());
-
-
-        
-                var select = document.getElementById("dynamic-select");
-	select.options[select.options.length] = new Option('New Element', '0');
+        // trigger when login form is submitted
+        $(document).on('submit', '#category_form', function()
+        {
+            // get form data
+            var crearCategoria=$(this);
+            var form_data=JSON.stringify(crearCategoria.serializeObject());
 
             //alert(form_data);
-      
-        // submit form data to api
-      /*  $.ajax({
-            url: "create/createCategory.php",
-            type : "POST",
-            contentType : 'application/json',
-            data : form_data,
-            success : function(result){
-       
-
-
-                console.log(result);
-
-                var option = document.createElement("option");
-                option.text = result;
-                option.value = 5;
-                var select = document.getElementById("selectCategory");
-                select.appendChild(option);
-
-             
-
-            
-
-               // $('#selectCategory').append("<option value='85'>Hot summer</option>");
-
-                //document.getElementById("selectCategory").innerHTML += "<option value='85'>Hot summer</option>";
-
- 
-                crearCategoria.find('input').val('');
-                crearCategoria.find('textarea').val('');
-              
-               
-            },
-            error: function(xhr, resp, text){
-              console.log("fail");
-                // on error, tell the user login has failed & empty the input boxes
-                console.log("Error al iniciar sesion " + text);
-                console.log("Response text  " + xhr.responseText);
-      
-                
-                crearCategoria.find('input').val('');
-                crearCategoria.find('textarea').val('');
-            }
-        });*/
-
-        return false;
-    });
         
+            // submit form data to api
+            $.ajax({
+                url: "create/createCategory.php",
+                type : "POST",
+                contentType : 'application/json',
+                data : form_data,
+                success : function(result){
+                    
+                    console.log(result);
+
+                    //http://jsfiddle.net/codeandcloud/nr54vx7b/
+                    var selects = document.getElementById("dynamic-selects");
+                    selects.options[selects.options.length] = new Option(result, '6');
+                    $('.selectpicker').selectpicker('refresh');
+   
+                    crearCategoria.find('input').val('');
+                    crearCategoria.find('textarea').val('');
+                
+                
+                },
+                error: function(xhr, resp, text){
+                console.log("fail");
+                    // on error, tell the user login has failed & empty the input boxes
+                    console.log("Error al iniciar sesion " + text);
+                    console.log("Response text  " + xhr.responseText);
+        
+                    
+                    crearCategoria.find('input').val('');
+                    crearCategoria.find('textarea').val('');
+                }
+            });
+
+            return false;
+        });
+            
     </script>
 
 
@@ -237,23 +196,13 @@ include_once 'navbar/navbar.php';
 
                                                     <div class="form-group">
                                                         <label class="col-12 col-form-label">Categoría</label> 
-                                                       
-                                                        <select class='selectpicker' name='selectCategory' id="selectCategory" data-live-search='true' multiple title='Selecciona una categoría...' data-width='100%'required>
-                                                            <?php foreach($users as $user): ?>
-                                                                <option value="<?= $user['categoriaId']; ?>"><?= $user['categoriaNombre']; ?></option>
-                                                            <?php endforeach; ?>
+   
+                                                            <select  id="dynamic-selects"  class="selectpicker" multiple aria-label="size 3 select example" name='selectCategory' id="selectCategory">
+                                                                    <?php foreach($users as $user): ?>
+                                                                        <option value="<?= $user['categoriaId']; ?>"><?= $user['categoriaNombre']; ?></option>
+                                                                    <?php endforeach; ?>
+                                                            </select>
 
-                                                       
-                                                        </select>
-
-                                                        <select id="dynamic-select">
-                                                        <option value="1">one</option>
-                                                        <option value="2">two</option>
-                                                        <option value="3">three</option>
-                                                        </select>
-
-
-                                                      
 
                                                         <label class="col-12 col-form-label">¿No encuentras la categoría que necesitas?<a href="#crearCategoria"> Crea una nueva </a></label> 
 

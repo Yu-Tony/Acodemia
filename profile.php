@@ -16,6 +16,9 @@ include_once 'navbar/navbar.php';
 
     <script>
 
+      var AccountTypeGlobal = 0;
+      var MailAccount = 0;
+
     //--------------------------------Comenzar imagen--------------------//
     $(document).ready()
     {
@@ -31,18 +34,15 @@ include_once 'navbar/navbar.php';
         var jwt = getCookie('jwt');
         $.post("api/validate_token.php", JSON.stringify({ jwt:jwt })).done(function(result) {
     
+          MailAccount = result.data.email;
           document.getElementById("firstnameP").value = result.data.firstname;
           document.getElementById("lastnameP").value = result.data.lastname;
           document.getElementById("emailP").value = result.data.email;
           document.getElementById("SecretMail").value = result.data.email;
 
           var dd = document.getElementById('genderP');
-          for (var i = 0; i < dd.options.length; i++) {
-              if (dd.options[i].text.toLowerCase() === result.data.gender) {
-                  dd.selectedIndex = i;
-                  break;
-              }
-          }
+          dd.selectedIndex = result.data.gender;
+
 
           //console.log(result.data);
           document.getElementById('birthdayP').value = result.data.birthday;
@@ -99,8 +99,9 @@ include_once 'navbar/navbar.php';
         var jwt = getCookie('jwt');
         $.post("api/validate_token.php", JSON.stringify({ jwt:jwt })).done(function(result) {
         
+          AccountTypeGlobal = result.data.typeAccount;
          // alert(result.data.typeAccount);
-          if(result.data.typeAccount==1)
+          if(AccountTypeGlobal==1)
           {
             console.log("TYPE 1");
             $('.historial-escuela').css('display','inline');
@@ -131,14 +132,19 @@ include_once 'navbar/navbar.php';
       // validate jwt to verify access
       var jwt = getCookie('jwt');
 
+
       // get form data
-      var update_account_form_obj = update_account_form.serializeObject()
+     var update_account_form_obj = update_account_form.serializeObject();
       
+      update_account_form_obj["TypeAccountP"] =AccountTypeGlobal; 
+      
+
       // add jwt on the object
       update_account_form_obj.jwt = jwt;
       
       // convert object to json string
       var form_data=JSON.stringify(update_account_form_obj);
+
      // alert("updating " + form_data);
       // submit form data to api
       $.ajax({

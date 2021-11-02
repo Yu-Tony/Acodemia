@@ -1,4 +1,16 @@
-
+<?php
+    //Connect to our MySQL database using the PDO extension.
+    $pdo = new PDO('mysql:host=127.0.0.1:3307;dbname=acodemiadb', 'root', '');
+    //Our select statement. This will retrieve the data that we want.
+    $sql = "SELECT categoriaId, categoriaNombre FROM categorias";
+    //Prepare the select statement.
+    $stmt = $pdo->prepare($sql);
+    //Execute the statement.
+    $stmt->execute();
+    //Retrieve the rows using fetchAll.
+    $users = $stmt->fetchAll();
+?>
+    
     <!--bootstrap-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -34,6 +46,7 @@
     <!---JS-->
 
 
+    
   <script type="text/javascript">
 
 //------------------------------------------USER IS LOGGED OR NOT---------------------------------
@@ -94,10 +107,6 @@
 
 
         ///////alert(form_data);
-
-        //////
-
-        
         // submit form data to api
         $.ajax({
             url: "api/create_user.php",
@@ -247,25 +256,11 @@
 
                     <ul class="dropdown-menu add-to-ul" aria-labelledby="navbarDropdownMenuLink">
 
-                        <li><a class="dropdown-item" href="http://localhost:8012/Acodemia/search.php">HTML</a></li>
+        
 
-                        <li class="dropdown-submenu"><a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">CSS</a>
-                            <div class="dropdown-menu top add-to-dropdown-div">
-                            <a class="dropdown-item" href="#">Selectores</a>
-                                <a class="dropdown-item" href="#">Comentarios</a>
-                            </div>
-                        </li>
-
-                        <li class="dropdown-submenu"><a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">JS</a>
-                            <div class="dropdown-menu top add-to-dropdown-div">
-                            <a class="dropdown-item" href="#">Variables</a>
-                                <a class="dropdown-item" href="#">Eventos</a>
-                                <a class="dropdown-item" href="#">Comentarios</a>
-                                <a class="dropdown-item" href="#">Operadores</a>
-                                <a class="dropdown-item" href="#">Metodos</a> 
-   
-                            </div>
-                        </li>
+                        <?php foreach($users as $user): ?>
+                          <li><a class="dropdown-item" href="http://localhost:8012/Acodemia/search.php"><?= $user['categoriaNombre']; ?></a></li>
+                         <?php endforeach; ?>
 
                     </ul>
                 </div>

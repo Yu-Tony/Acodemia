@@ -76,6 +76,8 @@ if(isset($_POST["submit"])){
     $status = 'error'; 
     if(!empty($_FILES["profile_pic"]["name"])) { 
         // Get file info 
+
+
         $fileName = basename($_FILES["profile_pic"]["name"]); 
         $fileType = pathinfo($fileName, PATHINFO_EXTENSION); 
          
@@ -85,40 +87,65 @@ if(isset($_POST["submit"])){
             $image = $_FILES['profile_pic']['tmp_name']; 
             $imgContent = addslashes(file_get_contents($image)); 
          
-            // Insert image content into database 
-			// $insert = $db->query("INSERT into testtable (image, uploaded) VALUES ('$imgContent', NOW())"); 
 		
 
-			//echo "<script type='text/javascript'>alert(\"Wrong Username or Password\")</script>";
+			$call = 'call userGetId(?,@idUser)';
+    
+			// prepare
+			$stmt = $db->prepare($call);
+		
+
+			$stmt->bindParam(1, $mail);
+	
+		
+			// execute
 			
-
-			$idProfileQuery = $db->query("SELECT usuarioId FROM usuario WHERE usuarioEmail = '".$mail."'"); 
-
-			while ($row = $idProfileQuery->fetch_assoc()) {
-				$idProfile= $row['usuarioId'];
-				//echo '<script type="text/javascript">alert("'.$idProfile.'");</script>';
+			if($stmt->execute())
+			{
+				$sql = "SELECT @idUser";
+				$stmt = $db->prepare($sql);
+				$stmt->execute();
+	
+				list($idUser) = $stmt->fetch(PDO::FETCH_NUM);
+						
+				 $stmtUpdate = $db->query("UPDATE usuario SET usuarioFotoPerfil = '$imgContent' WHERE usuarioId = '".$idUser."' "); 
 			}
 
 
 
-            $insert = $db->query("UPDATE usuario SET 	usuarioFotoPerfil = '$imgContent' WHERE usuarioId = '".$idProfile."' "); 
+			//CALL `userUpdateImg`(@p0, @p1);
+      		/* $Update = 'CALL userUpdateImg(?, ?)';
+    
+      		 // prepare 
+      		 $stmtUpdate = $db->prepare($Update);
 
+        	// bind the values
+		
+			$stmtUpdate->bindParam(1, $idUser);
+			$stmtUpdate->bindParam(2, $imgContent);
 	
+		
+			// execute 
+			$stmtUpdate->execute();
+			//echo ($imgContent);*/
 
-             
-            if($insert){ 
+      if($stmtUpdate){ 
                 $status = 'success'; 
                 $statusMsg = "File uploaded successfully."; 
+				echo $statusMsg; 
 				header("Location: http://localhost:8012/Acodemia/profile.php");
 				exit();
             }else{ 
                 $statusMsg = "File upload failed, please try again."; 
+				echo $statusMsg; 
             }  
         }else{ 
             $statusMsg = 'Sorry, only JPG, JPEG, PNG, & GIF files are allowed to upload.'; 
+			echo $statusMsg; 
         } 
     }else{ 
         $statusMsg = 'Please select an image file to upload.'; 
+		echo $statusMsg; 
     } 
 } 
  

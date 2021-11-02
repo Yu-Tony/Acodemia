@@ -26,19 +26,11 @@ class User{
     // create new user record
     function create(){
     
-        // insert query
-        $query = "INSERT INTO " . $this->table_name . "
-                SET
-                usuarioNombre = :firstname,
-                usuarioApellido = :lastname,
-                usuarioEmail = :email,
-                usuarioTipo = :typeAccount,
-                usuarioFechaNacimiento = :birthday,
-                usuarioGenero = :gender,
-                usuarioContraseña = :password";
+
+        $call = 'CALL userCreate(?, ?, ?, ?, ?, ?, ?)';
     
-        // prepare the query
-        $stmt = $this->conn->prepare($query);
+        // prepare
+        $stmt = $this->conn->prepare($call);
     
         // sanitize
         //https://www.php.net/manual/en/function.htmlspecialchars.php
@@ -53,19 +45,21 @@ class User{
         
 
         // bind the values
-        $stmt->bindParam(':firstname', $this->firstname);
-        $stmt->bindParam(':lastname', $this->lastname);
-        $stmt->bindParam(':email', $this->email);
-        $stmt->bindParam(':typeAccount', $this->typeAccount);
-        $stmt->bindParam(':gender', $this->gender);
-        $stmt->bindParam(':birthday', $this->birthday);
+
+        $stmt->bindParam(1, $this->firstname);
+        $stmt->bindParam(2, $this->lastname);
+        $stmt->bindParam(3, $this->email);
+        $stmt->bindParam(4, $this->typeAccount);
+        $stmt->bindParam(5, $this->birthday);
+        $stmt->bindParam(6, $this->gender);
+
      
         
         // hash the password before saving to database
         $password_hash = password_hash($this->password, PASSWORD_BCRYPT);
-        $stmt->bindParam(':password', $password_hash);
+        $stmt->bindParam(7, $password_hash);
     
-        // execute the query, also check if query was successful
+        // execute, also check if was successful
         if($stmt->execute()){
             return true;
         }
@@ -75,141 +69,101 @@ class User{
     
     // emailExists() 
     // check if given email exist in the database
+    //PARA LOG IN
     function emailExists(){
-    
-        // query to check if email exists
-        $query = "SELECT usuarioId, usuarioNombre, usuarioApellido, usuarioContraseña, usuarioTipo, usuarioGenero, usuarioFechaNacimiento
-                FROM " . $this->table_name . "
-                WHERE usuarioEmail = ?
-                LIMIT 0,1";
-    
-                           
 
-        // prepare the query
-        $stmt = $this->conn->prepare( $query );
-    
-        // sanitize
-        $this->email=htmlspecialchars(strip_tags($this->email));
-    
-        // bind given email value
-        $stmt->bindParam(1, $this->email);
-    
-        // execute the query
-        $stmt->execute();
-    
-        // get number of rows
-        $num = $stmt->rowCount();
-    
-        // if email exists, assign values to object properties for easy access and use for php sessions
-        if($num>0){
-    
-            // get record details / values
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+        $call =  $this->conn->prepare('CALL userEmailExists(:email, @id, @nombre, @apellido, @contrasena, @tipo, @genero, @fechanac)');
+        $call->bindParam(':email', $this->email, PDO::PARAM_STR);       
 
-            // assign values to object properties
-            $this->id = $row['usuarioId'];
-            $this->firstname = $row['usuarioNombre'];
-            $this->lastname = $row['usuarioApellido'];
-            $this->password = $row['usuarioContraseña'];
-            $this->typeAccount = $row['usuarioTipo'];
-            $this->gender = $row['usuarioGenero'];
-            $this->birthday = $row['usuarioFechaNacimiento'];
-            
-    
-            // return true because email exists in the database
-            return true;
-        }
-    
-        // return false if email does not exist in the database
-        return false;
+        if($call->execute())
+        {
+                 
+            $select = $this->conn->query('SELECT @id, @nombre, @apellido, @contrasena, @tipo, @genero, @fechanac');
+            $result = $select->fetch(PDO::FETCH_ASSOC);
+        
+            //var_dump($result);
+  
+            if($result['@id']!=null)
+            {
+                $this->id = $result['@id'];
+                $this->firstname = $result['@nombre'];
+                $this->lastname = $result['@apellido'];
+                $this->password = $result['@contrasena'];
+                $this->typeAccount = $result['@tipo'];
+                $this->gender = $result['@genero'];
+                $this->birthday = $result['@fechanac']; 
+
+                return true;
+            }else{return false;}
+
+        }else{return false;}
+
     }
 
     function emailCheck(){
-    
-        // query to check if email exists
-        $query = "SELECT usuarioNombre
-                FROM " . $this->table_name . "
-                WHERE usuarioEmail = ?
-                LIMIT 0,1";
-    
-                           
+        
+        $call =  $this->conn->prepare('CALL userEmailCheck(:email, @nombre)');
+        $call->bindParam(':email', $this->email, PDO::PARAM_STR);       
 
-        // prepare the query
-        $stmt = $this->conn->prepare( $query );
-    
-        // sanitize
-        $this->email=htmlspecialchars(strip_tags($this->email));
-    
-        // bind given email value
-        $stmt->bindParam(1, $this->email);
-    
-        // execute the query
-        $stmt->execute();
-    
-        // get number of rows
-        $num = $stmt->rowCount();
-    
-        // if email exists, assign values to object properties for easy access and use for php sessions
-        if($num>0){
-    
-            // return true because email exists in the database
-            return false;
-        }
-    
-        // return false if email does not exist in the database
-        return true;
+        if($call->execute())
+        {
+                 
+            $select = $this->conn->query('SELECT @nombre');
+            $result = $select->fetch(PDO::FETCH_ASSOC);
+        
+            //var_dump($result);
+  
+            if($result['@nombre']!=null)
+            {
+                $this->firstname = $result['@nombre'];
+                return true;
+            }else{return false;}
+
+        }else{return false;}
     }
  
     // update a user record
     public function update(){
+      
+         $call = 'CALL userUpdate(?,?,?,?,?,?,?,?)';
     
-        // if password needs to be updated
-        $password_set=!empty($this->password) ? ", usuarioContraseña = :password" : "";
-    
-        // if no posted password, do not update the password
-        $query = "UPDATE " . $this->table_name . "
-                SET
-                usuarioNombre = :firstname,
-                usuarioApellido = :lastname,
-                usuarioFechaNacimiento = :birthday,
-                usuarioGenero = :gender,
-                usuarioEmail = :email
-                    {$password_set}
-                WHERE id = :id";
-
-
-    
-        // prepare the query
-        $stmt = $this->conn->prepare($query);
+        // prepare
+        $stmt = $this->conn->prepare($call);
     
         // sanitize
+        //https://www.php.net/manual/en/function.htmlspecialchars.php
         $this->firstname=htmlspecialchars(strip_tags($this->firstname));
         $this->lastname=htmlspecialchars(strip_tags($this->lastname));
         $this->email=htmlspecialchars(strip_tags($this->email));
-    
-        // bind the values from the form
-        $stmt->bindParam(':firstname', $this->firstname);
-        $stmt->bindParam(':lastname', $this->lastname);
-        $stmt->bindParam(':birthday', $this->birthday);
-        $stmt->bindParam(':gender', $this->gender);
-        $stmt->bindParam(':email', $this->email);
-    
-        // hash the password before saving to database
+        $this->password=htmlspecialchars(strip_tags($this->password));
+        $this->typeAccount=htmlspecialchars(strip_tags($this->typeAccount));
+        $this->gender=htmlspecialchars(strip_tags($this->gender));
+        $this->birthday=htmlspecialchars(strip_tags($this->birthday));
+
+        // bind the values
+        $stmt->bindParam(1, $this->id);
+        $stmt->bindParam(2, $this->firstname);
+        $stmt->bindParam(3, $this->lastname);
+        $stmt->bindParam(4, $this->email);
+        $stmt->bindParam(5, $this->typeAccount);
+        $stmt->bindParam(6, $this->birthday);
+        $stmt->bindParam(7, $this->gender);
+        
         if(!empty($this->password)){
-            $this->password=htmlspecialchars(strip_tags($this->password));
             $password_hash = password_hash($this->password, PASSWORD_BCRYPT);
-            $stmt->bindParam(':password', $password_hash);
+            $stmt->bindParam(8, $password_hash);
+        }else
+        {
+            $stmt->bindParam(8, $this->password);
         }
+
     
-        // unique ID of record to be edited
-        $stmt->bindParam(':id', $this->id);
-    
-        // execute the query
+        // execute, also check if was successful
         if($stmt->execute()){
             return true;
         }
     
+       
         return false;
     }
 }

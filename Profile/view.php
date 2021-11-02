@@ -2,31 +2,31 @@
 
 <?php 
 // Include the database configuration file  
-require_once 'db_conn.php'; 
+require_once '../api/config/database.php'; 
  
 // Get image data from database 
 
 $resultado = $_POST['valorID']; 
 
+$database = new Database();
+$db = $database->getConnection();
 
 
-if (!$conn->query("SELECT usuarioFotoPerfil FROM usuario WHERE usuarioId = '".$resultado."'")) {
-    echo("Error description: " . $conn -> error);
+if (!$db->query("SELECT usuarioFotoPerfil FROM usuario WHERE usuarioId = '".$resultado."'")) {
+    echo("Error description: " . $db -> error);
   }
   else{
-    $result = $conn->query("SELECT usuarioFotoPerfil FROM usuario WHERE usuarioId = '".$resultado."'"); 
+    $result = $db->query("SELECT usuarioFotoPerfil FROM usuario WHERE usuarioId = '".$resultado."'"); 
   }
-
-
-//echo $result->num_rows; //haciendo este echo estas respondiendo la solicitud ajax
 
 
 ?>
 
 
-<?php if($result->num_rows > 0){ ?> 
+
+<?php if($result->rowCount() > 0){ ?> 
     <div class="gallery"> 
-        <?php while($row = $result->fetch_assoc()){
+        <?php while($row = $result->fetch(PDO::FETCH_ASSOC)){
             if($row['usuarioFotoPerfil']!=null)
             {?> 
                 <img alt="Imagen de perfil" class="rounded-circle p-1 bg-primary" width="110"  src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['usuarioFotoPerfil']); ?>" /> 

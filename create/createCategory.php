@@ -22,6 +22,7 @@ $status = $statusMsg = $mail= '';
     $catName = $data->CategoryName;
     $catDesc = $data->categoryDesc;
     $catPer = "1";
+    $catDate = "2000-10-18";
 
      
     // sanitize
@@ -55,7 +56,8 @@ $status = $statusMsg = $mail= '';
         SET
         categoriaNombre = :categoriaNombre,
         categoriaDescripcion = :categoriaDescripcion,
-        categoriaPersona = :categoriaPersona";
+        categoriaUsuario  = :categoriaUsuario ,
+        categoriaFecha = :categoriaFecha";
     
         // prepare the query
         $stmt = $db->prepare($query);
@@ -68,7 +70,8 @@ $status = $statusMsg = $mail= '';
         // bind the values
         $stmt->bindParam(':categoriaNombre', $catName);
         $stmt->bindParam(':categoriaDescripcion', $catDesc);
-        $stmt->bindParam(':categoriaPersona',  $catPer);
+        $stmt->bindParam(':categoriaUsuario',  $catPer);
+        $stmt->bindParam(':categoriaFecha',  $catDate);
     
          
     
