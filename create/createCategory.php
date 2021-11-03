@@ -20,8 +20,8 @@ $status = $statusMsg = $mail= '';
     ////////////////////////////
 
     $catName = $data->CategoryName;
-    $catDesc = $data->categoryDesc;
-    $catPer = "1";
+    $catDesc = $data->categoryDesc;    
+    $catPer = $data->MailCategory;
     $catDate = "2000-10-18";
 
      
@@ -81,9 +81,9 @@ $status = $statusMsg = $mail= '';
         if($stmt->execute()){
 
            
-            $i = 5;
+  
             //echo '<option value="10">'.$catName.'</option>';
-        echo $catName;
+            echo $catName;
 
             return true;
         }

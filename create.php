@@ -28,6 +28,16 @@ include_once 'navbar/navbar.php';
 
     <!--Script para agregar y borrar-->
     <script type="text/javascript">
+
+        var MailAccount = 0;
+
+        $(document).ready()
+        {
+        
+            obtenerInfo();
+        
+        }
+
         // add row
         $(function(){ /* DOM ready */ 
             $("#addRow").click(function () {
@@ -68,13 +78,35 @@ include_once 'navbar/navbar.php';
             }       
         }
 
+        /*----------------------------------OBTENER INFO DEL PERFIL-------------------------------------*/
+
+        function obtenerInfo()
+        {
+            var jwt = getCookie('jwt');
+            $.post("api/validate_token.php", JSON.stringify({ jwt:jwt })).done(function(result) {
+        
+            MailAccount = result.data.email;
+              
+            });
+        }
+
         /*--------------------------------------------------AGREGAR CATEGORIA--------------------------------------*/
         // trigger when login form is submitted
         $(document).on('submit', '#category_form', function()
         {
             // get form data
             var crearCategoria=$(this);
-            var form_data=JSON.stringify(crearCategoria.serializeObject());
+
+            
+            // get form data
+            var crearCategoria_obj = crearCategoria.serializeObject();
+            
+            crearCategoria_obj["MailCategory"] =AccountTypeGlobal; 
+                
+            // convert object to json string
+            var form_data=JSON.stringify(crearCategoria_obj);
+
+
 
             //alert(form_data);
         
@@ -112,6 +144,35 @@ include_once 'navbar/navbar.php';
 
             return false;
         });
+
+        /*-------------------------------------------AGREGAR CURSO--------------------------------*/
+        $(document).on('submit', '#course_form', function()
+        {
+			//e.preventDefault();    
+			//alert("hola");
+			var formData = new FormData(this);
+
+            formData.append("usuarioCreate", MailAccount);
+
+
+			$.ajax({
+				url: "create/createCourse.php",
+				type: 'POST',
+				data: formData,
+				success: function (data) {
+					alert(data);
+				},
+                error: function(xhr, resp, text){
+                    console.log("fail");
+                    // on error, tell the user login has failed & empty the input boxes
+                    console.log("Error al iniciar sesion " + text);
+                    console.log("Response text  " + xhr.responseText);
+                },
+				cache: false,
+				contentType: false,
+				processData: false
+			});
+		});
             
     </script>
 
@@ -150,7 +211,7 @@ include_once 'navbar/navbar.php';
                                 <div class="row">
                                   
                                 
-                                    <form action="http://localhost:8012/Acodemia/create/createCourse.php" method="post" style="margin-left: 3%;">
+                                    <form id="course_form" method="post" style="margin-left: 3%;">
 
                                         <div class="row" >
                                             <div class="col-md-8">
@@ -159,19 +220,19 @@ include_once 'navbar/navbar.php';
                                                 <div class="card" style="max-width: 100%; margin:0px; padding: 5%">
                                                     <div class="form-group row">
 
-                                                    <h2>Información general</h2>
+                                                        <h2>Información general</h2>
 
 
-                                                        <label for="titleCreate" class="col-12 col-form-label">Titulo del curso</label> 
+                                                        <label for="tituloCreate" class="col-12 col-form-label">Titulo del curso</label> 
                                                         <div class="col-12">
-                                                            <input id="titleCreate" name="text" placeholder="Enter Title here" class="form-control here" required="required" type="text" required>
+                                                            <input id="tituloCreate" name="tituloCreate" placeholder="Enter Title here" class="form-control here" required="required" type="text" required>
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group row">
                                                         <label for="descCreate" class="col-12 col-form-label">Descripción del curso</label> 
                                                         <div class="col-12">
-                                                        <textarea id="descCreate" name="textarea" cols="40" rows="5" class="form-control" required></textarea>
+                                                        <textarea id="descCreate" name="descCreate" cols="40" rows="5" class="form-control" required></textarea>
                                                     </div>
 
                                            
@@ -188,7 +249,7 @@ include_once 'navbar/navbar.php';
 
                                                                         <label for="costCreate" class="col-12 col-form-label">Costo del curso completo</label> 
                                                                         <div class="col-12">
-                                                                            <input id="costCreate"  type="number" min="0.00" step="any" style="width: 100%;" />
+                                                                            <input id="costoCreate" name="costoCreate"  type="number" min="0.00" step="any" style="width: 100%;" />
                                                                         </div>
                                                                         
                                                                       
@@ -197,7 +258,7 @@ include_once 'navbar/navbar.php';
                                                     <div class="form-group">
                                                         <label class="col-12 col-form-label">Categoría</label> 
    
-                                                            <select  id="dynamic-selects"  class="selectpicker" multiple aria-label="size 3 select example" name='selectCategory' id="selectCategory">
+                                                            <select  id="dynamic-selects"  class="selectpicker" multiple aria-label="size 3 select example" name='categoriaCreate[]' id="categoriaCreate">
                                                                     <?php foreach($users as $user): ?>
                                                                         <option value="<?= $user['categoriaId']; ?>"><?= $user['categoriaNombre']; ?></option>
                                                                     <?php endforeach; ?>
@@ -206,9 +267,9 @@ include_once 'navbar/navbar.php';
 
                                                         <label class="col-12 col-form-label">¿No encuentras la categoría que necesitas?<a href="#crearCategoria"> Crea una nueva </a></label> 
 
-                                                        <label for="numNiveles" class="col-12 col-form-label">Numero de niveles</label> 
+                                                        <label for="nivelesCreate" class="col-12 col-form-label">Numero de niveles</label> 
                                                          <div class="col-12">
-                                                             <input id="numNiveles"  type="number" min="1" step="1" style="width: 100%;" />
+                                                             <input id="nivelesCreate" name="nivelesCreate" type="number" min="1" step="1" style="width: 100%;" />
                                                          </div>
                                                     </div>                                         
                                                     
@@ -238,11 +299,8 @@ include_once 'navbar/navbar.php';
                                                                     -->
                                                                 </div>
 
-                                                       
+                                                                 <!--<div id="drag-drop-area"></div> -->
 
- <!--
-                                                                <div id="drag-drop-area"></div>
- -->
 
                                                             </div>
                                                             
@@ -263,24 +321,24 @@ include_once 'navbar/navbar.php';
                                                                 <div class="card mb-3" style="max-width: 18rem;">
                                                                         <div class="card-header bg-light ">Agregar imagen principal</div>
                                                                         <div class="card-footer bg-light">
-                                                                            <input type="file"name="myfile" >
+                                                                            <input type="file"name="imagenPrincipal" >
                                                                         </div>
                                                                 </div>
 
                                                                 <div class="card mb-3" style="max-width: 18rem;">
                                                                         <div class="card-header bg-light ">Agregar video introductorio</div>
                                                                         <div class="card-footer bg-light">
-                                                                            <input type="file"name="myfile" >
+                                                                            <input type="file"name="videoPrincipal" >
                                                                         </div>
                                                                 </div>
 
 
                                                                 <div class="card mb-3" style="max-width: 18rem;">
                                                                     <div class="card-header bg-light ">Agregar niveles</div>
-                                                                    <div class="card-footer bg-light">
-                                                                        <input class="btn btn-primary btn-sm" type="submit" name="next" value="Siguiente" />
-                                                                        
-                                                                    </div>
+                                                                        <div class="card-footer bg-light">
+                                                                            <input class="btn btn-primary btn-sm" type="submit" name="next" value="Siguiente" />
+                                                                            
+                                                                        </div>
                                                                 </div>
                                                         
                                             </div>
