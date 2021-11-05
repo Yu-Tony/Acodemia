@@ -155,6 +155,8 @@ $stmt->bindParam(':cursoEstado',  $cursoEstado);
 $stmt->bindParam(':cursoProfesorId',  $cursoProfesorId);
 
 
+
+
 /*$categArray = $_POST['categoriaCreate'];
 
 foreach($categArray as $categValue) {

@@ -146,10 +146,11 @@ include_once 'navbar/navbar.php';
         });
 
         /*-------------------------------------------AGREGAR CURSO--------------------------------*/
+        
         $(document).on('submit', '#course_form', function()
         {
-			//e.preventDefault();    
-			//alert("hola");
+			   
+			alert("hola");
 			var formData = new FormData(this);
 
             formData.append("usuarioCreate", MailAccount);
@@ -159,6 +160,40 @@ include_once 'navbar/navbar.php';
 				url: "create/createCourse.php",
 				type: 'POST',
 				data: formData,
+				success: function (data) {
+					alert("Hola");
+                  
+				},
+                error: function(xhr, resp, text){
+                  
+                   console.log("fail");
+                    // on error, tell the user login has failed & empty the input boxes
+                    console.log("Error al iniciar sesion " + text);
+                    console.log("Response text  " + xhr.responseText);
+                },
+				cache: false,
+				contentType: false,
+				processData: false
+			});
+		});
+        /*-----------------------------------------AGREGAR NIVELES--------------------------------------------------*/
+        $(document).on('submit', '.level_form', function(event)
+        {
+
+            event.preventDefault();   
+            var seri = $(this).serialize(); 
+			alert(seri);
+		
+
+            //formData.append("usuarioCreate", MailAccount);
+           /* var formData = new FormData(this);
+
+
+
+			$.ajax({
+				url: "create/createLevel.php",
+				type: 'POST',
+				data:  formData,
 				success: function (data) {
 					alert(data);
 				},
@@ -171,8 +206,62 @@ include_once 'navbar/navbar.php';
 				cache: false,
 				contentType: false,
 				processData: false
-			});
+			});*/
 		});
+
+        
+//https://stackoverflow.com/questions/23754973/submit-ajax-request-one-by-one-with-each
+
+function post_form_data(data,cache,i) {
+    $.ajax({
+        type: 'POST',
+        url: 'create/createLevel.php',
+        async :false ,
+        data: data,
+        success: function () {
+            console.log('Success');
+            i++;
+            post_form_data(cache.eq(i).serialize(),_cached,i);
+        },
+        error: function () {
+            console.log('error');   
+        }
+    });
+}
+
+$(document).on('click', '.btnSubmitAll', function(){
+    var _cached=$('.levelform');
+post_form_data(_cached.eq(0).serialize(),_cached,0);
+});
+
+//https://www.codeproject.com/Questions/4532857/How-do-I-pass-value-from-foreach-loop-with-AJAX-to
+       /* $('button').on('click', function () {
+            $('.levelform').each(function () {
+                alert($(this).serialize());
+                //post_form_data($(this).serialize());
+            });
+        });*/
+
+       /* $('.level_form').on('submit', function (event) {
+            event.preventDefault();
+            if (!onformsubmitContactUs()) return false;
+
+            var _this = $(this);
+
+            $.ajax({
+                url: '@Url.Action("AddComment", "Home")',
+                type: 'post',
+                data: _this.serialize(),
+                beforeSend: function () {
+                    $('.b',_this).val('sending .......'); // change submit button text
+                    $('.Name',_this).css("borderColor", "");
+                    $('.Msg',_this).css("borderColor", "");
+                },
+                ....
+        }*/
+
+
+
             
     </script>
 
@@ -213,7 +302,7 @@ include_once 'navbar/navbar.php';
                                 
                                     <form id="course_form" method="post" style="margin-left: 3%;">
 
-                                        <div class="row" >
+                                        <div class="row">
                                             <div class="col-md-8">
 
                                                
@@ -321,14 +410,14 @@ include_once 'navbar/navbar.php';
                                                                 <div class="card mb-3" style="max-width: 18rem;">
                                                                         <div class="card-header bg-light ">Agregar imagen principal</div>
                                                                         <div class="card-footer bg-light">
-                                                                            <input type="file"name="imagenPrincipal" >
+                                                                            <input type="file"name="imagenPrincipal" accept="image/jpeg, image/png"  >
                                                                         </div>
                                                                 </div>
 
                                                                 <div class="card mb-3" style="max-width: 18rem;">
                                                                         <div class="card-header bg-light ">Agregar video introductorio</div>
                                                                         <div class="card-footer bg-light">
-                                                                            <input type="file"name="videoPrincipal" >
+                                                                            <input type="file"name="videoPrincipal" accept="video/mp4">
                                                                         </div>
                                                                 </div>
 
@@ -343,7 +432,6 @@ include_once 'navbar/navbar.php';
                                                         
                                             </div>
                                         </div>
-                                    
 
                                     </form>
 
@@ -381,6 +469,144 @@ include_once 'navbar/navbar.php';
                                    
                                     
                                 </div>
+
+                                <div class="row">
+                                  
+                                
+                                <form class="level_form levelform" method="post" style="margin-left: 3%;">
+
+                                    <div class="row">
+                                        <div class="col-md-8">
+
+                                        
+                                            <div class="card" style="max-width: 100%; margin:0px; padding: 5%">
+                                                <div class="form-group row">
+
+                                                    <h2>Información general</h2>
+
+
+                                                    <label for="tituloNivel" class="col-12 col-form-label">Titulo del nivel</label> 
+                                                    <div class="col-12">
+                                                        <input name="tituloNivel" placeholder="Enter Title here" class="form-control here" required="required" type="text" required  style="margin-bottom:2%;">
+                                                    </div>
+
+                                                    <label  for="descNivel" class="col-12 col-form-label">Descripcion del nivel</label> 
+                                                    <div class="col-12">
+                                                    <textarea name="descNivel" cols="40" rows="5" placeholder="Escribir una descripción" class="form-control" style="margin-bottom:2%;"></textarea> 
+                                                    </div>
+
+                                                    <label>Costo del nivel</label> 
+                                                    <input name="costoNivel" type="number" min="0.00" step=".01" style="width: 100%; margin-bottom: 3%;" /> 
+
+                 
+                                                    <input type="file" name="videoNivel"  accept="image/jpeg, image/png"  >
+                                                </div>
+
+
+
+
+                                    
+
+
+                                            </div>
+
+                   
+
+                                        </div> 
+                                            
+                                        <div class="col-md-4 ">
+                                                    
+                                                
+
+                                                            <div class="card mb-3" style="max-width: 18rem;">
+                                                                <div class="card-header bg-light ">Agregar niveles</div>
+                                                                    <div class="card-footer bg-light">
+
+                                                                 
+                 
+                                                                    <input class="btn btn-primary btn-sm" type="submit" name="next" value="Siguiente" />
+                                                                        
+                                                                    </div>
+                                                            </div>
+                                                    
+                                        </div>
+                                    </div>
+
+                                </form>
+
+                                <form class="level_form levelform" method="post" style="margin-left: 3%;">
+
+                                    <div class="row">
+                                        <div class="col-md-8">
+
+                                        
+                                            <div class="card" style="max-width: 100%; margin:0px; padding: 5%">
+                                                <div class="form-group row">
+
+                                                    <h2>Información general</h2>
+
+
+                                                    <label for="tituloNivel" class="col-12 col-form-label">Titulo del nivel</label> 
+                                                    <div class="col-12">
+                                                        <input name="tituloNivel" placeholder="Enter Title here" class="form-control here" required="required" type="text" required  style="margin-bottom:2%;">
+                                                    </div>
+
+                                                    <label  for="descNivel" class="col-12 col-form-label">Descripcion del nivel</label> 
+                                                    <div class="col-12">
+                                                    <textarea name="descNivel" cols="40" rows="5" placeholder="Escribir una descripción" class="form-control" style="margin-bottom:2%;"></textarea> 
+                                                    </div>
+
+                                                    <label>Costo del nivel</label> 
+                                                    <input name="costoNivel" type="number" min="0.00" step=".01" style="width: 100%; margin-bottom: 3%;" /> 
+
+
+                                                    <input type="file" name="videoNivel"  accept="image/jpeg, image/png"  >
+                                                </div>
+
+
+
+
+
+
+
+                                            </div>
+
+
+
+                                        </div> 
+                                            
+                                        <div class="col-md-4 ">
+                                                    
+                                                
+
+                                                            <div class="card mb-3" style="max-width: 18rem;">
+                                                                <div class="card-header bg-light ">Agregar niveles</div>
+                                                                    <div class="card-footer bg-light">
+
+                                                                
+
+                                                                    <!--<input class="btn btn-primary btn-sm" type="submit" name="next" value="Siguiente" />-->
+                                                                   
+                                                                        
+                                                                    </div>
+                                                            </div>
+                                                    
+                                        </div>
+                                    </div>
+
+                                </form>
+
+
+                                
+                          
+                       <button class="btnSubmitAll">gimme love</button>
+
+                                 
+                                  
+                              </div>
+
+
+
                             </div>
                         </div>
                     </div>
