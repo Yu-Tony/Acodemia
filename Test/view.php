@@ -1,4 +1,4 @@
-<?php require_once '../api/config/database.php';  ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,19 +28,23 @@
 </head>
 <body>
      <a href="index.php">&#8592;</a>
+
+
+
      <?php 
+	 require_once '../api/config/database.php'; 
 		$database = new Database();
 		$db = $database->getConnection();
 
 
 
-          $idProfileQuery = $db->query("SELECT cursoMiniatura FROM curso ORDER BY cursoId DESC"); 
+          $idProfileQuery = $db->query("SELECT video FROM tablavideo ORDER BY idVideo DESC"); 
 
           while ($row = $idProfileQuery->fetch(PDO::FETCH_ASSOC)) {?>
 
 
                 <div class="alb">
-                    <img src="../uploads/<?=$row['cursoMiniatura']?>">
+                    <img src="../uploads/<?=$row['video']?>">
                 </div>
 
               <?php  }?>

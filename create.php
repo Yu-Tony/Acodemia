@@ -30,6 +30,7 @@ include_once 'navbar/navbar.php';
     <script type="text/javascript">
 
         var MailAccount = 0;
+        var numNiveles = 0;
 
         $(document).ready()
         {
@@ -38,31 +39,6 @@ include_once 'navbar/navbar.php';
         
         }
 
-        // add row
-        $(function(){ /* DOM ready */ 
-            $("#addRow").click(function () {
-
-            var html = '' + 
-            '<div id="inputFormRow">' + 
-            '<div class="row">' + 
-            '<div class="col-sm-9" >' + 
-            '<input type="text" name="title[]" class="form-control m-input" placeholder="Escribir titulo" autocomplete="off" style="margin-bottom:2%;">' + 
-            '<textarea name="textarea" cols="40" rows="5" placeholder="Escribir una descripción" class="form-control" style="margin-bottom:2%;"></textarea>' + 
-            '<label>Costo del nivel</label>'+
-            '<input type="number" min="0.00" step=".01" style="width: 100%; margin-bottom: 3%;" />'+
-            '</div>' + 
-            '<div class="col-sm-3" style="text-align: right;">' + 
-            '<button id="removeRow" type="button" class="btn btn-danger" >Remove</button>' + 
-            '</div>' + 
-            '</div>' + 
-            '<div id="drag-drop-area"></div>' + 
-            '</div>';
-                
-    
-            $('#newRow').append(html);
-            });
-    
-        }); 
                                                    
         // remove row
         $(document).on('click', '#removeRow', function () {
@@ -149,11 +125,11 @@ include_once 'navbar/navbar.php';
         
         $(document).on('submit', '#course_form', function()
         {
-			   
-			alert("hola");
+
 			var formData = new FormData(this);
 
             formData.append("usuarioCreate", MailAccount);
+            numNiveles = formData.get("nivelesCreate");
 
 
 			$.ajax({
@@ -161,7 +137,48 @@ include_once 'navbar/navbar.php';
 				type: 'POST',
 				data: formData,
 				success: function (data) {
-					alert("Hola");
+					//alert("Hola");
+
+          
+                    for (let i = 0; i < numNiveles; i++) {
+                        
+                        var strVar="";
+                        strVar += "<form class=\"level_form levelform\" method=\"post\" style=\"margin-left: 3%;\">";
+                        strVar += " <div class=\"row\">";
+                        strVar += " <div class=\"col-md-8\">";
+                        strVar += "<div class=\"card\" style=\"max-width: 100%; margin:0px; padding: 5%\">";
+                        strVar += "<div class=\"form-group row\">";
+                        strVar += "<h2>Información del nivel ";
+                        strVar += (i+1);
+                        strVar += "<\/h2>";
+                        strVar += "<label for=\"tituloNivel\" class=\"col-12 col-form-label\">Titulo del nivel<\/label> ";
+                        strVar += "<div class=\"col-12\">";
+                        strVar += "<input name=\"tituloNivel\" placeholder=\"Enter Title here\" class=\"form-control here\" required=\"required\" type=\"text\" required  style=\"margin-bottom:2%;\">";
+                        strVar += "<\/div>";
+                        strVar += "<label  for=\"descNivel\" class=\"col-12 col-form-label\">Descripcion del nivel<\/label> ";
+                        strVar += "<div class=\"col-12\">";
+                        strVar += "<textarea name=\"descNivel\" cols=\"40\" rows=\"5\" placeholder=\"Escribir una descripción\" class=\"form-control\" style=\"margin-bottom:2%;\"><\/textarea> ";
+                        strVar += "<\/div>";
+                        strVar += "<label>Costo del nivel<\/label> ";
+                        strVar += "<input name=\"costoNivel\" type=\"number\" min=\"0.00\" step=\".01\" style=\"width: 100%; margin-bottom: 3%;\" \/> ";
+                        strVar += "<input type=\"file\" name=\"videoNivel\" required accept=\"video\/mp4\">";
+                        strVar += "<\/div>";
+                        strVar += "<\/div>";
+                        strVar += "<\/div> ";
+                        strVar += "<div class=\"col-md-4 \">";
+                        strVar += "<\/div>";
+                        strVar += "<\/div>";
+                        strVar += "<\/form>";
+            
+                                        
+                            
+                        $('#newRow').append(strVar);
+                        
+                        
+                    }
+
+        
+                    $('.form-course-all').hide();
                   
 				},
                 error: function(xhr, resp, text){
@@ -175,64 +192,63 @@ include_once 'navbar/navbar.php';
 				contentType: false,
 				processData: false
 			});
+
+            return false;
 		});
-        /*-----------------------------------------AGREGAR NIVELES--------------------------------------------------*/
-        $(document).on('submit', '.level_form', function(event)
-        {
-
-            event.preventDefault();   
-            var seri = $(this).serialize(); 
-			alert(seri);
-		
-
-            //formData.append("usuarioCreate", MailAccount);
-           /* var formData = new FormData(this);
+        /*-----------------------------------------AGREGAR NIVELES--------------------------------------------------*/       
+        //https://stackoverflow.com/questions/23754973/submit-ajax-request-one-by-one-with-each
 
 
-
-			$.ajax({
-				url: "create/createLevel.php",
-				type: 'POST',
-				data:  formData,
-				success: function (data) {
-					alert(data);
-				},
-                error: function(xhr, resp, text){
+        function post_form_data(formData) {
+            
+            
+            $.ajax({
+                type: 'POST',
+                url: 'create/createLevel.php',
+                data: formData,
+                async :false ,
+                success: function (data) {
+                    alert(data);
+                
+                    //console.log('Success');
+                },
+                error: function (xhr, resp, text) {
+                
                     console.log("fail");
                     // on error, tell the user login has failed & empty the input boxes
-                    console.log("Error al iniciar sesion " + text);
-                    console.log("Response text  " + xhr.responseText);
-                },
-				cache: false,
-				contentType: false,
-				processData: false
-			});*/
-		});
-
-        
-//https://stackoverflow.com/questions/23754973/submit-ajax-request-one-by-one-with-each
-
-function post_form_data(data,cache,i) {
-    $.ajax({
-        type: 'POST',
-        url: 'create/createLevel.php',
-        async :false ,
-        data: data,
-        success: function () {
-            console.log('Success');
-            i++;
-            post_form_data(cache.eq(i).serialize(),_cached,i);
-        },
-        error: function () {
-            console.log('error');   
+                    console.log(text);
+                    console.log("Response text  " + xhr.responseText); 
+                }
+            });
         }
-    });
-}
 
-$(document).on('click', '.btnSubmitAll', function(){
-    var _cached=$('.levelform');
-post_form_data(_cached.eq(0).serialize(),_cached,0);
-});
+        $(document).on('click', '.btnSubmitAll', function(){
+
+            var dataLevel = 0;
+            var numNuvel = 0;
+
+            $('.level_form').each(function () {
+
+                var $myForm = $(this);
+
+                if (!$myForm[0].checkValidity()) {
+                  alert("Llenar todos los campos de los niveles");
+                }
+                else
+                {
+                    dataLevel =$(this).serialize() + "&idCourse=" + 10 + "&numeroNivel=" + numNuvel;
+                    post_form_data(dataLevel);
+                    numNuvel = numNuvel + 1;
+                }
+
+
+              
+            });
+
+          /*  $(".form-course-all").show();
+            $( ".level_form" ).remove();*/
+
+        });
 
 //https://www.codeproject.com/Questions/4532857/How-do-I-pass-value-from-foreach-loop-with-AJAX-to
        /* $('button').on('click', function () {
@@ -297,7 +313,7 @@ post_form_data(_cached.eq(0).serialize(),_cached,0);
                                 </div>
                                 <hr style="border: 1px solid #1879d1;
                                 border-radius: 5px;">
-                                <div class="row">
+                                <div class="row form-course-all">
                                   
                                 
                                     <form id="course_form" method="post" style="margin-left: 3%;">
@@ -327,27 +343,19 @@ post_form_data(_cached.eq(0).serialize(),_cached,0);
                                            
 
                                                     <div class="form-group row">
-                                                                        <!-- <label class="col-12 col-form-label">Tipo de costo del curso</label> 
-                                                                        
-                                                                        <select class="selectpicker" data-width="200%" title="Selecciona tipo de costo..." required>
-                                                                            <option>Curso completo gratuito</option>
-                                                                            <option>Precio por el curso completo</option>
-                                                                            <option>Precio solo por los niveles</option>
-                                                                            <option>Precio por niveles y curso completo</option>
-                                                                        </select>-->
-
-                                                                        <label for="costCreate" class="col-12 col-form-label">Costo del curso completo</label> 
-                                                                        <div class="col-12">
-                                                                            <input id="costoCreate" name="costoCreate"  type="number" min="0.00" step="any" style="width: 100%;" />
-                                                                        </div>
-                                                                        
+                                                      
+                                                       <label for="costCreate" class="col-12 col-form-label">Costo del curso completo</label> 
+                                                       <div class="col-12">
+                                                           <input id="costoCreate" name="costoCreate"  type="number" min="0.00" step="any" style="width: 100%;" />
+                                                       </div>
+                                                       
                                                                       
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label class="col-12 col-form-label">Categoría</label> 
    
-                                                            <select  id="dynamic-selects"  class="selectpicker" multiple aria-label="size 3 select example" name='categoriaCreate[]' id="categoriaCreate">
+                                                            <select required  id="dynamic-selects"  class="selectpicker" multiple aria-label="size 3 select example" name='categoriaCreate[]' id="categoriaCreate">
                                                                     <?php foreach($users as $user): ?>
                                                                         <option value="<?= $user['categoriaId']; ?>"><?= $user['categoriaNombre']; ?></option>
                                                                     <?php endforeach; ?>
@@ -358,7 +366,7 @@ post_form_data(_cached.eq(0).serialize(),_cached,0);
 
                                                         <label for="nivelesCreate" class="col-12 col-form-label">Numero de niveles</label> 
                                                          <div class="col-12">
-                                                             <input id="nivelesCreate" name="nivelesCreate" type="number" min="1" step="1" style="width: 100%;" />
+                                                             <input id="nivelesCreate" name="nivelesCreate" type="number" min="1" step="1" style="width: 100%;" required />
                                                          </div>
                                                     </div>                                         
                                                     
@@ -388,12 +396,7 @@ post_form_data(_cached.eq(0).serialize(),_cached,0);
                                                                     -->
                                                                 </div>
 
-                                                                 <!--<div id="drag-drop-area"></div> -->
-
-
                                                             </div>
-                                                            
-                                                            <div id="newRow"></div>
                                                                 <!-- <button id="addRow" type="button" class="btn btn-info">Añadir otro nivel</button>-->   
                                                             </div>
                                                                           
@@ -410,7 +413,7 @@ post_form_data(_cached.eq(0).serialize(),_cached,0);
                                                                 <div class="card mb-3" style="max-width: 18rem;">
                                                                         <div class="card-header bg-light ">Agregar imagen principal</div>
                                                                         <div class="card-footer bg-light">
-                                                                            <input type="file"name="imagenPrincipal" accept="image/jpeg, image/png"  >
+                                                                            <input type="file"name="imagenPrincipal" accept="image/jpeg, image/png" required>
                                                                         </div>
                                                                 </div>
 
@@ -426,6 +429,7 @@ post_form_data(_cached.eq(0).serialize(),_cached,0);
                                                                     <div class="card-header bg-light ">Agregar niveles</div>
                                                                         <div class="card-footer bg-light">
                                                                             <input class="btn btn-primary btn-sm" type="submit" name="next" value="Siguiente" />
+                                                                            
                                                                             
                                                                         </div>
                                                                 </div>
@@ -470,140 +474,13 @@ post_form_data(_cached.eq(0).serialize(),_cached,0);
                                     
                                 </div>
 
-                                <div class="row">
-                                  
+                                <div id="newRow" class="row">
                                 
-                                <form class="level_form levelform" method="post" style="margin-left: 3%;">
-
-                                    <div class="row">
-                                        <div class="col-md-8">
-
-                                        
-                                            <div class="card" style="max-width: 100%; margin:0px; padding: 5%">
-                                                <div class="form-group row">
-
-                                                    <h2>Información general</h2>
-
-
-                                                    <label for="tituloNivel" class="col-12 col-form-label">Titulo del nivel</label> 
-                                                    <div class="col-12">
-                                                        <input name="tituloNivel" placeholder="Enter Title here" class="form-control here" required="required" type="text" required  style="margin-bottom:2%;">
-                                                    </div>
-
-                                                    <label  for="descNivel" class="col-12 col-form-label">Descripcion del nivel</label> 
-                                                    <div class="col-12">
-                                                    <textarea name="descNivel" cols="40" rows="5" placeholder="Escribir una descripción" class="form-control" style="margin-bottom:2%;"></textarea> 
-                                                    </div>
-
-                                                    <label>Costo del nivel</label> 
-                                                    <input name="costoNivel" type="number" min="0.00" step=".01" style="width: 100%; margin-bottom: 3%;" /> 
-
                  
-                                                    <input type="file" name="videoNivel"  accept="image/jpeg, image/png"  >
-                                                </div>
 
-
-
-
-                                    
-
-
-                                            </div>
-
-                   
-
-                                        </div> 
-                                            
-                                        <div class="col-md-4 ">
-                                                    
-                                                
-
-                                                            <div class="card mb-3" style="max-width: 18rem;">
-                                                                <div class="card-header bg-light ">Agregar niveles</div>
-                                                                    <div class="card-footer bg-light">
-
-                                                                 
-                 
-                                                                    <input class="btn btn-primary btn-sm" type="submit" name="next" value="Siguiente" />
-                                                                        
-                                                                    </div>
-                                                            </div>
-                                                    
-                                        </div>
-                                    </div>
-
-                                </form>
-
-                                <form class="level_form levelform" method="post" style="margin-left: 3%;">
-
-                                    <div class="row">
-                                        <div class="col-md-8">
-
-                                        
-                                            <div class="card" style="max-width: 100%; margin:0px; padding: 5%">
-                                                <div class="form-group row">
-
-                                                    <h2>Información general</h2>
-
-
-                                                    <label for="tituloNivel" class="col-12 col-form-label">Titulo del nivel</label> 
-                                                    <div class="col-12">
-                                                        <input name="tituloNivel" placeholder="Enter Title here" class="form-control here" required="required" type="text" required  style="margin-bottom:2%;">
-                                                    </div>
-
-                                                    <label  for="descNivel" class="col-12 col-form-label">Descripcion del nivel</label> 
-                                                    <div class="col-12">
-                                                    <textarea name="descNivel" cols="40" rows="5" placeholder="Escribir una descripción" class="form-control" style="margin-bottom:2%;"></textarea> 
-                                                    </div>
-
-                                                    <label>Costo del nivel</label> 
-                                                    <input name="costoNivel" type="number" min="0.00" step=".01" style="width: 100%; margin-bottom: 3%;" /> 
-
-
-                                                    <input type="file" name="videoNivel"  accept="image/jpeg, image/png"  >
-                                                </div>
-
-
-
-
-
-
-
-                                            </div>
-
-
-
-                                        </div> 
-                                            
-                                        <div class="col-md-4 ">
-                                                    
-                                                
-
-                                                            <div class="card mb-3" style="max-width: 18rem;">
-                                                                <div class="card-header bg-light ">Agregar niveles</div>
-                                                                    <div class="card-footer bg-light">
-
-                                                                
-
-                                                                    <!--<input class="btn btn-primary btn-sm" type="submit" name="next" value="Siguiente" />-->
-                                                                   
-                                                                        
-                                                                    </div>
-                                                            </div>
-                                                    
-                                        </div>
-                                    </div>
-
-                                </form>
-
-
-                                
-                          
-                       <button class="btnSubmitAll">gimme love</button>
-
-                                 
-                                  
                               </div>
+
+                              <button  class="btn btn-primary btn-sm btnSubmitAll" >gimme love</button>
 
 
 
