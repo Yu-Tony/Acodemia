@@ -36,7 +36,7 @@ include_once 'navbar/navbar.php';
                     </div>
                     <div class="video-parallax">
                         
-                        <video class="video-parall" src="http://localhost:8012/Acodemia/Media/videoplayback.mp4"  autoplay loop muted>
+                        <video class="video-parall" src="Media/videoplayback.mp4"  autoplay loop muted>
                         </video>
                     </div>
                
@@ -72,7 +72,7 @@ include_once 'navbar/navbar.php';
                                 <div class="card carousel">
                                     <img src="https://i.ytimg.com/vi/rbuYtrNUxg4/maxresdefault.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
-                                        <a href="http://localhost:8012/Acodemia/course.php">
+                                        <a href="course.php">
                                             <h5 class="font-weight-normal">Desarrollo Web Completo con HTML5</h5>
                                         </a>
                                         <div class="post-meta"><span class="small lh-120">Aprende Desarrollo Web con este curso 100% práctico,
@@ -91,7 +91,7 @@ include_once 'navbar/navbar.php';
                                     </div>
                                 </div>
                                 <div class="card carousel d-none d-md-block">
-                                    <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                                    <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <a href="#">
                                             <h5 class="font-weight-normal">Titulo del curso 2</h5>
@@ -110,7 +110,7 @@ include_once 'navbar/navbar.php';
                                     </div>
                                 </div>
                                 <div class="card carousel d-none d-md-block">
-                                    <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                                    <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <a href="#">
                                             <h5 class="font-weight-normal">Titulo del curso 3</h5>
@@ -135,7 +135,7 @@ include_once 'navbar/navbar.php';
                         <div class="carousel-item">
                             <div class="cards-wrapper">
                                 <div class="card carousel">
-                                    <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                                    <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <a href="#">
                                             <h5 class="font-weight-normal">Titulo del curso 4</h5>
@@ -154,7 +154,7 @@ include_once 'navbar/navbar.php';
                                     </div>
                                 </div>
                                 <div class="card carousel d-none d-md-block">
-                                    <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                                    <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <a href="#">
                                             <h5 class="font-weight-normal">Titulo del curso 5</h5>
@@ -173,7 +173,7 @@ include_once 'navbar/navbar.php';
                                     </div>
                                 </div>
                                 <div class="card carousel d-none d-md-block">
-                                    <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                                    <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <a href="#">
                                             <h5 class="font-weight-normal">Titulo del curso 6</h5>
@@ -224,9 +224,9 @@ include_once 'navbar/navbar.php';
                             <!--Card-->
                             <div class="cards-wrapper">
                                 <div class="card carousel">
-                                    <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                                    <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
-                                        <a href="http://localhost:8012/Acodemia/course.php">
+                                        <a href="course.php">
                                             <h5 class="font-weight-normal">Titulo del curso 1</h5>
                                         </a>
                                         <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
@@ -243,7 +243,7 @@ include_once 'navbar/navbar.php';
                                     </div>
                                 </div>
                                 <div class="card carousel d-none d-md-block">
-                                    <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                                    <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <a href="#">
                                             <h5 class="font-weight-normal">Titulo del curso 2</h5>
@@ -262,7 +262,7 @@ include_once 'navbar/navbar.php';
                                     </div>
                                 </div>
                                 <div class="card carousel d-none d-md-block">
-                                    <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                                    <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <a href="#">
                                             <h5 class="font-weight-normal">Titulo del curso 3</h5>
@@ -287,7 +287,7 @@ include_once 'navbar/navbar.php';
                         <div class="carousel-item">
                             <div class="cards-wrapper">
                                 <div class="card carousel">
-                                    <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                                    <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <a href="#">
                                             <h5 class="font-weight-normal">Titulo del curso 4</h5>
@@ -306,7 +306,7 @@ include_once 'navbar/navbar.php';
                                     </div>
                                 </div>
                                 <div class="card carousel d-none d-md-block">
-                                    <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                                    <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <a href="#">
                                             <h5 class="font-weight-normal">Titulo del curso 5</h5>
@@ -325,7 +325,7 @@ include_once 'navbar/navbar.php';
                                     </div>
                                 </div>
                                 <div class="card carousel d-none d-md-block">
-                                    <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                                    <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <a href="#">
                                             <h5 class="font-weight-normal">Titulo del curso 6</h5>
@@ -380,7 +380,7 @@ include_once 'navbar/navbar.php';
             <div class="row" style="padding-top: 8%;">
                 <div class="col-4">
                     <!--https://unsplash.com/photos/ipARHaxETRk?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink -->
-                    <img src="http://localhost:8012/Acodemia/Media/kobu-agency-ipARHaxETRk-unsplash.jpg" alt="" style="width: 100%;">
+                    <img src="Media/kobu-agency-ipARHaxETRk-unsplash.jpg" alt="" style="width: 100%;">
                 </div>
                 <div class=col-8 >
                     <div class="caption" >
@@ -417,7 +417,7 @@ include_once 'navbar/navbar.php';
 
                 <div class="col-4" >
                     <!--https://unsplash.com/photos/idmvPhF8t4E?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink -->
-                    <img src="http://localhost:8012/Acodemia/Media/goran-ivos-idmvPhF8t4E-unsplash.jpg" alt="" style="width: 100%;">
+                    <img src="Media/goran-ivos-idmvPhF8t4E-unsplash.jpg" alt="" style="width: 100%;">
                 </div>
             </div>
 
