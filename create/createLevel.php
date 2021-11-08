@@ -36,7 +36,7 @@ if ((($_FILES["videoNivel"]["type"] == "video/mp4")) && ($_FILES["videoNivel"]["
   }
 else
 {
-  echo "Invalid file";
+ 
 }
 
 $allowedExtsP = array("pdf");
@@ -60,50 +60,28 @@ if ((($_FILES["pdfNivel"]["type"] == "application/pdf")) && in_array($extensionP
   }
 else
 {
-  echo "Invalid file";
+  
 }
 
+	$call =  $db->prepare('CALL nivelCreate(:p_nombre, :p_num, :p_costo, :p_video, :p_pdf, :p_contenido,:p_cursoid)');
+	$call->bindParam(':p_nombre', $nivelNombre, PDO::PARAM_STR); 
+	$call->bindParam(':p_num', $nivelNumero, PDO::PARAM_INT);  
+	$call->bindParam(':p_costo', $nivelCosto, PDO::PARAM_INT);  
+	$call->bindParam(':p_video', $nivelVideo, PDO::PARAM_STR); 
+	$call->bindParam(':p_pdf', $nivelPDF, PDO::PARAM_STR); 
+	$call->bindParam(':p_contenido', $nivelContenido, PDO::PARAM_STR); 
+	$call->bindParam(':p_cursoid', $cursoId, PDO::PARAM_INT); 
 
+	if($call->execute())
+	{
+			return true;
 
-
-
-$query = "INSERT INTO nivel
-SET
-nivelNumero = :nivelNumero,
-nivelNombre = :nivelNombre,
-nivelCosto  = :nivelCosto,
-nivelVideo = :nivelVideo,
-nivelPDF = :nivelPDF,
-nivelContenido = :nivelContenido,
-cursoId = :cursoId";
-
-
-// prepare the query
-$stmt = $db->prepare($query);
-
-// bind the values
-$stmt->bindParam(':nivelNumero', $nivelNumero);
-$stmt->bindParam(':nivelNombre', $nivelNombre);
-$stmt->bindParam(':nivelCosto', $nivelCosto);
-$stmt->bindParam(':nivelContenido', $nivelContenido);
-$stmt->bindParam(':nivelVideo', $nivelVideo);
-$stmt->bindParam(':nivelPDF', $nivelPDF);
-$stmt->bindParam(':cursoId', $cursoId);
-
-
-
-if($stmt->execute()){
-
-
-	print_r($nivelNombre);
-
-	return true;
-}
-else
-{
-	print_r("Error al agregar curso. Intente de nuevo");
-   return false;
-}
+	}
+	else{
+		print_r("Error al agregar curso. Intente de nuevo");
+		return false;
+	}
+		
 
 
 ?>

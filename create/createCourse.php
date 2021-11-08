@@ -109,11 +109,7 @@ if ($error === 0) {
 			$img_upload_path = '../uploads/'.$cursoMiniatura;
 			move_uploaded_file($tmp_name, $img_upload_path);
 
-			// Insert into Database
-			/*$sql = "INSERT INTO images(image_url) 
-					VALUES('$cursoMiniatura')";
-			mysqli_query($conn, $sql);
-			header("Location: view.php");*/
+
 		}else {
 			$em = "You can't upload files of this type";
 			//header("Location: ../create.php?error=$em");
@@ -152,41 +148,51 @@ if ((($_FILES["videoPrincipal"]["type"] == "video/mp4")
   }
 else
   {
-  echo "Invalid file";
+
   }
 
 
+        $call =  $db->prepare('CALL cursoCreate(:p_nombre, :p_desc, :p_costo, :p_niveles,:p_imagen,:p_video,:p_user, @p_lastid)');
+        $call->bindParam(':p_nombre', $cursoNombre, PDO::PARAM_STR); 
+        $call->bindParam(':p_desc', $cursoDescripcion, PDO::PARAM_STR);  
+		
+		if(($cursoCosto == null) || ($cursoCosto == 0))
+		{
+			$cursoCosto = 0;
+		}
 
+        $call->bindParam(':p_costo', $cursoCosto, PDO::PARAM_INT);  
+		$call->bindParam(':p_niveles', $cursoNiveles, PDO::PARAM_INT); 
+		$call->bindParam(':p_imagen', $cursoMiniatura, PDO::PARAM_STR); 
+		$call->bindParam(':p_video', $cursoVideoIntroductorio, PDO::PARAM_STR); 
+		$call->bindParam(':p_user', $cursoProfesorId, PDO::PARAM_INT);    
+              
 
+        if($call->execute())
+        {
+                 
+            $select = $db->query('SELECT @p_lastid');
+            $result = $select->fetch(PDO::FETCH_ASSOC);
+        
+            //var_dump($result);
+  
+            if($result['@p_lastid']!=null)
+            {
+                $idCourse = $result['@p_lastid'];
 
+                echo $idCourse;
+                //echo $catName;
 
+                return true;
+            }
+            else
+            { 
+                return false;}
 
-$query = "INSERT INTO curso
-SET
-cursoNombre = :cursoNombre,
-cursoDescripcion = :cursoDescripcion,
-cursoCosto  = :cursoCosto ,
-cursoNiveles = :cursoNiveles,
-cursoEstado = :cursoEstado,
-cursoMiniatura = :cursoMiniatura,
-cursoVideoIntroductorio = :cursoVideoIntroductorio,
-cursoProfesorId = :cursoProfesorId";
-
-
-// prepare the query
-$stmt = $db->prepare($query);
-
-// bind the values
-$stmt->bindParam(':cursoNombre', $cursoNombre);
-$stmt->bindParam(':cursoDescripcion', $cursoDescripcion);
-$stmt->bindParam(':cursoCosto',  $cursoCosto);
-$stmt->bindParam(':cursoNiveles',  $cursoNiveles);
-$stmt->bindParam(':cursoVideoIntroductorio',  $catDate);
-$stmt->bindParam(':cursoMiniatura',  $cursoMiniatura);
-$stmt->bindParam(':cursoVideoIntroductorio',  $cursoVideoIntroductorio);
-$stmt->bindParam(':cursoEstado',  $cursoEstado);
-$stmt->bindParam(':cursoProfesorId',  $cursoProfesorId);
-
+        }
+        else{
+			print_r("Error al agregar curso. Intente de nuevo");
+            return false;}
 
 
 
@@ -197,21 +203,6 @@ foreach($categArray as $categValue) {
    $qtyOut = $categValue;
 
 }*/
-
-
-if($stmt->execute()){
-
-
-	print_r($cursoNombre);
-
-	return true;
-}
-else
-{
-	print_r("Error al agregar curso. Intente de nuevo");
-   return false;
-}
-
 
 
     

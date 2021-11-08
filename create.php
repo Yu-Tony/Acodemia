@@ -8,14 +8,13 @@ include_once 'navbar/navbar.php';
 
     //Connect to our MySQL database using the PDO extension.
     $pdo = new PDO('mysql:host=127.0.0.1:3307;dbname=acodemiadb', 'root', '');
-    //Our select statement. This will retrieve the data that we want.
-    $sql = "SELECT categoriaId, categoriaNombre FROM categorias";
-    //Prepare the select statement.
-    $stmt = $pdo->prepare($sql);
-    //Execute the statement.
-    $stmt->execute();
-    //Retrieve the rows using fetchAll.
-    $users = $stmt->fetchAll();
+    $call =  $pdo->prepare('CALL categoriaGetAll()');     
+
+    if($call->execute())
+    {
+        $categoriasVar = $call->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -33,6 +32,7 @@ include_once 'navbar/navbar.php';
         var MailAccount = 0;
         //Guarda el numero de niveles para poner los campos a llenar luego de crear curso
         var numNiveles = 0;
+        var cursoActual = 0;
 
         $(document).ready()
         {
@@ -40,6 +40,7 @@ include_once 'navbar/navbar.php';
             obtenerInfo();
         
         }
+
 
                                                    
         // remove row
@@ -66,16 +67,13 @@ include_once 'navbar/navbar.php';
             // get form data
             var crearCategoria=$(this);
 
-            
             // get form data
             var crearCategoria_obj = crearCategoria.serializeObject();
             
-            crearCategoria_obj["MailCategory"] =AccountTypeGlobal; 
+            crearCategoria_obj["MailCategory"] =MailAccount; 
                 
             // convert object to json string
             var form_data=JSON.stringify(crearCategoria_obj);
-
-
 
             //alert(form_data);
         
@@ -85,13 +83,16 @@ include_once 'navbar/navbar.php';
                 type : "POST",
                 contentType : 'application/json',
                 data : form_data,
-                success : function(result){
-                    
-                    console.log(result);
+                success : function(output){
+                   
+                    var result = $.parseJSON(output);
+                    //alert(result[1]);
 
                     //http://jsfiddle.net/codeandcloud/nr54vx7b/
                     var selects = document.getElementById("dynamic-selects");
-                    selects.options[selects.options.length] = new Option(result, '6');
+
+                    selects.options[selects.options.length] = new Option(result[1], result[0]);
+
                     $('.selectpicker').selectpicker('refresh');
    
                     crearCategoria.find('input').val('');
@@ -100,7 +101,12 @@ include_once 'navbar/navbar.php';
                 
                 },
                 error: function(xhr, resp, text){
-                console.log("fail");
+
+                    if ( xhr.status === 403) {
+                        alert("Ya existe esa categoria. Favor de crear una nueva o elegir la ya existente.")
+                    }
+                    
+                    console.log("fail");
                     // on error, tell the user login has failed & empty the input boxes
                     console.log("Error al iniciar sesion " + text);
                     console.log("Response text  " + xhr.responseText);
@@ -113,6 +119,8 @@ include_once 'navbar/navbar.php';
 
             return false;
         });
+
+
 
         /*-------------------------------------------AGREGAR CURSO--------------------------------*/
         
@@ -129,8 +137,8 @@ include_once 'navbar/navbar.php';
 				type: 'POST',
 				data: formData,
 				success: function (data) {
-					alert(data);
-
+					//alert(data);
+                    cursoActual = data;
           
                 for (let i = 0; i < numNiveles; i++) {
                         
@@ -203,16 +211,16 @@ include_once 'navbar/navbar.php';
                 data: formData,
                 async :false ,
                 success: function (data) {
-                    //alert(data);
+                   // alert(data);
                 
                     console.log('Success');
                 },
                 error: function (xhr, resp, text) {
                 
-                    console.log("fail");
+                    alert("fail");
                     // on error, tell the user login has failed & empty the input boxes
-                    console.log(text);
-                    console.log("Response text  " + xhr.responseText); 
+                    alert(text);
+                    alert("Response text  " + xhr.responseText); 
                 },
 				cache: false,
 				contentType: false,
@@ -223,7 +231,7 @@ include_once 'navbar/navbar.php';
         $(document).on('click', '.btnSubmitAll', function(){
 
             var dataLevel = 0;
-            var numNuvel = 0;
+            var numNivel = 0;
 
             $('.level_form').each(function () {
 
@@ -238,18 +246,16 @@ include_once 'navbar/navbar.php';
                 }
                 else
                 {
-                    formData.append("idCourse", 14);
-                    formData.append("numeroNivel", numNuvel);
+                    formData.append("idCourse", cursoActual);
+                    formData.append("numeroNivel", numNivel);
 
                     /*for (var pair of formData.entries()) {
                         console.log(pair[0]+ ', ' + pair[1]); 
                     }*/
 
                     post_form_data(formData);
-                    numNuvel = numNuvel + 1;
+                    numNivel = numNivel + 1;
                 }
-
-
               
             });
 
@@ -367,8 +373,8 @@ include_once 'navbar/navbar.php';
                                                         <label class="col-12 col-form-label" data-toggle="tooltip" data-placement="right" title="Puede seleccionar múltiples categorías">Categoría<span style=" color: red;">*</span></label> 
    
                                                             <select required  id="dynamic-selects"  class="selectpicker" multiple aria-label="size 3 select example" name='categoriaCreate[]' id="categoriaCreate">
-                                                                    <?php foreach($users as $user): ?>
-                                                                        <option value="<?= $user['categoriaId']; ?>"><?= $user['categoriaNombre']; ?></option>
+                                                                    <?php foreach($categoriasVar as $categoriaVar): ?>
+                                                                        <option value="<?= $user['categoriaId']; ?>"><?= $categoriaVar['categoriaNombre']; ?></option>
                                                                     <?php endforeach; ?>
                                                             </select>
 

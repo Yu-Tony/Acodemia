@@ -22,8 +22,33 @@ $status = $statusMsg = $mail= '';
     $catName = $data->CategoryName;
     $catDesc = $data->categoryDesc;    
     $catPer = $data->MailCategory;
-    $catDate = "2000-10-18";
 
+    $call =  $db->prepare('CALL userGetId(:p_email, @p_id)');
+    $call->bindParam(':p_email', $catPer, PDO::PARAM_STR); 
+
+
+    if($call->execute())
+    { 
+        $select = $db->query('SELECT @p_id');
+        $result = $select->fetch(PDO::FETCH_ASSOC);
+    
+        //var_dump($result);
+
+        if($result['@p_id']!=null)
+        {
+            $catPerId = $result['@p_id'];
+        }
+        else
+        { 
+            echo("No hay resultados con ese correo");
+            return false;
+        }
+
+    }
+    else{
+        echo("Error al correr el procedure");
+        return false;
+    }
      
     // sanitize
     //https://www.php.net/manual/en/function.htmlspecialchars.php
@@ -31,72 +56,61 @@ $status = $statusMsg = $mail= '';
     $catDesc=htmlspecialchars(strip_tags($catDesc));
 
 
-    $query = "SELECT categoriaId 
-    FROM  categorias 
-    WHERE categoriaNombre = ?
-    LIMIT 0,1";
+    /*delimiter &ZV 
+    create procedure 
+    categoriaValidName(
+        in p_nombre varchar(30)) 
 
-               
-
-    // prepare the query
-    $stmt = $db->prepare( $query );
-
-    // bind given email value
-    $stmt->bindParam(1, $catName);
-
+        begin select categoriaId from categorias where categoriaNombre = p_nombre limit 0, 1; 
+    end &ZV*/
+    $call =  $db->prepare('CALL categoriaValidName(:p_nombre)');
+    $call->bindParam(':p_nombre', $catName, PDO::PARAM_STR); 
     // execute the query
-    $stmt->execute();
+    $call->execute();
 
     // get number of rows
-    $num = $stmt->rowCount();
+    $num = $call->rowCount();
 
     // si ya existe una categoria con ese nombre
     if($num==0){
-        $query = "INSERT INTO categorias
-        SET
-        categoriaNombre = :categoriaNombre,
-        categoriaDescripcion = :categoriaDescripcion,
-        categoriaUsuario  = :categoriaUsuario ,
-        categoriaFecha = :categoriaFecha";
-    
-        // prepare the query
-        $stmt = $db->prepare($query);
-    
-    
-    
-    
-    
-    
-        // bind the values
-        $stmt->bindParam(':categoriaNombre', $catName);
-        $stmt->bindParam(':categoriaDescripcion', $catDesc);
-        $stmt->bindParam(':categoriaUsuario',  $catPer);
-        $stmt->bindParam(':categoriaFecha',  $catDate);
-    
-         
-    
-    
-    
-        // execute the query, also check if query was successful
-        if($stmt->execute()){
 
-           
-  
-            //echo '<option value="10">'.$catName.'</option>';
-            echo $catName;
+        $call =  $db->prepare('CALL categoriaCreate(:p_nombre, :p_desc, :p_user, @p_lastid)');
+        $call->bindParam(':p_nombre', $catName, PDO::PARAM_STR); 
+        $call->bindParam(':p_desc', $catDesc, PDO::PARAM_STR);     
+        $call->bindParam(':p_user', $catPerId, PDO::PARAM_INT);     
+              
 
-            return true;
-        }
-        else
+        if($call->execute())
         {
-            echo  "Error al agregar categoria. Intente de nuevo";
-           return false;
+                 
+            $select = $db->query('SELECT @p_lastid');
+            $result = $select->fetch(PDO::FETCH_ASSOC);
+        
+            //var_dump($result);
+  
+            if($result['@p_lastid']!=null)
+            {
+                $catID = $result['@p_lastid'];
+
+                echo json_encode(array($catID, $catName));
+                //echo $catName;
+
+                return true;
+            }
+            else
+            { 
+                return false;}
+
         }
+        else{
+            return false;}
+
+
     }
     else
     {
-        echo  "Esa categoria ya existe. Favor de escribir una nueva o seleccionar una de las ya existentes";
-        return false;
+        header("HTTP/1.0 403 Forbidden");
+        print 'Bad user name / password';
     }
 
    

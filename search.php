@@ -124,9 +124,9 @@ include_once 'navbar/navbar.php';
 
                     <div class="card-deck" style="margin-bottom: 5%;">
                         <div class="card">
-                            <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                            <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                             <div class="card-body">
-                                <a href="http://localhost:8012/Acodemia/course.php">
+                                <a href="course.php">
                                     <h5 class="font-weight-normal">Titulo del curso 1</h5>
                                 </a>
                                 <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
@@ -143,7 +143,7 @@ include_once 'navbar/navbar.php';
                             </div>
                         </div>
                         <div class="card">
-                            <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                            <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                             <div class="card-body">
                                 <a href="#">
                                     <h5 class="font-weight-normal">Titulo del curso 2</h5>
@@ -162,7 +162,7 @@ include_once 'navbar/navbar.php';
                             </div>
                         </div>
                         <div class="card">
-                            <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                            <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                             <div class="card-body">
                                 <a href="#">
                                     <h5 class="font-weight-normal">Titulo del curso 3</h5>
@@ -184,7 +184,7 @@ include_once 'navbar/navbar.php';
 
                       <div class="card-deck" style="margin-bottom: 5%;">
                         <div class="card">
-                            <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                            <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                             <div class="card-body">
                                 <a href="#">
                                     <h5 class="font-weight-normal">Titulo del curso 4</h5>
@@ -203,7 +203,7 @@ include_once 'navbar/navbar.php';
                             </div>
                         </div>
                         <div class="card">
-                            <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                            <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                             <div class="card-body">
                                 <a href="#">
                                     <h5 class="font-weight-normal">Titulo del curso 5</h5>
@@ -222,7 +222,7 @@ include_once 'navbar/navbar.php';
                             </div>
                         </div>
                         <div class="card">
-                            <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                            <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                             <div class="card-body">
                                 <a href="#">
                                     <h5 class="font-weight-normal">Titulo del curso 6</h5>
@@ -245,7 +245,7 @@ include_once 'navbar/navbar.php';
 
                       <div class="card-deck" style="margin-bottom: 5%;">
                         <div class="card">
-                            <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                            <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                             <div class="card-body">
                                 <a href="#">
                                     <h5 class="font-weight-normal">Titulo del curso 7</h5>
@@ -264,7 +264,7 @@ include_once 'navbar/navbar.php';
                             </div>
                         </div>
                         <div class="card">
-                            <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                            <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                             <div class="card-body">
                                 <a href="#">
                                     <h5 class="font-weight-normal">Titulo del curso 8</h5>
@@ -283,7 +283,7 @@ include_once 'navbar/navbar.php';
                             </div>
                         </div>
                         <div class="card">
-                            <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
+                            <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
                             <div class="card-body">
                                 <a href="#">
                                     <h5 class="font-weight-normal">Titulo del curso 9</h5>

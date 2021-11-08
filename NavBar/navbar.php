@@ -1,14 +1,13 @@
 <?php
-    //Connect to our MySQL database using the PDO extension.
+
     $pdo = new PDO('mysql:host=127.0.0.1:3307;dbname=acodemiadb', 'root', '');
-    //Our select statement. This will retrieve the data that we want.
-    $sql = "SELECT categoriaId, categoriaNombre FROM categorias";
-    //Prepare the select statement.
-    $stmt = $pdo->prepare($sql);
-    //Execute the statement.
-    $stmt->execute();
-    //Retrieve the rows using fetchAll.
-    $users = $stmt->fetchAll();
+    $call =  $pdo->prepare('CALL categoriaGetAll()');     
+
+    if($call->execute())
+    {
+        $categoriasVar = $call->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 ?>
     
     <!--bootstrap-->
@@ -256,11 +255,9 @@
 
                     <ul class="dropdown-menu add-to-ul" aria-labelledby="navbarDropdownMenuLink">
 
-        
-
-                        <?php foreach($users as $user): ?>
-                          <li><a class="dropdown-item" href="http://localhost:8012/Acodemia/search.php"><?= $user['categoriaNombre']; ?></a></li>
-                         <?php endforeach; ?>
+                        <?php foreach($categoriasVar as $categoriaVar): ?>
+                          <li><a class="dropdown-item" href="http://localhost:8012/Acodemia/search.php"><?= $categoriaVar['categoriaNombre']; ?></a></li>
+                        <?php endforeach; ?>
 
                     </ul>
                 </div>
