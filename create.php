@@ -29,7 +29,9 @@ include_once 'navbar/navbar.php';
     <!--Script para agregar y borrar-->
     <script type="text/javascript">
 
+        //Guarda el mail para obtener el id del usuario en otras funciones
         var MailAccount = 0;
+        //Guarda el numero de niveles para poner los campos a llenar luego de crear curso
         var numNiveles = 0;
 
         $(document).ready()
@@ -44,15 +46,6 @@ include_once 'navbar/navbar.php';
         $(document).on('click', '#removeRow', function () {
             $(this).closest('#inputFormRow').remove();
         });
-
-        //Solo una cantidad de archivos
-        function checkFiles(files) {       
-            if(files.length>3) {
-                alert("No se permiten mas de 3 imagenes");
-
-                event.preventDefault();
-            }       
-        }
 
         /*----------------------------------OBTENER INFO DEL PERFIL-------------------------------------*/
 
@@ -131,16 +124,15 @@ include_once 'navbar/navbar.php';
             formData.append("usuarioCreate", MailAccount);
             numNiveles = formData.get("nivelesCreate");
 
-
-			$.ajax({
+            $.ajax({
 				url: "create/createCourse.php",
 				type: 'POST',
 				data: formData,
 				success: function (data) {
-					//alert("Hola");
+					alert(data);
 
           
-                    for (let i = 0; i < numNiveles; i++) {
+                for (let i = 0; i < numNiveles; i++) {
                         
                         var strVar="";
                         strVar += "<form class=\"level_form levelform\" method=\"post\" style=\"margin-left: 3%;\">";
@@ -151,17 +143,20 @@ include_once 'navbar/navbar.php';
                         strVar += "<h2>Información del nivel ";
                         strVar += (i+1);
                         strVar += "<\/h2>";
-                        strVar += "<label for=\"tituloNivel\" class=\"col-12 col-form-label\">Titulo del nivel<\/label> ";
+                        strVar += "<label for=\"tituloNivel\" class=\"col-12 col-form-label\">Titulo del nivel<span style=\" color: red;\">*</span><\/label> ";
                         strVar += "<div class=\"col-12\">";
                         strVar += "<input name=\"tituloNivel\" placeholder=\"Enter Title here\" class=\"form-control here\" required=\"required\" type=\"text\" required  style=\"margin-bottom:2%;\">";
                         strVar += "<\/div>";
-                        strVar += "<label  for=\"descNivel\" class=\"col-12 col-form-label\">Descripcion del nivel<\/label> ";
+                        strVar += "<label  for=\"descNivel\" class=\"col-12 col-form-label\">Descripcion del nivel<span style=\" color: red;\">*</span><\/label> ";
                         strVar += "<div class=\"col-12\">";
                         strVar += "<textarea name=\"descNivel\" cols=\"40\" rows=\"5\" placeholder=\"Escribir una descripción\" class=\"form-control\" style=\"margin-bottom:2%;\"><\/textarea> ";
                         strVar += "<\/div>";
                         strVar += "<label>Costo del nivel<\/label> ";
                         strVar += "<input name=\"costoNivel\" type=\"number\" min=\"0.00\" step=\".01\" style=\"width: 100%; margin-bottom: 3%;\" \/> ";
+                        strVar += "<label for=\"videoNivel\" class=\"col-12 col-form-label\">Video del nivel<span style=\" color: red;\">*</span><\/label> ";
                         strVar += "<input type=\"file\" name=\"videoNivel\" required accept=\"video\/mp4\">";
+                        strVar += "<label for=\"pdfNivel\" class=\"col-12 col-form-label\">PDF del nivel<\/label> ";
+                        strVar += "<input type=\"file\" name=\"pdfNivel\" accept=\"application\/pdf\">";
                         strVar += "<\/div>";
                         strVar += "<\/div>";
                         strVar += "<\/div> ";
@@ -170,23 +165,23 @@ include_once 'navbar/navbar.php';
                         strVar += "<\/div>";
                         strVar += "<\/form>";
             
-                                        
-                            
-                        $('#newRow').append(strVar);
-                        
-                        
-                    }
 
+                        $('#newRow').append(strVar);
+
+                    }
         
+                   
+                    $('.btnSubmitAll').css('visibility', 'visible');
                     $('.form-course-all').hide();
+                    $('#course_form').trigger("reset");
                   
 				},
                 error: function(xhr, resp, text){
                   
-                   console.log("fail");
+                    console.log("fail");
                     // on error, tell the user login has failed & empty the input boxes
-                    console.log("Error al iniciar sesion " + text);
-                    console.log("Response text  " + xhr.responseText);
+                    alert("Error al iniciar sesion " + text);
+                    alert("Response text  " + xhr.responseText);
                 },
 				cache: false,
 				contentType: false,
@@ -208,9 +203,9 @@ include_once 'navbar/navbar.php';
                 data: formData,
                 async :false ,
                 success: function (data) {
-                    alert(data);
+                    //alert(data);
                 
-                    //console.log('Success');
+                    console.log('Success');
                 },
                 error: function (xhr, resp, text) {
                 
@@ -218,7 +213,10 @@ include_once 'navbar/navbar.php';
                     // on error, tell the user login has failed & empty the input boxes
                     console.log(text);
                     console.log("Response text  " + xhr.responseText); 
-                }
+                },
+				cache: false,
+				contentType: false,
+				processData: false
             });
         }
 
@@ -230,14 +228,24 @@ include_once 'navbar/navbar.php';
             $('.level_form').each(function () {
 
                 var $myForm = $(this);
+        
+                var formData = new FormData(this);
+
+               // console.log(formData.get("videoNivel"));
 
                 if (!$myForm[0].checkValidity()) {
                   alert("Llenar todos los campos de los niveles");
                 }
                 else
                 {
-                    dataLevel =$(this).serialize() + "&idCourse=" + 10 + "&numeroNivel=" + numNuvel;
-                    post_form_data(dataLevel);
+                    formData.append("idCourse", 14);
+                    formData.append("numeroNivel", numNuvel);
+
+                    /*for (var pair of formData.entries()) {
+                        console.log(pair[0]+ ', ' + pair[1]); 
+                    }*/
+
+                    post_form_data(formData);
                     numNuvel = numNuvel + 1;
                 }
 
@@ -245,8 +253,8 @@ include_once 'navbar/navbar.php';
               
             });
 
-          /*  $(".form-course-all").show();
-            $( ".level_form" ).remove();*/
+            $(".form-course-all").show();
+            $( ".level_form" ).remove();
 
         });
 
@@ -277,7 +285,10 @@ include_once 'navbar/navbar.php';
         }*/
 
 
-
+    /*--------------------------------TOOLTIP PARA AYUDA-------------------- */
+    $(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+    })
             
     </script>
 
@@ -303,12 +314,12 @@ include_once 'navbar/navbar.php';
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-5">
+                                    <div class="col-md-12">
                                         <h1>Crear un nuevo curso</h1>
+                                        <span>Los campos con <span style="color:red;">*</span> son obligatorios. Puede pasar el cursor sobre los campos para obtener más información</span>
+
                                     </div>
-                                    <div class="col-md-7">
-                                     
-                                    </div>
+                               
                                     
                                 </div>
                                 <hr style="border: 1px solid #1879d1;
@@ -328,14 +339,14 @@ include_once 'navbar/navbar.php';
                                                         <h2>Información general</h2>
 
 
-                                                        <label for="tituloCreate" class="col-12 col-form-label">Titulo del curso</label> 
+                                                        <label for="tituloCreate" class="col-12 col-form-label">Titulo del curso<span style=" color: red;">*</span></label> 
                                                         <div class="col-12">
                                                             <input id="tituloCreate" name="tituloCreate" placeholder="Enter Title here" class="form-control here" required="required" type="text" required>
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group row">
-                                                        <label for="descCreate" class="col-12 col-form-label">Descripción del curso</label> 
+                                                        <label for="descCreate" class="col-12 col-form-label">Descripción del curso<span style=" color: red;">*</span></label> 
                                                         <div class="col-12">
                                                         <textarea id="descCreate" name="descCreate" cols="40" rows="5" class="form-control" required></textarea>
                                                     </div>
@@ -344,7 +355,7 @@ include_once 'navbar/navbar.php';
 
                                                     <div class="form-group row">
                                                       
-                                                       <label for="costCreate" class="col-12 col-form-label">Costo del curso completo</label> 
+                                                       <label for="costCreate" class="col-12 col-form-label" data-toggle="tooltip" data-placement="right" title="Si el curso completo tiene un precio, ingresar monto. Si es gratis o solo los niveles tiene precio dejar este campo en blanco">Costo del curso completo</label> 
                                                        <div class="col-12">
                                                            <input id="costoCreate" name="costoCreate"  type="number" min="0.00" step="any" style="width: 100%;" />
                                                        </div>
@@ -353,7 +364,7 @@ include_once 'navbar/navbar.php';
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <label class="col-12 col-form-label">Categoría</label> 
+                                                        <label class="col-12 col-form-label" data-toggle="tooltip" data-placement="right" title="Puede seleccionar múltiples categorías">Categoría<span style=" color: red;">*</span></label> 
    
                                                             <select required  id="dynamic-selects"  class="selectpicker" multiple aria-label="size 3 select example" name='categoriaCreate[]' id="categoriaCreate">
                                                                     <?php foreach($users as $user): ?>
@@ -364,7 +375,7 @@ include_once 'navbar/navbar.php';
 
                                                         <label class="col-12 col-form-label">¿No encuentras la categoría que necesitas?<a href="#crearCategoria"> Crea una nueva </a></label> 
 
-                                                        <label for="nivelesCreate" class="col-12 col-form-label">Numero de niveles</label> 
+                                                        <label for="nivelesCreate" class="col-12 col-form-label" data-toggle="tooltip" data-placement="right" title="En base a este número se crearán los campos de nivel a llenar">Numero de niveles<span style=" color: red;">*</span></label> 
                                                          <div class="col-12">
                                                              <input id="nivelesCreate" name="nivelesCreate" type="number" min="1" step="1" style="width: 100%;" required />
                                                          </div>
@@ -411,14 +422,14 @@ include_once 'navbar/navbar.php';
                                             <div class="col-md-4 ">
                                                         
                                                                 <div class="card mb-3" style="max-width: 18rem;">
-                                                                        <div class="card-header bg-light ">Agregar imagen principal</div>
+                                                                        <div class="card-header bg-light" data-toggle="tooltip" data-placement="right" title="Subir imagen con formato jpeg, jpg o png">Agregar imagen principal<span style=" color: red;">*</span></div>
                                                                         <div class="card-footer bg-light">
                                                                             <input type="file"name="imagenPrincipal" accept="image/jpeg, image/png" required>
                                                                         </div>
                                                                 </div>
 
                                                                 <div class="card mb-3" style="max-width: 18rem;">
-                                                                        <div class="card-header bg-light ">Agregar video introductorio</div>
+                                                                        <div class="card-header bg-light" data-toggle="tooltip" data-placement="right" title="Subir video con formato mp4">Agregar video introductorio</div>
                                                                         <div class="card-footer bg-light">
                                                                             <input type="file"name="videoPrincipal" accept="video/mp4">
                                                                         </div>
@@ -426,9 +437,9 @@ include_once 'navbar/navbar.php';
 
 
                                                                 <div class="card mb-3" style="max-width: 18rem;">
-                                                                    <div class="card-header bg-light ">Agregar niveles</div>
+                                                                    <div class="card-header bg-light">Crear curso</div>
                                                                         <div class="card-footer bg-light">
-                                                                            <input class="btn btn-primary btn-sm" type="submit" name="next" value="Siguiente" />
+                                                                            <input class="btn btn-primary btn-sm" type="submit" name="next" value="Crear curso" data-toggle="tooltip" data-placement="right" title="Click para crear el curso y pasar a crear los niveles"/>
                                                                             
                                                                             
                                                                         </div>
@@ -452,12 +463,12 @@ include_once 'navbar/navbar.php';
                                                     
                                                         <h2>Agregar categoría</h2>
 
-                                                        <label for="#CategoryName" class="col-12 col-form-label">Nombre de la categoría</label> 
+                                                        <label for="#CategoryName" class="col-12 col-form-label">Nombre de la categoría<span style="color:red;">*</span> </label> 
                                                         <input id="CategoryName" name="CategoryName" class="form-control here" required type="text">
-                                                        <label for="#categoryDesc" class="col-12 col-form-label">Descripción de la categoría</label> 
+                                                        <label for="#categoryDesc" class="col-12 col-form-label" data-toggle="tooltip" data-placement="right" title="Explicar qué tipo de cursos puede contener esta categoría">Descripción de la categoría<span style="color:red;">*</span> </label> 
                                                         <textarea id="categoryDesc" name="categoryDesc" cols="40" rows="5" class="form-control" required></textarea>
                                                     
-                                                        <input class="btn btn-primary btn-sm" type="submit" name="Categoria" value="Agregar categoría" />
+                                                        <input class="btn btn-primary btn-sm" type="submit" name="Categoria" value="Agregar categoría" data-toggle="tooltip" data-placement="right" title="Click para crear una nueva categoria"/>
 
                                             
                                                     </div>
@@ -480,7 +491,8 @@ include_once 'navbar/navbar.php';
 
                               </div>
 
-                              <button  class="btn btn-primary btn-sm btnSubmitAll" >gimme love</button>
+                              <button  class="btn btn-primary btn-sm btnSubmitAll" style="visibility: hidden" data-toggle="tooltip" data-placement="right" title="Click para crear los niveles y publicar el curso">Crear niveles</button>
+
 
 
 

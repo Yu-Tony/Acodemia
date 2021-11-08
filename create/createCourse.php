@@ -92,7 +92,6 @@ if($stmt->execute())
 $img_name = $_FILES['imagenPrincipal']['name'];
 $img_size = $_FILES['imagenPrincipal']['size'];
 $tmp_name = $_FILES['imagenPrincipal']['tmp_name'];
-//$cursoMiniatura = addslashes(file_get_contents($_FILES['imagenPrincipal']['tmp_name']));
 $error = $_FILES['imagenPrincipal']['error'];
 
 if ($error === 0) {
@@ -106,7 +105,7 @@ if ($error === 0) {
 		$allowed_exs = array("jpg", "jpeg", "png"); 
 
 		if (in_array($img_ex_lc, $allowed_exs)) {
-			$cursoMiniatura = uniqid("IMG-", true).'.'.$img_ex_lc;
+			$cursoMiniatura = uniqid("IMG-COURSE-", true).'.'.$img_ex_lc;
 			$img_upload_path = '../uploads/'.$cursoMiniatura;
 			move_uploaded_file($tmp_name, $img_upload_path);
 
@@ -125,42 +124,36 @@ if ($error === 0) {
 	//header("Location: ../create.php?error=$em");
 }
 
-$vid_name = $_FILES['videoPrincipal']['name'];
-$vid_size = $_FILES['videoPrincipal']['size'];
-$tmpVid_name = $_FILES['videoPrincipal']['tmp_name'];
-//$cursoMiniatura = addslashes(file_get_contents($_FILES['imagenPrincipal']['tmp_name']));
-$error = $_FILES['videoPrincipal']['error'];
+//https://stackoverflow.com/questions/14758191/how-to-use-filesfilesize/14758827
+define('MB', 1048576);
 
-if ($error === 0) {
-	if ($vid_size > 125000) {
-		$em = "Sorry, your file is too large.";
-		header("Location: ../create.php?error=$em");
-	}else {
-		$img_ex = pathinfo($vid_name, PATHINFO_EXTENSION);
-		$img_ex_lc = strtolower($img_ex);
+$allowedExts = array("mp4", "wma");
+$extension = pathinfo($_FILES['videoPrincipal']['name'], PATHINFO_EXTENSION);
 
-		$allowed_exs = array("mp4", "m4v"); 
+if ((($_FILES["videoPrincipal"]["type"] == "video/mp4")
+|| ($_FILES["videoPrincipal"]["type"] == "audio/wma"))
+&& ($_FILES["videoPrincipal"]["size"] < 10*MB)
+&& in_array($extension, $allowedExts))
 
-		if (in_array($img_ex_lc, $allowed_exs)) {
-			$cursoVideoIntroductorio = uniqid("VID-", true).'.'.$img_ex_lc;
-			$img_upload_path = '../uploads/'.$cursoVideoIntroductorio;
-			move_uploaded_file($tmpVid_name, $img_upload_path);
+  {
+  if ($_FILES["videoPrincipal"]["error"] > 0)
+    {
+    echo "Return Code: " . $_FILES["videoPrincipal"]["error"] . "<br />";
+    }
+  else
+    {
 
-			// Insert into Database
-			/*$sql = "INSERT INTO images(image_url) 
-					VALUES('$cursoMiniatura')";
-			mysqli_query($conn, $sql);
-			header("Location: view.php");*/
-		}else {
-			$em = "You can't upload files of this type";
-			//header("Location: ../create.php?error=$em");
-		}
-	}
-}else {
-	$em = "unknown error occurred!";
-	//header("Location: ../create.php?error=$em");
-}
+	$img_ex_lc = strtolower($_FILES["videoPrincipal"]["name"]);
+	$cursoVideoIntroductorio = uniqid("VID-COURSE-", true).'.'.$img_ex_lc;
+	$img_upload_path = '../uploads/'.$cursoVideoIntroductorio;
+	move_uploaded_file($_FILES["videoPrincipal"]["tmp_name"], $img_upload_path);
 
+    }
+  }
+else
+  {
+  echo "Invalid file";
+  }
 
 
 
@@ -188,7 +181,7 @@ $stmt->bindParam(':cursoNombre', $cursoNombre);
 $stmt->bindParam(':cursoDescripcion', $cursoDescripcion);
 $stmt->bindParam(':cursoCosto',  $cursoCosto);
 $stmt->bindParam(':cursoNiveles',  $cursoNiveles);
-//$stmt->bindParam(':cursoVideoIntroductorio',  $catDate);
+$stmt->bindParam(':cursoVideoIntroductorio',  $catDate);
 $stmt->bindParam(':cursoMiniatura',  $cursoMiniatura);
 $stmt->bindParam(':cursoVideoIntroductorio',  $cursoVideoIntroductorio);
 $stmt->bindParam(':cursoEstado',  $cursoEstado);
@@ -222,7 +215,7 @@ else
 
 
     
-print_r($cursoProfesorId);
+echo($cursoNombre);
 
 
 

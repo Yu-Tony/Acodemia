@@ -76,7 +76,6 @@ $extension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
 
 if ((($_FILES["file"]["type"] == "video/mp4")
 || ($_FILES["file"]["type"] == "audio/wma"))
-
 && ($_FILES["file"]["size"] < 10*MB)
 && in_array($extension, $allowedExts))
 
@@ -92,16 +91,15 @@ if ((($_FILES["file"]["type"] == "video/mp4")
     echo "Size: " . ($_FILES["file"]["size"] / 1024) . " Kb<br />";
     echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br />";
 
-    if (file_exists("../uploads/" . $_FILES["file"]["name"]))
-      {
-      echo $_FILES["file"]["name"] . " already exists. ";
-      }
-    else
-      {
-      move_uploaded_file($_FILES["file"]["tmp_name"],
-      "../uploads/" . $_FILES["file"]["name"]);
-      echo "Stored in: " . "../uploads/" . $_FILES["file"]["name"];
-      }
+	$img_ex_lc = strtolower($_FILES["file"]["name"]);
+	$new_img_name = uniqid("VID-", true).'.'.$img_ex_lc;
+	$img_upload_path = '../uploads/'.$new_img_name;
+	move_uploaded_file($_FILES["file"]["tmp_name"], $img_upload_path);
+	echo "Stored in: " . "../uploads/" . $new_img_name;
+
+	$sql = "INSERT INTO tablavideo(video) 
+				        VALUES('$new_img_name')";
+				mysqli_query($conn, $sql);
     }
   }
 else
@@ -110,3 +108,30 @@ else
   }
 
 ?>
+
+<!--
+
+Server name
+acodemia-server
+Engine
+MySQL - Flexible Server
+Database name
+Region
+East US
+Username
+vibhyignov
+Password
+L0SR2T3BN364LF50$
+
+
+
+https://None@acodemia.scm.azurewebsites.net/Acodemia.git
+
+https://Teb@acodemia.scm.azurewebsites.net/Acodemia.git
+
+https://docs.microsoft.com/en-us/azure/app-service/quickstart-php?pivots=platform-windows
+https://docs.microsoft.com/en-us/azure/app-service/deploy-configure-credentials?tabs=cli#code-try-2
+https://docs.microsoft.com/en-us/azure/app-service/tutorial-php-mysql-app?pivots=platform-windows
+
+
+-->

@@ -32,24 +32,55 @@
 
 
      <?php 
-	 require_once '../api/config/database.php'; 
-		$database = new Database();
-		$db = $database->getConnection();
+		$sname = "127.0.0.1:3307";
+		$uname = "root";
+		$password = "";
+
+		$db_name = "acodemia_db";
+
+		//https://stackoverflow.com/questions/14758191/how-to-use-filesfilesize/14758827
+		define('MB', 1048576);
 
 
+		$conn = mysqli_connect($sname, $uname, $password, $db_name);
 
-          $idProfileQuery = $db->query("SELECT video FROM tablavideo ORDER BY idVideo DESC"); 
+		if (!$conn) {
+			echo "Connection failed!";
+			exit();
+		}
 
-          while ($row = $idProfileQuery->fetch(PDO::FETCH_ASSOC)) {?>
+		$sql = "SELECT `video` FROM `tablavideo` ORDER BY `idVideo` DESC";
+		//$idProfileQuery= mysqli_query($conn, $sql);
 
+		$result = mysqli_query($conn,$sql);
+     	//execute SQL statement 
+     
+		if (!$result)     
+			die("Database access failed: " . mysqli_error()); 
+			//output error message if query execution failed 
+			
+			$rows = mysqli_num_rows($result); 
+			// get number of rows returned 
+		
+		if ($rows) {  
+		
+			while ($row = mysqli_fetch_array($result)) {    ?>        
 
-                <div class="alb">
-                    <img src="../uploads/<?=$row['video']?>">
-                </div>
+				<video width="320" height="240" controls>
+				<source  src="../uploads/<?=$row['video']?>" type="video/mp4">
+				Your browser does not support the video tag.
+				</video>
+    
+		
+			<?php } 
+		}
 
-              <?php  }?>
+		
+
+      ?>
 
 
 
 </body>
 </html>
+
