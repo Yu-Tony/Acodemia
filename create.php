@@ -374,7 +374,7 @@ include_once 'navbar/navbar.php';
    
                                                             <select required  id="dynamic-selects"  class="selectpicker" multiple aria-label="size 3 select example" name='categoriaCreate[]' id="categoriaCreate">
                                                                     <?php foreach($categoriasVar as $categoriaVar): ?>
-                                                                        <option value="<?= $user['categoriaId']; ?>"><?= $categoriaVar['categoriaNombre']; ?></option>
+                                                                        <option value="<?= $categoriaVar['categoriaId']; ?>"><?= $categoriaVar['categoriaNombre']; ?></option>
                                                                     <?php endforeach; ?>
                                                             </select>
 

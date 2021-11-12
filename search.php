@@ -1,6 +1,17 @@
 <?php
 include_once 'navbar/navbar.php';
 //include_once 'footer/footer.php';
+
+
+    $pdo = new PDO('mysql:host=127.0.0.1:3307;dbname=acodemiadb', 'root', '');
+    $call =  $pdo->prepare('CALL categoriaGetAll()');     
+
+    if($call->execute())
+    {
+        $categoriasVar = $call->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    
 ?>
 
 <!DOCTYPE html>
@@ -18,20 +29,229 @@ include_once 'navbar/navbar.php';
     <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 
     <script>
-        $(function(){ /* DOM ready */
-            $("#SelectFilter").change(function() {
-                //alert('The option with value ' + $(this).val());
-                if ($('#SelectFilter').val().length > 0 && $('#SelectFilter').val() == "Fecha") 
+        var searchText = 0;
+        var pageText = 0;
+   
+
+        $(document).ready()
+        {
+            //$("#SelectFilter").val("");
+
+            //https://easyautotagging.com/javascript-get-url-parameter/
+            var queryString = window.location.search;
+            var urlParams = new URLSearchParams(queryString);
+            searchText = urlParams.get('searchword');
+            pageText = urlParams.get('page');
+            if(searchText!=null)
+            {
+                //alert("serach by word "+searchText);
+
+                $.ajax({
+                    url: "Search/SearchByName.php",
+                    type : "POST",
+                    data: {'searchword': searchText, 'page':pageText}, 
+                    success : function(result) {
+
+                        $('#resultados-word').html(searchText);
+                        $("#CourseRow").html(result); 
+
+                        // if response is a success, tell the user it was a successful sign up & empty the input boxes
+                        //location.href = "http://www.example.com/ThankYou.html"
+                    },
+                    error: function(xhr, resp, text){
+                     
+                        window.location = ' error/404.html';
+                        console.log("Error al crear cuenta  " + text);
+                        console.log("Response text  " + xhr.responseText);
+                    }
+                });
+        
+            }
+            else
+            {
+                searchText = urlParams.get('category');
+                if(searchText!=null)
                 {
-                   
-                    $('#DatePicker').css( "display", "inline-block" );
-            
-                } 
-                else {
-                    $('#DatePicker').css( "display", "none" );
+                    $.ajax({
+                    url: "Search/SearchByCategory.php",
+                    type : "POST",
+                    data: {'searchword': searchText, 'page':pageText}, 
+                    success : function(result) {
+                        //alert(result);
+                        $('#resultados-word').html(searchText);
+                        $("#CourseRow").html(result); 
+                    },
+                    error: function(xhr, resp, text){
+                        
+                        //window.location = ' error/404.html';
+                        console.log("Error al crear cuenta  " + text);
+                        console.log("Response text  " + xhr.responseText);
+                    }
+                });
                 }
-            });
-        });
+                else
+                {
+                    searchText = urlParams.get('user');
+                    if(searchText!=null)
+                    {
+                        $.ajax({
+                        url: "Search/SearchByUser.php",
+                        type : "POST",
+                        data: {'searchword': searchText, 'page':pageText}, 
+                        success : function(result) {
+                            alert(result);
+
+                         
+                                //$('#resultados-word').html(searchText);
+                                //$("#CourseRow").html(result); 
+
+                            },
+                            error: function(xhr, resp, text){
+
+                                window.location = ' error/404.html';
+                                console.log("Error al crear cuenta  " + text);
+                                console.log("Response text  " + xhr.responseText);
+                            }
+                        });
+                    }
+                    else
+                    {
+                        searchTextTo = urlParams.get('to');
+                        searchTextFrom = urlParams.get('from');
+                        if((searchTextTo!=null)||(searchTextFrom!=null))
+                        {
+                            $.ajax({
+                            url: "Search/SearchByDate.php",
+                            type : "POST",
+                            data: {'searchTextTo': searchTextTo, 'searchTextFrom': searchTextFrom, 'page':pageText}, 
+                            success : function(result) {
+
+                                //alert(result);
+                                    $('#resultados-word').html(searchText);
+                                    $("#CourseRow").html(result); 
+
+                                },
+                                error: function(xhr, resp, text){
+
+                                    window.location = ' error/404.html';
+                                    console.log("Error al crear cuenta  " + text);
+                                    console.log("Response text  " + xhr.responseText);
+                                }
+                            });
+                        }
+                
+                    }
+                }
+            }
+           
+
+         
+            $("#btnSubmit").click(function(){
+                alert("button");
+            }); 
+
+        }
+
+//Get multiple URL PARAMETERS
+//https://www.codexpedia.com/javascript/javascript-get-the-query-string-param-from-url/
+
+/*--------------------------------ON CHANGE FILTER-----------------------*/
+    function getval(sel)
+    {
+        if(sel.value == "categoria")
+        {
+            window.location = 'http://localhost:8012/Acodemia/search.php?category=' + searchText + "&page=1";
+        }
+        if(sel.value == "usuario")
+        {
+            window.location = 'http://localhost:8012/Acodemia/search.php?user=' + searchText + "&page=1";
+        }
+        if(sel.value == "curso")
+        {
+            window.location = 'http://localhost:8012/Acodemia/search.php?searchword=' + searchText + "&page=1";
+        }
+        if(sel.value == "fecha")
+        {
+            
+           $('#DatePicker').css( "display", "inline-block" );
+           $('#btnFecha').css( "display", "inline-block" );
+        }
+
+    
+    }
+
+
+
+/*----------------------------------ON CLICK NEXT - PREV-------------------- */
+
+    $(document).on('click','#nextPage', function() {
+       
+       var queryString = window.location.search;
+        var urlParams = new URLSearchParams(queryString);
+        pageText = urlParams.get('page');
+        pageText = parseInt(pageText);
+        pageText = (pageText+1);
+
+   
+
+        urlParams.set('page', pageText);
+
+        //window.location.search = urlParams;
+
+        //window.location.search = jQuery.query.set("page", pageText);
+        //queryString.searchParams.set('page', pageText);
+        
+        window.location = 'http://localhost:8012/Acodemia/search.php?' + urlParams;
+    }); 
+
+
+
+    $(document).on('click','#prevPage', function() {
+       
+        var queryString = window.location.search;
+        var urlParams = new URLSearchParams(queryString);
+        pageText = urlParams.get('page');
+        pageText = parseInt(pageText);
+   
+        if(pageText>1)
+        {
+            pageText = (pageText-1);
+            //alert(pageText);
+            urlParams.set('page', pageText);
+            window.location = 'http://localhost:8012/Acodemia/search.php?' + urlParams;
+           // queryString.searchParams.set('page', pageText);
+           // window.location = 'http://localhost:8012/Acodemia/search.php';
+        }
+    }); 
+
+/*-----------------------------DISPLAY FECHA------------------------*/
+
+function obtenerFecha()
+{
+    
+    var startDate = document.getElementById("startDate").value;
+    if(startDate!=0)
+    {
+        var dateAr = startDate.split('/');
+        startDate = dateAr[2] + '-' + dateAr[0] + '-' + dateAr[1].slice(-2);
+    }
+  
+
+    var endDate = document.getElementById("endDate").value;
+    if(endDate!=0)
+    {
+        dateAr = endDate.split('/');
+        endDate = dateAr[2] + '-' + dateAr[0] + '-' + dateAr[1].slice(-2);
+    }
+  
+
+    window.location = 'http://localhost:8012/Acodemia/search.php?from=' + startDate + "&to=" + endDate + "&page=1";
+
+    
+}
+  
+
+        
     </script>
 
 
@@ -45,7 +265,7 @@ include_once 'navbar/navbar.php';
         <div class="col-8" style="background-color: #073352; padding-left: 4%; padding-right: 4%;">
         
             <div class="text-left " style="padding-top:2%; ">
-               <h4 style="color: whitesmoke;" class="subtitle-text">100 resultados para  ....</h4>
+               <h4 style="color: whitesmoke;" class="subtitle-text">Resultados para <span id="resultados-word"></span></h4>
             </div>
 
             <div class="text-left " style="padding-top:2%;">
@@ -55,17 +275,17 @@ include_once 'navbar/navbar.php';
 
              <!--Form filtro-->
              <div class="form-group">
-                <select class="form-control" id="SelectFilter">
+                <select class="form-control" onchange="getval(this);" id="SelectFilter">
                   <option value="">Cualquier resultado</option>
-                  <option>Categoría</option>
-                  <option>Curso</option>
-                  <option>Usuario</option>
-                  <option>Fecha</option>
+                  <option value="categoria">Categoría</option>
+                  <option value="curso">Curso</option>
+                  <option value="usuario">Usuario</option>
+                  <option value="fecha">Fecha</option>
                 </select>
               </div>
 
               <!--Date picker-->
-              <div class="container" style="color: whitesmoke; display: none;" id="DatePicker">
+            <div class="container" style="color: whitesmoke; display: none;" id="DatePicker">
                 <div class="row">
                     <div class="col-6">
                         Start Date: <input id="startDate" width="276" />
@@ -75,7 +295,12 @@ include_once 'navbar/navbar.php';
                     </div>
                 </div>
               
-            </div>
+            </div>     
+
+            
+
+            <a class="btn btn-primary btn-category" style="display: none;" onclick='obtenerFecha();' id="btnFecha">Buscar</a>
+
 
             <script>
                 var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
@@ -90,9 +315,7 @@ include_once 'navbar/navbar.php';
                     maxDate: today,
                     minDate: function () {
                         return $('#startDate').val();
-                    }
-
-                    
+                    } 
                 });
             </script>
 
@@ -104,241 +327,41 @@ include_once 'navbar/navbar.php';
                  
                 
                         <div class="list-group  bg-transparent" >
-                            <a href="#" class="list-group-item list-group-item-action">
-                                Categoria 1
-                            </a>
-                            <a href="#" class="list-group-item list-group-item-action">
-                                Categoria 2
-                            </a>
-                            <a href="#" class="list-group-item list-group-item-action">
-                                Categoria 3
-                            </a>
-                            <a href="#" class="list-group-item list-group-item-action">
-                                Categoria 4
-                            </a>
+                            <?php foreach($categoriasVar as $categoriaVar): ?>
+                            <a href="http://localhost:8012/Acodemia/search.php?category=<?= $categoriaVar['categoriaId'] ?>&page=1" class="list-group-item list-group-item-action"><?= $categoriaVar['categoriaNombre'] ?></a>
+                            <?php endforeach; ?>
                         </div>
                     
 
                 </div>
-                <div class="col-xl-10">
+                <div class="col-xl-10" id="CourseRow" >
+                </div>
 
-                    <div class="card-deck" style="margin-bottom: 5%;">
-                        <div class="card">
-                            <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <a href="course.php">
-                                    <h5 class="font-weight-normal">Titulo del curso 1</h5>
-                                </a>
-                                <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
-                                <div class="d-flex my-4">
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i></div>
-                                <div class="d-flex justify-content-between">
-                                    <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
-                                    <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <a href="#">
-                                    <h5 class="font-weight-normal">Titulo del curso 2</h5>
-                                </a>
-                                <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
-                                <div class="d-flex my-4">
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i></div>
-                                <div class="d-flex justify-content-between">
-                                    <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
-                                    <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <a href="#">
-                                    <h5 class="font-weight-normal">Titulo del curso 3</h5>
-                                </a>
-                                <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
-                                <div class="d-flex my-4">
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i></div>
-                                <div class="d-flex justify-content-between">
-                                    <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
-                                    <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
-                                </div>
-                            </div>
-                        </div>
-                      </div>
-
-                      <div class="card-deck" style="margin-bottom: 5%;">
-                        <div class="card">
-                            <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <a href="#">
-                                    <h5 class="font-weight-normal">Titulo del curso 4</h5>
-                                </a>
-                                <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
-                                <div class="d-flex my-4">
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i></div>
-                                <div class="d-flex justify-content-between">
-                                    <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
-                                    <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <a href="#">
-                                    <h5 class="font-weight-normal">Titulo del curso 5</h5>
-                                </a>
-                                <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
-                                <div class="d-flex my-4">
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i></div>
-                                <div class="d-flex justify-content-between">
-                                    <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
-                                    <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <a href="#">
-                                    <h5 class="font-weight-normal">Titulo del curso 6</h5>
-                                </a>
-                                <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
-                                <div class="d-flex my-4">
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i></div>
-                                <div class="d-flex justify-content-between">
-                                    <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
-                                    <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                      </div>
-
-                      <div class="card-deck" style="margin-bottom: 5%;">
-                        <div class="card">
-                            <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <a href="#">
-                                    <h5 class="font-weight-normal">Titulo del curso 7</h5>
-                                </a>
-                                <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
-                                <div class="d-flex my-4">
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i></div>
-                                <div class="d-flex justify-content-between">
-                                    <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
-                                    <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <a href="#">
-                                    <h5 class="font-weight-normal">Titulo del curso 8</h5>
-                                </a>
-                                <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
-                                <div class="d-flex my-4">
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i></div>
-                                <div class="d-flex justify-content-between">
-                                    <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
-                                    <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <a href="#">
-                                    <h5 class="font-weight-normal">Titulo del curso 9</h5>
-                                </a>
-                                <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
-                                <div class="d-flex my-4">
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i>
-                                    <i class="star fas fa-star text-warning"></i></div>
-                                <div class="d-flex justify-content-between">
-                                    <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
-                                    <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                      </div>
-
-                      <!--navigation-->
-                      <div class="row">
+                <div class="col-xl-10"  >
+                       <!--navigation-->
+                    <div class="row">
                           <div class="col-4"></div>
                           <div class="col-4">
 
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination">
+                          <nav aria-label="...">
+                            <ul class="pagination">
+                                <li class="page-item" id="prevPage">
+                                    <a class="page-link">Previous</a>
+                                </li>
+                               
+                                <li class="page-item" id="nextPage">
+                                    <a class="page-link">Next</a>
+                                </li>
+                            </ul>
+                            </nav>
 
-                                  <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Previous">
-                                      <span aria-hidden="true">&laquo;</span>
-                                      <span class="sr-only">Previous</span>
-                                    </a>
-                                  </li>
-
-                                  <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                  <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                  <li class="page-item"><a class="page-link" href="#">3</a></li>
-
-                                  <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Next">
-                                      <span aria-hidden="true">&raquo;</span>
-                                      <span class="sr-only">Next</span>
-                                    </a>
-                                  </li>
-
-                                </ul>
-                              </nav>
                    
                           </div>
                           <div class="col-4"></div>
-                      </div>
-                     
-
+                    </div>
                 </div>
+
+               
             </div>
         
 
@@ -351,3 +374,18 @@ include_once 'navbar/navbar.php';
     
 </body>
 </html>
+
+<!--
+
+
+
+
+
+
+delimiter &ZV
+create procedure searchByFecha(in p_date1 date, in p_date2 date)
+begin
+    select cursoId, cursoNombre, cursoMiniatura, cursoDescripcion, cursoCosto, cursoNiveles 
+    from Curso where cursoFechaPublicacion between p_date1 and p_date2 limit 10;
+end &ZV
+-->

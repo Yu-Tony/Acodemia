@@ -21,6 +21,43 @@ include_once 'navbar/navbar.php';
             }); 
         }); 
 
+
+        $(document).ready()
+        {
+            //$("#SelectFilter").val("");
+
+            //https://easyautotagging.com/javascript-get-url-parameter/
+           var queryString = window.location.search;
+            var urlParams = new URLSearchParams(queryString);
+            searchText = urlParams.get('course');
+           
+            if(searchText!=null)
+            {
+                //alert("serach by word "+searchText);
+
+                $.ajax({
+                    url: "course/showCourse.php",
+                    type : "POST",
+                    data: {'course': searchText}, 
+                    success : function(result) {
+
+                        $("#TituloCurso").html(result); 
+                        
+                    },
+                    error: function(xhr, resp, text){
+                        // on error, tell the user sign up failed
+                        window.location = ' error/404.html';
+                        console.log("Error al crear cuenta  " + text);
+                        console.log("Response text  " + xhr.responseText);
+                        //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+                    }
+                });
+        
+            }
+     
+        }
+
+
     </script>
 
         <script src="https://www.paypal.com/sdk/js?client-id=AXzXMA6dPo-ziWAA-D7i-6ON8yxv5j0chRAwEISbmc2dVwWESiFkZdhsrDzRjcRBj-oYQCflacN0Qjyx&currency=MXN"></script>
@@ -43,437 +80,9 @@ include_once 'navbar/navbar.php';
         <!--Principal-->
         <div class="col-8" style="background-color: #073352; padding:0px">
 
-            <div class="row" >
-                <div class="col-lg-8"></div>
-                <div class="col-lg-4 col-md-12 col-sm-12 col-12">
-                    <div class="card card-desc buy-card" >
-
-                        <video id="my-video" class="video-js vjs-16-9 " controls  preload="auto" poster="http://localhost:8012/Acodemia/Media/david-schultz-SrewPUfo2c0-unsplash.jpg" data-setup="{}">  
-                        <source src="http://localhost:8012/Acodemia/Media/videoplayback.mp4" type="video/mp4" />
-                        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that
-                            <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                        </p>
-                        </video>
-
-                        <div class="card-body" style="padding-left: 10%;">
-                            
-                            <div class="row">
-                                <span class="text-muted font-small d-block mb-2">Categorias</span>
-                               
-                            </div>
-                            <button class="btn btn-primary btn-category">HTML</button>
-   
-                            <div class="row" style="margin-top: 4%">
-                                <span class="text-muted font-small d-block mb-2">Calificacion del curso: </span>
-    
-                            </div>
-
-                            <span class="text-muted font-small d-block mb-2">5.0</span>
-                            
-                            <!--
-                            <div class="d-flex my-4" style="margin-top: 0px !important;">
-                                <i class="star fas fa-star text-warning"></i>
-                                <i class="star fas fa-star text-warning"></i>
-                                <i class="star fas fa-star text-warning"></i>
-                                <i class="star fas fa-star text-warning"></i>
-                                <i class="star fas fa-star text-warning"></i>
-                            </div>-->
- 
-                            <section class='rating-widget'>
-   
-                                 <!-- Rating Stars Box -->
-                                 <!--https://codepen.io/depy/pen/vEWWdw -->
-                                 <div class='rating-stars text-left'>
-                                   <ul id='stars'>
-                                     <li class='star' title='Poor' data-value='1'>
-                                       <i class='fa fa-star fa-2x'></i>
-                                     </li>
-                                     <li class='star' title='Fair' data-value='2'>
-                                       <i class='fa fa-star fa-fw'></i>
-                                     </li>
-                                     <li class='star' title='Good' data-value='3'>
-                                       <i class='fa fa-star fa-fw'></i>
-                                     </li>
-                                     <li class='star' title='Excellent' data-value='4'>
-                                       <i class='fa fa-star fa-fw'></i>
-                                     </li>
-                                     <li class='star' title='WOW!!!' data-value='5'>
-                                       <i class='fa fa-star fa-fw'></i>
-                                     </li>
-                                   </ul>
-                                 </div>
-                                
-                                 
-                                 
-                            </section>
-   
- 
-                            <div class="d-flex justify-content-between">
-                                 <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$800.00</span></div>
-                                 <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">3</span></div>
-                            </div>
- 
-                            <button type="button" class="btn btn-primary" style="margin-top: 10%;" data-toggle="modal" data-target="#ModalPay" >Comprar</button>
-                            <button class="btn btn-secondary" style="margin-top: 2%;">Editar</button>
-
-
-                            <button data-toggle="modal" data-target="#modalDelete" class="btn btn-danger" style="margin-top: 2%;">Eliminar</button>
-
-
- 
-                        </div>
-                    </div>
-
-                                                   <!-- Modal Eliminar -->
-                        <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                            <div class="modal-content">    
-  
-                                            <div class="modal-header">
-             
-                                            <h4 class="modal-title">Eliminar curso</h4>
-                                            </div>
-                                            <div class="modal-body">
-                                            ¿Borrar este curso?
-                                            </div>
-                                            <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                            <button type="button" class="btn btn-danger" >Eliminar</button>
-
-                                            </div>
-                                        </div>
-                                        
-                                        </div>
-                        </div>
-
-                         <!-- Modal Comprar -->
-                         <div class="modal fade" id="modalPurchased" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                            <div class="modal-content">    
-  
-                                                <div class="modal-header">
-             
-                                                    <h4 class="modal-title">Comprar curso</h4>
-                                                </div>
-
-                                                <div class="modal-body">
-                                                    Curso comprado con exito
-                                                </div>
-
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
-                                                </div>
-
-                                            </div>
-                                        
-                                        </div>
-                        </div>
-                </div>
-            </div>
-           
-
             <!--Titulo del curso-->
-            <div class="bgimg-4" style="background-image: url('https://i.ytimg.com/vi/rbuYtrNUxg4/maxresdefault.jpg'); min-height: 400px;">
+            <div id="TituloCurso"></div>
 
-                <div class="container" style=" background-color: rgba(0, 0, 0, 0.705);">
-                    <div class="row" style="padding-top: 8%; color: whitesmoke;">
-
-                        <!--Descripcion curso-->
-                        <div class="col-xl-8 col-sm-8 col-12">
-                            <div class="text-left " style="padding-top:2%; ">
-                                <h1  class="subtitle-text">Desarrollo Web Completo con HTML5</h1>
-                             </div>
-                             <div class="text-left " style="padding-top:2%; ">
-                                <h4 class="subtitle-text">Aprende Desarrollo Web con este curso 100% práctico, paso a paso y sin conocimientos previos</h4>
-                             </div>
-                             <div class="text-left " style="padding-top:20%; ">
-                                <h6 class="subtitle-text">Yuta Nakamoto 
-                                    <button onClick="window.location.href='http://localhost:8012/Acodemia/message.php';" style="width: 10%; margin-left: 2%; margin-top: 0px;" class="btn btn-secondary"><i class="fas fa-envelope"></i></button>
-                                </h6>
-                             </div>
-                        </div>
-                        <!--Card-->
-                        
-                        <div class="col-12 col-sm-4" >
-                            
-                          
-                         
-
-                           
-                        </div>
-
-                        
-                    </div>
-        
-                </div>
-        
-                
-            </div>
-
-            <div class="col-12" style="padding-left: 10%; padding-right: 4%; ">
-              
-                <div class="row" style="padding-bottom: 2%;">
-                    <div class="col-lg-12 col-12 text-left" style="padding-top:2%; ">
-                    
-                    <h5 style="color: whitesmoke;" class="subtitle-text">Progreso del curso : 75%</h5>
-                        
-                    </div>
-                    <div class="col-lg-6 col-12">
-                        <div class="progress" style="z-index: 5px;">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
-                        </div>
-
-                        <button type="button" class="btn btn-primary" style="margin-top: 10%; width: 30%;" data-toggle="modal" data-target="#ModalDip" >Obtener diploma</button>
-                            
-                    </div>
-
-                </div>
-
-               <div class="row" style="padding-bottom: 2%;">
-                   <div class="text-left " style="padding-top:2%; ">
-                       <h5 style="color: whitesmoke;" class="subtitle-text">Contenido del curso</h5>
-                   </div>
-               </div>
-        
-               <!--Nivel-->
-               <div class="row" style="color: black;">
-        
-                <div class="col-lg-5 col-8" style=" background-color: #80b5e2;">
-                <h4>
-                    Nivel 1
-                </h4>               
-                </div>
-        
-                <div class="col-lg-1 col-4" style="background-color: #80b5e2;">
-                    <button style="margin-top: 6%;" type="button" class="btn btn-primary VerMas"><i class="fa fa-plus"></i></button>
-                </div>
-        
-                <div class="col-lg-5 col-8"></div>
-        
-                <div class="col-lg-6 col-12">
-                    <div class="DescripcionCurso" style="background-color: #b8d2e5; display: none; padding:2%; margin-bottom: 2%;" >
-                        <h5>Descripcion del nivel 1</h5>
-                        <br>
-                        <h5>Costo del nivel: $0.00</h5>
-                        <button data-toggle="modal" data-target="#modalPurchased" class="btn btn-primary btn-category" style="margin-top: 2%;">Comprar este nivel</button>
-                    </div>
-                </div>
-        
-               </div>
-
-               <div class="row" style="color: black;">
-        
-                    <div class="col-lg-5 col-8" style=" background-color: #80b5e2;">
-                    <h4>
-                        Nivel 2
-                    </h4>               
-                    </div>
-            
-                    <div class="col-lg-1 col-4" style="background-color: #80b5e2;">
-                        <button style="margin-top: 6%;" type="button" class="btn btn-primary VerMas"><i class="fa fa-plus"></i></button>
-                    </div>
-            
-                    <div class="col-lg-5 col-8"></div>
-            
-                    <div class="col-lg-6 col-12">
-                        <div class="DescripcionCurso" style="background-color: #b8d2e5; display: none; padding:2%; margin-bottom: 2%;" >
-                            <h5>Descripcion del nivel 2</h5>
-                            <br>
-                            <h5>Costo del nivel: $400.00</h5>
-                            <button type="button" class="btn btn-primary btn-category" data-toggle="modal" data-target="#ModalPay" >Comprar este nivel</button>
-
-                        </div>
-                    </div>
-        
-               </div>
-
-               <div class="row" style="color: black;">
-        
-                <div class="col-lg-5 col-8" style=" background-color: #80b5e2;">
-                <h4>
-                    Nivel 3
-                </h4>               
-                </div>
-        
-                <div class="col-lg-1 col-4" style="background-color: #80b5e2;">
-                    <button style="margin-top: 6%;" type="button" class="btn btn-primary VerMas"><i class="fa fa-plus"></i></button>
-                </div>
-        
-                <div class="col-lg-5 col-8"></div>
-        
-                <div class="col-lg-6 col-12">
-                    <div class="DescripcionCurso" style="background-color: #b8d2e5; display: none; padding:2%; margin-bottom: 2%;" >
-                        <h5>Descripcion del nivel 3</h5>
-                        <br>
-                       <button type="button" onClick="window.location.href='http://localhost:8012/Acodemia/level.php';" class="btn btn-primary btn-category" >Ir al nivel</button>
-
-                    </div>
-                </div>
-    
-           </div>
-         
-
-
-      
-         
- <!--Comentarios-->
-               <div class="row">
-                   <div class="col-12 col-lg-6">
-                        <hr style="border: 2px solid #b8d2e5; border-radius: 5px;">
-                       
-
-                        <div class="row" style="padding-bottom: 2%;">
-                            <div class="text-left " style="padding-top:2%; ">
-                                <h5 style="color: whitesmoke;" class="subtitle-text">Comentarios</h5>
-                            </div>
-                        </div>
-
-                        <!--Escribir comentario-->
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12">
-                                    <div class="comment-wrapper">
-                                        <div class="panel panel-info">
-                                            <div class="panel-heading">
-                                                Comment panel
-                                            </div>
-                                            <div class="panel-body">
-                                                <textarea class="form-control" placeholder="write a comment..." rows="3"></textarea>
-                                                <br>
-                                                <button type="button" style="width: 30%;" class="btn btn-primary pull-right">Post</button>
-                                                <div class="clearfix"></div>
-                                                <hr>
-                                               
-                                            </div>
-                                        </div>
-                                    </div>
-                            
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                
-                <!-- COMMENT 1 - START -->
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-12">
-                            <div class="blog-comment">
-                               
-                                <ul class="comments">
-
-                                <li class="clearfix">
-                                  <img src="https://bootdey.com/img/Content/user_1.jpg" class="avatar" alt="">
-                                  <div class="post-comments">
-                                      <p class="meta"> <a href="#">JohnDoe</a> says : <i class="pull-right"></i></p>
-                                      <p>
-                                          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                          Etiam a sapien odio, sit amet
-                                      </p>
-                                  </div>
-                                </li>
-
-                                
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- COMMENT 1 - END -->
-
-                 <!-- COMMENT 1 - START -->
-                 <div class="container">
-                    <div class="row">
-                        <div class="col-xl-12">
-                            <div class="blog-comment">
-                               
-                                <ul class="comments">
-
-                                <li class="clearfix">
-                                  <img src="https://bootdey.com/img/Content/user_1.jpg" class="avatar" alt="">
-                                  <div class="post-comments">
-                                      <p class="meta"> <a href="#">JohnDoe</a> says : <i class="pull-right"></i></p>
-                                      <p>
-                                          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                          Etiam a sapien odio, sit amet
-                                      </p>
-                                  </div>
-                                </li>
-
-                                
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- COMMENT 1 - END -->
-
-                       <!-- COMMENT 1 - START -->
-                       <div class="container">
-                        <div class="row">
-                            <div class="col-xl-12">
-                                <div class="blog-comment">
-                                   
-                                    <ul class="comments">
-    
-                                    <li class="clearfix">
-                                      <img src="https://bootdey.com/img/Content/user_1.jpg" class="avatar" alt="">
-                                      <div class="post-comments">
-                                          <p class="meta"> <a href="#">JohnDoe</a> says : <i class="pull-right"></i></p>
-                                          <p>
-                                              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                              Etiam a sapien odio, sit amet
-                                          </p>
-                                      </div>
-                                    </li>
-    
-                                    
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- COMMENT 1 - END -->
-                            </div>
-
-                        </div>
-
-                            <!--Navigation-->
-                            <div class="row" style="margin-top: 5%;">
-                                <div class="col-4"></div>
-    
-                                <div class="col-4">
-                                  <nav aria-label="Page navigation example">
-                                      <ul class="pagination">
-    
-                                        <li class="page-item">
-                                          <a class="page-link" href="#" aria-label="Previous">
-                                            <span aria-hidden="true">&laquo;</span>
-                                            <span class="sr-only">Previous</span>
-                                          </a>
-                                        </li>
-    
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-    
-                                        <li class="page-item">
-                                          <a class="page-link" href="#" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                            <span class="sr-only">Next</span>
-                                          </a>
-                                        </li>
-    
-                                      </ul>
-                                    </nav>
-                                </div>
-    
-                                <div class="col-4"></div>
-                              </div>
-
-                   </div>
-               </div>
-        
-            </div>
 
         </div>
 
@@ -482,8 +91,8 @@ include_once 'navbar/navbar.php';
 
     </div>
 
-        <!-- Modal Diploma-->
-        <div class="modal fade" id="ModalDip" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <!-- Modal Diploma-->
+    <div class="modal fade" id="ModalDip" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                 <div class="modal-content">
                    
@@ -514,7 +123,7 @@ include_once 'navbar/navbar.php';
                     </div>
                    </div>
                 </div>
-        </div>
+    </div>
 
     <!--Modal Pay-->
     <!--https://bbbootstrap.com/snippets/payment-form-three-different-payment-options-13285516 -->

@@ -1,0 +1,99 @@
+html { box-sizing: border-box; }
+
+*,
+*::before,
+*::after { box-sizing: inherit; }
+
+body * {
+  margin: 0;
+  padding: 0;
+}
+
+
+body {
+    font-family: 'Nunito Sans', sans-serif;
+    background-color: #82B7DC;
+    color: #F1F1F1;
+
+    
+  }
+  
+  .mainbox {
+    background-color: #82B7DC;
+    margin: 2em auto 0 auto;
+    height: 300px;
+    width: 30%;
+    position: relative;
+
+  }
+  
+    .err {
+  
+      font-size: 11rem;
+      position:absolute;
+      left: 20%;
+      top: 8%;
+    }
+  
+  .far {
+    position: absolute;
+    font-size: 8.5rem;
+    left: 42%;
+    top: 15%;
+    color: #ffffff;
+  }
+  
+   .err2 {
+    
+      font-size: 11rem;
+      position:absolute;
+      left: 68%;
+      top: 8%;
+    }
+  
+  p {
+    text-align:center;
+
+    color: #F1F1F1;
+
+    margin-bottom: 0.5em;
+    font-size: 3em;
+    }
+  
+  a {
+    text-decoration: none;
+    color: #3466AA;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+
+  h1 {
+    text-align:center;
+    margin: 50px 0 10px 0;
+    font-size: 4rem;
+    color: #F1F1F1;
+  }
+
+  @media (max-width: 1135px) {
+
+    .err {
+  
+        font-size: 5rem;
+      
+      }
+    
+    .far {
+     
+      font-size: 3rem;
+    
+    }
+    
+     .err2 {
+      
+        font-size: 5rem;
+      
+      }
+
+}

@@ -74,82 +74,71 @@ $cursoEstado = 0;
 $cursoProfesorMail=$_POST['usuarioCreate'];
 $cursoProfesorId=0;
 
-$call = 'call userGetId(?,@idUser)';
-$stmt = $db->prepare($call);
-$stmt->bindParam(1, $cursoProfesorMail);
-if($stmt->execute())
-{
-	$sql = "SELECT @idUser";
-	$stmt = $db->prepare($sql);
-	$stmt->execute();
+		$call = 'call userGetId(?,@idUser)';
+		$stmt = $db->prepare($call);
+		$stmt->bindParam(1, $cursoProfesorMail);
+		if($stmt->execute())
+		{
+			$sql = "SELECT @idUser";
+			$stmt = $db->prepare($sql);
+			$stmt->execute();
 
-	list($idUser) = $stmt->fetch(PDO::FETCH_NUM);
-	$cursoProfesorId = $idUser;
+			list($idUser) = $stmt->fetch(PDO::FETCH_NUM);
+			$cursoProfesorId = $idUser;
+					
 			
+		}
+
+		$img_name = $_FILES['imagenPrincipal']['name'];
+		$img_size = $_FILES['imagenPrincipal']['size'];
+		$tmp_name = $_FILES['imagenPrincipal']['tmp_name'];
+		$error = $_FILES['imagenPrincipal']['error'];
+
+		if ($error === 0) {
 	
-}
+			$img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
+			$img_ex_lc = strtolower($img_ex);
 
-$img_name = $_FILES['imagenPrincipal']['name'];
-$img_size = $_FILES['imagenPrincipal']['size'];
-$tmp_name = $_FILES['imagenPrincipal']['tmp_name'];
-$error = $_FILES['imagenPrincipal']['error'];
+			$allowed_exs = array("jpg", "jpeg", "png"); 
 
-if ($error === 0) {
-	if ($img_size > 125000) {
-		$em = "Sorry, your file is too large.";
-		header("Location: ../create.php?error=$em");
-	}else {
-		$img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
-		$img_ex_lc = strtolower($img_ex);
-
-		$allowed_exs = array("jpg", "jpeg", "png"); 
-
-		if (in_array($img_ex_lc, $allowed_exs)) {
-			$cursoMiniatura = uniqid("IMG-COURSE-", true).'.'.$img_ex_lc;
-			$img_upload_path = '../uploads/'.$cursoMiniatura;
-			move_uploaded_file($tmp_name, $img_upload_path);
+			if (in_array($img_ex_lc, $allowed_exs)) {
+				$cursoMiniatura = uniqid("IMG-COURSE-", true).'.'.$img_ex_lc;
+				$img_upload_path = '../uploads/'.$cursoMiniatura;
+				move_uploaded_file($tmp_name, $img_upload_path);
 
 
+			}else {
+				$em = "You can't upload files of this type";
+				//header("Location: ../create.php?error=$em");
+			}
+		
 		}else {
-			$em = "You can't upload files of this type";
+			$em = "unknown error occurred!";
 			//header("Location: ../create.php?error=$em");
 		}
-	}
-}else {
-	$em = "unknown error occurred!";
-	//header("Location: ../create.php?error=$em");
-}
 
-//https://stackoverflow.com/questions/14758191/how-to-use-filesfilesize/14758827
-define('MB', 1048576);
+		//https://stackoverflow.com/questions/14758191/how-to-use-filesfilesize/14758827
+		define('MB', 1048576);
 
-$allowedExts = array("mp4", "wma");
-$extension = pathinfo($_FILES['videoPrincipal']['name'], PATHINFO_EXTENSION);
+		$allowedExts = array("mp4", "wma");
+		$extension = pathinfo($_FILES['videoPrincipal']['name'], PATHINFO_EXTENSION);
 
-if ((($_FILES["videoPrincipal"]["type"] == "video/mp4")
-|| ($_FILES["videoPrincipal"]["type"] == "audio/wma"))
-&& ($_FILES["videoPrincipal"]["size"] < 10*MB)
-&& in_array($extension, $allowedExts))
+		if ((($_FILES["videoPrincipal"]["type"] == "video/mp4")|| ($_FILES["videoPrincipal"]["type"] == "audio/wma"))&& ($_FILES["videoPrincipal"]["size"] < 10*MB)&& in_array($extension, $allowedExts))
+		{
+			if ($_FILES["videoPrincipal"]["error"] > 0)
+			{
+				echo "Return Code: " . $_FILES["videoPrincipal"]["error"] . "<br />";
+			}
+			else
+			{
 
-  {
-  if ($_FILES["videoPrincipal"]["error"] > 0)
-    {
-    echo "Return Code: " . $_FILES["videoPrincipal"]["error"] . "<br />";
-    }
-  else
-    {
+				$img_ex_lc = strtolower($_FILES["videoPrincipal"]["name"]);
+				$cursoVideoIntroductorio = uniqid("VID-COURSE-", true).'.'.$img_ex_lc;
+				$img_upload_path = '../uploads/'.$cursoVideoIntroductorio;
+				move_uploaded_file($_FILES["videoPrincipal"]["tmp_name"], $img_upload_path);
 
-	$img_ex_lc = strtolower($_FILES["videoPrincipal"]["name"]);
-	$cursoVideoIntroductorio = uniqid("VID-COURSE-", true).'.'.$img_ex_lc;
-	$img_upload_path = '../uploads/'.$cursoVideoIntroductorio;
-	move_uploaded_file($_FILES["videoPrincipal"]["tmp_name"], $img_upload_path);
-
-    }
-  }
-else
-  {
-
-  }
+			}
+		}
 
 
         $call =  $db->prepare('CALL cursoCreate(:p_nombre, :p_desc, :p_costo, :p_niveles,:p_imagen,:p_video,:p_user, @p_lastid)');
@@ -180,6 +169,30 @@ else
             {
                 $idCourse = $result['@p_lastid'];
 
+				$categArray = $_POST['categoriaCreate'];
+
+				foreach($categArray as $categValue) {
+		
+					$qtyOut = $categValue;
+				
+					$query = "INSERT INTO categoria_curso
+					SET
+					categoriaId = :categoriaId,
+					cursoId = :cursoId";
+
+		
+
+					// prepare the query
+					$stmt = $db->prepare($query);
+
+					// bind the values
+					$stmt->bindParam(':categoriaId', $qtyOut);
+					$stmt->bindParam(':cursoId',  $idCourse);
+					$stmt->execute();				
+					
+		
+				}
+
                 echo $idCourse;
                 //echo $catName;
 
@@ -192,21 +205,16 @@ else
         }
         else{
 			print_r("Error al agregar curso. Intente de nuevo");
-            return false;}
+            return false;
+		}
 
 
 
-/*$categArray = $_POST['categoriaCreate'];
 
-foreach($categArray as $categValue) {
-
-   $qtyOut = $categValue;
-
-}*/
 
 
     
-echo($cursoNombre);
+
 
 
 

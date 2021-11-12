@@ -5,6 +5,9 @@ error_reporting(E_ALL);
 // set your default time-zone
 date_default_timezone_set('Asia/Manila');
  
+//https://codeofaninja.com/2018/09/rest-api-authentication-example-php-jwt-tutorial.html
+
+
 // variables used for jwt
 //https://datatracker.ietf.org/doc/html/rfc7519#section-4.1
 

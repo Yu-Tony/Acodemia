@@ -177,6 +177,24 @@
         return false;
     });
 
+    /*---------------------------------------------SEARCH------------------------------*/
+         // trigger when registration form is submitted
+         $(document).on('submit', '#search_form', function(){
+    
+
+
+          var formData = new FormData(this);
+          var searchText = formData.get('searchword');
+
+  
+          //https://stackoverflow.com/questions/44419945/ajax-request-redirect-with-params
+          window.location = 'http://localhost:8012/Acodemia/search.php?searchword=' + searchText + "&page=1";
+          // submit form data to api
+        
+
+          return false;
+        });
+
     // function to set cookie
     function setCookie(cname, cvalue, exdays) {
                 var d = new Date();
@@ -256,7 +274,7 @@
                     <ul class="dropdown-menu add-to-ul" aria-labelledby="navbarDropdownMenuLink">
 
                         <?php foreach($categoriasVar as $categoriaVar): ?>
-                          <li><a class="dropdown-item" href="http://localhost:8012/Acodemia/search.php"><?= $categoriaVar['categoriaNombre']; ?></a></li>
+                          <li><a  href="http://localhost:8012/Acodemia/search.php?category=<?= $categoriaVar['categoriaId'] ?>&page=1" class="dropdown-item" href="http://localhost:8012/Acodemia/search.php"><?= $categoriaVar['categoriaNombre']; ?></a></li>
                         <?php endforeach; ?>
 
                     </ul>
@@ -265,9 +283,17 @@
 
             <!--Search bar-->
             <div class=" col-xl-8 col-lg-8 col-md-8 col-sm-12" style="margin-top: 1%;">
-                <form action="http://localhost:8012/Acodemia/search.php" class="search-wrap">
-                    <div class="input-group w-100"> <input type="text" class="form-control search-form" style="width:55%; " placeholder="Buscar">
-                        <div class="input-group-append"> <button class="btn btn-primary search-button" type="submit"> <i class="fa fa-search"></i> </button> </div>
+                <form class="search-wrap" id="search_form">
+                    <div class="input-group w-100"> 
+
+                      <input type="text" name="searchword" class="form-control search-form" style="width:55%; " placeholder="Buscar">
+
+                      <div class="input-group-append"> 
+                        <button class="btn btn-primary search-button" type="submit"> 
+                          <i class="fa fa-search"></i> 
+                        </button> 
+                      </div>
+
                     </div>
                 </form>
             </div>
