@@ -11,8 +11,82 @@ include_once 'navbar/navbar.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <link rel="stylesheet" href="course/star.css">
+    <script src="course/star.js"></script>
+
     <!--Toggle de los cursos-->
     <script> 
+
+        
+
+
+        $(document).ready()
+        {  
+         
+            var userMail=0;
+            var queryString = window.location.search;
+            var urlParams = new URLSearchParams(queryString);
+            searchText = urlParams.get('course');
+           
+            if(searchText!=null)
+            {
+                // validate jwt to verify access
+                var jwt = getCookie('jwt');
+                $.post("api/validate_token.php", JSON.stringify({ jwt:jwt }))
+                .done(function(result) {
+                    userMail = result.data.email;
+                    
+                    $.ajax({
+                        url: "course/showCourse.php",
+                        type : "POST",
+                        data: {'course': searchText,'mail': userMail }, 
+                        success : function(result) {
+
+                            $("#TituloCurso").html(result);                         
+                            
+                        },
+                        error: function(xhr, resp, text){
+                            // on error, tell the user sign up failed
+                            window.location = ' error/404.html';
+                            console.log("Error al crear cuenta  " + text);
+                            console.log("Response text  " + xhr.responseText);
+                            //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+                        }
+                    });
+                
+                })
+                .fail(function() {
+                    $.ajax({
+                        url: "course/showCourse.php",
+                        type : "POST",
+                        data: {'course': searchText,'mail': userMail }, 
+                        success : function(result) {
+
+                            $("#TituloCurso").html(result);                         
+                            
+                        },
+                        error: function(xhr, resp, text){
+                            // on error, tell the user sign up failed
+                            window.location = ' error/404.html';
+                            console.log("Error al crear cuenta  " + text);
+                            console.log("Response text  " + xhr.responseText);
+                            //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+                        }
+                    });
+                });
+                
+                //alert("serach by word "+searchText);
+
+               
+        
+            }
+     
+        }
+
+ 
+
         $(function(){ /* DOM ready */ 
             $('.VerMas').click(function(){ 
                 if ( $(this).parent().parent().find('.DescripcionCurso').css('display') == 'none' ) 
@@ -20,43 +94,6 @@ include_once 'navbar/navbar.php';
                 else $(this).parent().parent().find('.DescripcionCurso').css('display','none'); 
             }); 
         }); 
-
-
-        $(document).ready()
-        {
-            //$("#SelectFilter").val("");
-
-            //https://easyautotagging.com/javascript-get-url-parameter/
-           var queryString = window.location.search;
-            var urlParams = new URLSearchParams(queryString);
-            searchText = urlParams.get('course');
-           
-            if(searchText!=null)
-            {
-                //alert("serach by word "+searchText);
-
-                $.ajax({
-                    url: "course/showCourse.php",
-                    type : "POST",
-                    data: {'course': searchText}, 
-                    success : function(result) {
-
-                        $("#TituloCurso").html(result); 
-                        
-                    },
-                    error: function(xhr, resp, text){
-                        // on error, tell the user sign up failed
-                        window.location = ' error/404.html';
-                        console.log("Error al crear cuenta  " + text);
-                        console.log("Response text  " + xhr.responseText);
-                        //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
-                    }
-                });
-        
-            }
-     
-        }
-
 
     </script>
 

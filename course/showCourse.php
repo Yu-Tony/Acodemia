@@ -10,6 +10,33 @@
     ////////////////////////////
 
     $searchWord = $_POST['course'];
+    $userMail = $_POST['mail'];
+    $userId =0;
+
+    if($userMail!=0)
+    {
+        $call = 'call userGetId(?,@idUser)';
+    
+		// prepare
+		$stmt = $db->prepare($call);
+	
+
+		$stmt->bindParam(1, $userMail);
+	
+	
+		// execute
+		
+		if($stmt->execute())
+		{
+			$sql = "SELECT @idUser";
+			$stmt = $db->prepare($sql);
+			$stmt->execute();
+	
+			list($userId) = $stmt->fetch(PDO::FETCH_NUM);
+ 					
+		}
+    }
+    
 
     /*
     delimiter &ZV
@@ -45,6 +72,7 @@
                 $cursoMiniatura = $result['cursoMiniatura'];
                 $cursoEstado = $result['cursoEstado'];
                 $usuarioNombre = $result['usuarioNombre'];
+                $usuarioIdResult =  $result['usuarioId'];
 
                 if($cursoEstado==1)
                 {
@@ -97,12 +125,15 @@
                     echo "<div class=\"col pl-0\"><span class=\"text-muted font-small d-block mb-2\">Precio</span> <span class=\"h5 text-dark font-weight-bold\">$$cursoCosto</span></div>";
                     echo "<div class=\"col pr-0\"><span class=\"text-muted font-small d-block mb-2\">Niveles</span> <span class=\"h5 text-dark font-weight-bold\">$cursoNiveles</span></div>";
                     echo "</div>";
-                    if($cursoCosto!=0)
+                    if(($cursoCosto!=0) && ($userMail!=0))
                     {
                         echo "<button type=\"button\" class=\"btn btn-primary\" style=\"margin-top: 10%;\" data-toggle=\"modal\" data-target=\"#ModalPay\" >Comprar</button>";
                     }
-                    echo "<button class=\"btn btn-secondary\" style=\"margin-top: 2%;\">Editar Curso</button>";
-                    echo "<button data-toggle=\"modal\" data-target=\"#modalDelete\" class=\"btn btn-danger\" style=\"margin-top: 2%;\">Eliminar Curso</button>";
+                    if($userId==$usuarioIdResult)
+                    {
+                        echo "<button class=\"btn btn-secondary\" style=\"margin-top: 2%;\">Editar Curso</button>";
+                        echo "<button data-toggle=\"modal\" data-target=\"#modalDelete\" class=\"btn btn-danger\" style=\"margin-top: 2%;\">Eliminar Curso</button>";    
+                    }
                     echo "</div>";
                     echo "</div>";
                     echo "<!-- Modal Eliminar -->";
@@ -275,7 +306,7 @@
                                     echo "<br>";
                                     echo "<h5>Costo del nivel: $$nivelCosto</h5>";
                                     echo "<button type=\"button\" class=\"btn btn-primary btn-category\" data-toggle=\"modal\" data-target=\"#ModalPay\" >Comprar este nivel</button>";
-                                    echo "";
+                                    echo "<a class=\"btn btn-primary btn-category\" href=\"http://localhost:8012/Acodemia/level.php?course=$searchWord&level=$nivelId\">Ir al nivel</a>";
                                     echo "</div>";
                                     echo "</div>";
                                     echo "";
@@ -345,26 +376,48 @@
 
                     echo "<!--Escribir comentario-->";
                     echo "<div class=\"container\">";
-                    echo "<div class=\"row\">";
-                    echo "<div class=\"col-md-12 col-sm-12\">";
-                    echo "<div class=\"comment-wrapper\">";
-                    echo "<div class=\"panel panel-info\">";
-                    echo "<div class=\"panel-body\">";
-                    echo "<textarea class=\"form-control\" placeholder=\"write a comment...\" rows=\"3\"></textarea>";
-                    echo "<br>";
-                    echo "<button type=\"button\" style=\"width: 30%;\" class=\"btn btn-primary pull-right\">Post</button>";
-                    echo "<div class=\"clearfix\"></div>";
-                    echo "<hr>";
-                    echo "";
-                    echo "</div>";
-                    echo "</div>";
-                    echo "</div>";
-                    echo "";
-                    echo "</div>";
-                    echo "</div>";
-                    echo "";
-                    echo "<div class=\"row\">";
-                    echo "";
+                        echo "<div class=\"row\">";
+                            echo "<h6 style=\"color: whitesmoke;\">Escribe un comentario</h6>";
+                            echo "<div class=\"col-md-12 col-sm-12\">";
+                                echo "<div class=\"comment-wrapper\">";
+                                    echo "<div class=\"panel panel-info\">";
+                                        echo "<div class=\"panel-body\">";
+                                            echo "<textarea class=\"form-control\" id=\"commentArea\" placeholder=\"write a comment...\" rows=\"3\"></textarea>";
+                                            echo "<br>";
+                                            echo "<h6 style=\"color: whitesmoke;\">Deja una calificacion</h6>";
+
+                                            echo "<div class='rating-stars text-center'>";
+                                            echo "<ul id='stars'>";
+                                            echo "<li class='star' title='Poor' data-value='1'>";
+                                            echo "<i class='fa fa-star fa-fw'></i>";
+                                            echo "</li>";
+                                            echo "<li class='star' title='Fair' data-value='2'>";
+                                            echo "<i class='fa fa-star fa-fw'></i>";
+                                            echo "</li>";
+                                            echo "<li class='star' title='Good' data-value='3'>";
+                                            echo "<i class='fa fa-star fa-fw'></i>";
+                                            echo "</li>";
+                                            echo "<li class='star' title='Excellent' data-value='4'>";
+                                            echo "<i class='fa fa-star fa-fw'></i>";
+                                            echo "</li>";
+                                            echo "<li class='star' title='WOW!!!' data-value='5'>";
+                                            echo "<i class='fa fa-star fa-fw'></i>";
+                                            echo "</li>";
+                                            echo "</ul>";
+                                            echo "</div>";
+                                            
+
+                                            echo "<button type=\"button\" id=\"btnComment\" style=\"width: 30%;\" class=\"btn btn-primary pull-right\">Post</button>";
+                                            echo "<div class=\"clearfix\"></div>";
+                                                echo "<hr>";
+                                                echo "";
+                                            echo "</div>";
+                                        echo "</div>";
+                                     echo "</div>";
+                                echo "</div>";
+                            echo "</div>";
+                        echo "<div class=\"row\" id=\"commentSection\">";
+              
 
                     /*
                     delimiter &ZV
@@ -394,32 +447,23 @@
                         
                                 echo "<!-- COMMENT 1 - START -->";
                                 echo "<div class=\"container\">";
-                                echo "<div class=\"row\">";
-                                echo "<div class=\"col-xl-12\">";
-                                echo "<div class=\"blog-comment\">";
-                                echo "";
-                                echo "<ul class=\"comments\">";
-                                echo "";
-                                echo "<li class=\"clearfix\">";
-                                echo "<img src=\"https://bootdey.com/img/Content/user_1.jpg\" class=\"avatar\" alt=\"\">";
-                                echo "<div class=\"post-comments\">";
-                                echo "<p class=\"meta\"> <a> $usuarioNombre</a>: <i class=\"pull-right\"></i></p>";
-                                echo "<p>";
-                                echo $comentarioContenido;
-                                echo "</p>";
-                                echo "</div>";
-                                echo "</li>";
-                                echo "";
-                                echo "";
-                                echo "</ul>";
-                                echo "</div>";
-                                echo "</div>";
-                                echo "</div>";
+                                    echo "<div class=\"row\">";
+                                        echo "<div class=\"col-xl-12\">";
+                                            echo "<div class=\"blog-comment\">";
+                                                echo "<ul class=\"comments\">";
+                                                    echo "<li class=\"clearfix\">";
+                                                        echo "<div class=\"post-comments\" style=\"padding-left:2%\">";
+                                                            echo "<p > <a> $usuarioNombre</a>: <i class=\"pull-right\"></i></p>";
+                                                            echo "<p>$comentarioContenido</p>";
+                                                        echo "</div>";
+                                                     echo "</li>";
+                                                echo "</ul>";
+                                            echo "</div>";
+                                        echo "</div>";
+                                    echo "</div>";
                                 echo "</div>";
                                 echo "<!-- COMMENT 1 - END -->";
-                                echo "";
-
-                                                            
+                                                           
                             } 
                         }
                     }

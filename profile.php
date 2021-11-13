@@ -58,9 +58,9 @@ include_once 'navbar/navbar.php';
           $("#UserNameProfile").html($fname+$space+$lname);
         
           
-        var parametros = {
-                "valorID" : result.data.id
-        };
+          var parametros = {
+                  "valorID" : result.data.id
+          };
         $.ajax({
                 data:  parametros, //datos que se envian a traves de ajax
                 url:   'profile/view.php', //archivo que recibe la peticion
