@@ -229,12 +229,20 @@
                     echo "</div>";
                     echo "";
 
-                    
+                    /*
+                        delimiter &ZV
+                        create procedure showNiveles(in p_cursoid int)
+                        begin
+                            select nivelId, nivelNumero, nivelNombre, nivelCosto, nivelContenido, nivelVideo, nivelPDF
+                            from Curso where cursoId = p_cursoid;
+                        end &ZV 
+                    */
+  
 
                     $call =  $db->prepare('CALL showNiveles(:p_cursoid)');
                     $call->bindParam(':p_cursoid', $searchWord, PDO::PARAM_INT); 
                     
-                   if($call->execute())
+                    if($call->execute())
                     {
                         $nivelesCurso = $call->fetchAll(PDO::FETCH_ASSOC);
                         
@@ -275,6 +283,7 @@
                                     echo "<br>";
                                     echo "<h5>Costo del nivel: $$nivelCosto</h5>";
                                     echo "<button data-toggle=\"modal\" data-target=\"#modalPurchased\" class=\"btn btn-primary btn-category\" style=\"margin-top: 2%;\">Obtener este nivel</button>";
+                                    echo "<a class=\"btn btn-primary btn-category\" href=\"http://localhost:8012/Acodemia/level.php?course=$searchWord&level=$nivelId\">Ir al nivel</a>";
                                     echo "</div>";
                                     echo "</div>";
                                     echo "";
@@ -318,10 +327,7 @@
                             } 
                         }
                     }
-                    else
-                    {
-                       
-                    }
+       
 
                
         
@@ -376,7 +382,7 @@
 
                     echo "<!--Escribir comentario-->";
                     echo "<div class=\"container\">";
-                        echo "<div class=\"row\">";
+                        echo "<div class=\"row\" id=\"ponerComentario\">";
                             echo "<h6 style=\"color: whitesmoke;\">Escribe un comentario</h6>";
                             echo "<div class=\"col-md-12 col-sm-12\">";
                                 echo "<div class=\"comment-wrapper\">";
@@ -409,8 +415,8 @@
 
                                             echo "<button type=\"button\" id=\"btnComment\" style=\"width: 30%;\" class=\"btn btn-primary pull-right\">Post</button>";
                                             echo "<div class=\"clearfix\"></div>";
-                                                echo "<hr>";
-                                                echo "";
+                                            echo "<hr style=\"border: 2px solid #b8d2e5; border-radius: 5px;\">";
+                                            echo "";
                                             echo "</div>";
                                         echo "</div>";
                                      echo "</div>";
@@ -480,38 +486,8 @@
                     echo "</div>";
                     echo "";
 
-                    echo "<!--Navigation-->";
-                    echo "<div class=\"row\" style=\"margin-top: 5%;\">";
-                    echo "<div class=\"col-4\"></div>";
-                    echo "";
-                    echo "<div class=\"col-4\">";
-                    echo "<nav aria-label=\"Page navigation example\">";
-                    echo "<ul class=\"pagination\">";
-                    echo "";
-                    echo "<li class=\"page-item\">";
-                    echo "<a class=\"page-link\" href=\"#\" aria-label=\"Previous\">";
-                    echo "<span aria-hidden=\"true\">&laquo;</span>";
-                    echo "<span class=\"sr-only\">Previous</span>";
-                    echo "</a>";
-                    echo "</li>";
-                    echo "";
-                    echo "<li class=\"page-item\"><a class=\"page-link\" href=\"#\">1</a></li>";
-                    echo "<li class=\"page-item\"><a class=\"page-link\" href=\"#\">2</a></li>";
-                    echo "<li class=\"page-item\"><a class=\"page-link\" href=\"#\">3</a></li>";
-                    echo "";
-                    echo "<li class=\"page-item\">";
-                    echo "<a class=\"page-link\" href=\"#\" aria-label=\"Next\">";
-                    echo "<span aria-hidden=\"true\">&raquo;</span>";
-                    echo "<span class=\"sr-only\">Next</span>";
-                    echo "</a>";
-                    echo "</li>";
-                    echo "";
-                    echo "</ul>";
-                    echo "</nav>";
-                    echo "</div>";
-                    echo "";
-                    echo "<div class=\"col-4\"></div>";
-                    echo "</div>";
+ 
+
                     echo "";
                     echo "</div>";
                     echo "";
@@ -522,7 +498,7 @@
     
     
             
-                    return true;
+                   
                 }
                 else
                 {
@@ -542,9 +518,8 @@
            
            
         }
-      
-
-        
+    
+         return true;
     }
     else
     {
