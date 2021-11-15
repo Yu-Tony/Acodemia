@@ -74,6 +74,20 @@
                 echo "</a>";
                 echo "<div class=\"post-meta\"><span class=\"small lh-120\">$cursoDescripcion</span></div>";
                 echo "<div class=\"d-flex my-4\">";
+                $call = 'call valoracionGet(?,@p_valoracion)';
+                $stmt = $db->prepare($call);
+                $stmt->bindParam(1, $cursoId);
+                if($stmt->execute())
+                {
+                    $sql = "SELECT @p_valoracion";
+                    $stmt = $db->prepare($sql);
+                    $stmt->execute();
+            
+                    list($calificacionCourse) = $stmt->fetch(PDO::FETCH_NUM);
+                             
+                }
+                
+                echo "<div class=\"col pl-0\"><span class=\"text-muted font-small d-block mb-2\">Calificacion: <b> $calificacionCourse</b></span></div>";
                 echo "</div>";
                 echo "<div class=\"d-flex justify-content-between\">";
                 echo "<div class=\"col pl-0\"><span class=\"text-muted font-small d-block mb-2\">Precio</span> <span class=\"h5 text-dark font-weight-bold\">$cursoCosto</span></div>";

@@ -247,7 +247,7 @@
     function LogOut()
     {
       setCookie("jwt", "", 1);
-      location.replace("http://localhost:8012/Acodemia/")
+      location.replace("http://localhost:8012/Acodemia/");
     }
 
 

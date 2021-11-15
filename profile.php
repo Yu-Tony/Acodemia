@@ -40,6 +40,10 @@ include_once 'navbar/navbar.php';
           document.getElementById("emailP").value = result.data.email;
           document.getElementById("SecretMail").value = result.data.email;
 
+
+          $("#fechaRegistro").html(result.data.registro);
+
+          
           var dd = document.getElementById('genderP');
           dd.selectedIndex = result.data.gender;
 
@@ -277,7 +281,8 @@ include_once 'navbar/navbar.php';
 
                           <div class="mt-3">
                             <h4 id="UserNameProfile"></h4>
-                            <h6>Fecha de registro 09/09/2021</h6>
+                            <h6> Fecha de registro</h6>
+                            <h6 id="fechaRegistro"> </h6>
                           </div>
 
                              <input type="text" hidden name="SecretMail" id="SecretMail" />

@@ -99,11 +99,11 @@ include_once 'navbar/navbar.php';
                         type : "POST",
                         data: {'searchword': searchText, 'page':pageText}, 
                         success : function(result) {
-                            alert(result);
+                            //alert(result);
 
                          
-                                //$('#resultados-word').html(searchText);
-                                //$("#CourseRow").html(result); 
+                                $('#resultados-word').html(searchText);
+                                $("#CourseRow").html(result); 
 
                             },
                             error: function(xhr, resp, text){

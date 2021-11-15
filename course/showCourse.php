@@ -117,23 +117,53 @@
                     }
                    
 
-                    echo "<div class=\"row\" style=\"margin-top: 4%\">";
-                    echo "<span class=\"text-muted font-small d-block mb-2\">Calificacion del curso: </span>";
-                    echo "</div>";
-                    echo "<span class=\"text-muted font-small d-block mb-2\">5.0</span>";
+                 
+
+                    $call = 'call valoracionGet(?,@p_valoracion)';
+                    $stmt = $db->prepare($call);
+                    $stmt->bindParam(1, $searchWord);
+                    if($stmt->execute())
+                    {
+                        $sql = "SELECT @p_valoracion";
+                        $stmt = $db->prepare($sql);
+                        $stmt->execute();
+                
+                        list($calificacionCourse) = $stmt->fetch(PDO::FETCH_NUM);
+                                 
+                    }
+
+                    echo "<div class=\"col pl-0\" style=\"margin-top: 10%\"><span class=\"text-muted font-small d-block mb-2\">Calificacion</span> <span class=\"h5 text-dark font-weight-bold\">$calificacionCourse</span></div>";
+
+
+                    echo "<span cclass=\"h5 text-dark font-weight-bold\"></span>";
+
                     echo "<div class=\"d-flex justify-content-between\">";
                     echo "<div class=\"col pl-0\"><span class=\"text-muted font-small d-block mb-2\">Precio</span> <span class=\"h5 text-dark font-weight-bold\">$$cursoCosto</span></div>";
                     echo "<div class=\"col pr-0\"><span class=\"text-muted font-small d-block mb-2\">Niveles</span> <span class=\"h5 text-dark font-weight-bold\">$cursoNiveles</span></div>";
                     echo "</div>";
+
                     if(($cursoCosto!=0) && ($userMail!=0))
                     {
+                
+                 
                         echo "<button type=\"button\" class=\"btn btn-primary\" style=\"margin-top: 10%;\" data-toggle=\"modal\" data-target=\"#ModalPay\" >Comprar</button>";
+                 
                     }
                     if($userId==$usuarioIdResult)
                     {
-                        echo "<button class=\"btn btn-secondary\" style=\"margin-top: 2%;\">Editar Curso</button>";
+       
+ 
+                        echo "<button type=\"button\" class=\"btn btn-secondary\" style=\"margin-top: 2%;\" id=\"EditCourse\">Editar Curso</button>";
+
+
+                        echo "<button id=\"SaveCourse\" type=\"button\" class=\"btn btn-secondary\" style=\"margin-top: 2%; display: none;\" >Guardar</button>";
+                        echo "<button id=\"CancelEditCourse\" type=\"button\" class=\"btn btn-secondary\" style=\"margin-top: 2%; display: none;\" >Cancelar</button>";
+         
+                     
                         echo "<button data-toggle=\"modal\" data-target=\"#modalDelete\" class=\"btn btn-danger\" style=\"margin-top: 2%;\">Eliminar Curso</button>";    
+                    
                     }
+         
                     echo "</div>";
                     echo "</div>";
                     echo "<!-- Modal Eliminar -->";
@@ -148,7 +178,7 @@
                     echo "</div>";
                     echo "<div class=\"modal-footer\">";
                     echo "<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Cancelar</button>";
-                    echo "<button type=\"button\" class=\"btn btn-danger\" >Eliminar</button>";
+                    echo "<button type=\"button\" class=\"btn btn-danger\" id=\"DeleteCourse\">Eliminar</button>";
                     echo "</div>";
                     echo "</div>";
                     echo "</div>";
@@ -178,10 +208,18 @@
                     echo "<div class=\"row\" style=\"padding-top: 8%; color: whitesmoke;\">";
                     echo "<div class=\"col-xl-8 col-sm-8 col-12\">";
                     echo "<div class=\"text-left \" style=\"padding-top:2%; \">";
-                    echo "<h1 class=\"subtitle-text\">$cursoNombre</h1>";
+                    
+                   
+                    echo "<h1 id=\"displayName\" class=\"subtitle-text\">$cursoNombre</h1>";
+                    echo "<div class=\"form-group\"> 
+                    <input type=\"text\" id=\"nameEdit\" class=\"form-control modify\" value=\"$cursoNombre\" style=\"display: none;\" required>  
+                    </div>";
                     echo "</div>";
                     echo "<div class=\"text-left \" style=\"padding-top:2%; \">";
-                    echo "<h4 class=\"subtitle-text\">$cursoDescripcion</h4>";
+                    echo "<h4 id=\"displayDesc\" class=\"subtitle-text\">$cursoDescripcion</h4>";
+                    echo "<div class=\"form-group\"> 
+                    <input type=\"text\" id=\"descEdit\" class=\"form-control modify\" value=\"$cursoDescripcion\" style=\"display: none;\" required>  
+                    </div>";
                     echo "</div>";
                     echo "<div class=\"text-left \" style=\"padding-top:20%;\">";
                     echo "<h6 class=\"subtitle-text\">$usuarioNombre<button onClick=\"window.location.href='http://localhost:8012/Acodemia/message.php';\" style=\"width: 10%; margin-left: 2%; margin-top: 0px;\" class=\"btn btn-secondary\"><i class=\"fas fa-envelope\"></i></button></h6>";
@@ -272,7 +310,10 @@
                                     echo "</div>";
                                     echo "";
                                     echo "<div class=\"col-lg-1 col-4\" style=\"background-color: #80b5e2;\">";
-                                    echo "<button style=\"margin-top: 6%;\" type=\"button\" class=\"btn btn-primary VerMas\"><i class=\"fa fa-plus\"></i></button>";
+                                    if(($userMail!=0))
+                                    {
+                                        echo "<button style=\"margin-top: 6%;\" type=\"button\" class=\"btn btn-primary VerMas\"><i class=\"fa fa-plus\"></i></button>";
+                                    }                                    
                                     echo "</div>";
                                     echo "";
                                     echo "<div class=\"col-lg-5 col-8\"></div>";
@@ -304,7 +345,10 @@
                                     echo "</div>";
                                     echo "";
                                     echo "<div class=\"col-lg-1 col-4\" style=\"background-color: #80b5e2;\">";
-                                    echo "<button style=\"margin-top: 6%;\" type=\"button\" class=\"btn btn-primary VerMas\"><i class=\"fa fa-plus\"></i></button>";
+                                    if(($userMail!=0))
+                                    {
+                                        echo "<button style=\"margin-top: 6%;\" type=\"button\" class=\"btn btn-primary VerMas\"><i class=\"fa fa-plus\"></i></button>";
+                                    }
                                     echo "</div>";
                                     echo "";
                                     echo "<div class=\"col-lg-5 col-8\"></div>";
@@ -382,49 +426,76 @@
 
                     echo "<!--Escribir comentario-->";
                     echo "<div class=\"container\">";
-                        echo "<div class=\"row\" id=\"ponerComentario\">";
-                            echo "<h6 style=\"color: whitesmoke;\">Escribe un comentario</h6>";
-                            echo "<div class=\"col-md-12 col-sm-12\">";
-                                echo "<div class=\"comment-wrapper\">";
-                                    echo "<div class=\"panel panel-info\">";
-                                        echo "<div class=\"panel-body\">";
-                                            echo "<textarea class=\"form-control\" id=\"commentArea\" placeholder=\"write a comment...\" rows=\"3\"></textarea>";
-                                            echo "<br>";
-                                            echo "<h6 style=\"color: whitesmoke;\">Deja una calificacion</h6>";
 
-                                            echo "<div class='rating-stars text-center'>";
-                                            echo "<ul id='stars'>";
-                                            echo "<li class='star' title='Poor' data-value='1'>";
-                                            echo "<i class='fa fa-star fa-fw'></i>";
-                                            echo "</li>";
-                                            echo "<li class='star' title='Fair' data-value='2'>";
-                                            echo "<i class='fa fa-star fa-fw'></i>";
-                                            echo "</li>";
-                                            echo "<li class='star' title='Good' data-value='3'>";
-                                            echo "<i class='fa fa-star fa-fw'></i>";
-                                            echo "</li>";
-                                            echo "<li class='star' title='Excellent' data-value='4'>";
-                                            echo "<i class='fa fa-star fa-fw'></i>";
-                                            echo "</li>";
-                                            echo "<li class='star' title='WOW!!!' data-value='5'>";
-                                            echo "<i class='fa fa-star fa-fw'></i>";
-                                            echo "</li>";
-                                            echo "</ul>";
-                                            echo "</div>";
-                                            
+                                        /*delimiter &ZV
+                    create procedure comentarioHecho(in p_user int, in p_curso int)
+                    begin
+                        select count(comentarioId) from Comentario where usuarioId = p_user and cursoId = p_curso;
+                    end &ZV
+                    */
 
-                                            echo "<button type=\"button\" id=\"btnComment\" style=\"width: 30%;\" class=\"btn btn-primary pull-right\">Post</button>";
-                                            echo "<div class=\"clearfix\"></div>";
-                                            echo "<hr style=\"border: 2px solid #b8d2e5; border-radius: 5px;\">";
-                                            echo "";
+                    $call =  $db->prepare('CALL comentarioHecho(:p_user, :p_curso)');
+                    $call->bindParam(':p_user', $userId, PDO::PARAM_INT); 
+                    $call->bindParam(':p_curso', $searchWord, PDO::PARAM_INT); 
+
+                    if($call->execute())
+                    {
+                        $result = $call->fetchAll(PDO::FETCH_ASSOC);
+                        if($result!=null)
+                        {
+                            foreach ($result as $comment) 
+                            { 
+                                $comentarios= $comment['count(comentarioId)'];
+                                //print_r($comentarios);
+
+                                if(($comentarios==0)&&($userMail!=0))
+                                {
+                                    echo "<div class=\"row\" id=\"ponerComentario\">";
+                                        echo "<h6 style=\"color: whitesmoke;\">Escribe un comentario</h6>";
+                                        echo "<div class=\"col-md-12 col-sm-12\">";
+                                            echo "<div class=\"comment-wrapper\">";
+                                                echo "<div class=\"panel panel-info\">";
+                                                    echo "<div class=\"panel-body\">";
+                                                        echo "<textarea class=\"form-control\" id=\"commentArea\" placeholder=\"write a comment...\" rows=\"3\"></textarea>";
+                                                        echo "<br>";
+                                                        echo "<h6 style=\"color: whitesmoke;\">Deja una calificacion</h6>";
+
+                                                        echo "<div class='rating-stars text-center'>";
+                                                        echo "<ul id='stars'>";
+                                                        echo "<li class='star' title='Poor' data-value='1'>";
+                                                        echo "<i class='fa fa-star fa-fw'></i>";
+                                                        echo "</li>";
+                                                        echo "<li class='star' title='Fair' data-value='2'>";
+                                                        echo "<i class='fa fa-star fa-fw'></i>";
+                                                        echo "</li>";
+                                                        echo "<li class='star' title='Good' data-value='3'>";
+                                                        echo "<i class='fa fa-star fa-fw'></i>";
+                                                        echo "</li>";
+                                                        echo "<li class='star' title='Excellent' data-value='4'>";
+                                                        echo "<i class='fa fa-star fa-fw'></i>";
+                                                        echo "</li>";
+                                                        echo "<li class='star' title='WOW!!!' data-value='5'>";
+                                                        echo "<i class='fa fa-star fa-fw'></i>";
+                                                        echo "</li>";
+                                                        echo "</ul>";
+                                                        echo "</div>";
+                                                        
+
+                                                        echo "<button type=\"button\" id=\"btnComment\" style=\"width: 30%;\" class=\"btn btn-primary pull-right\">Post</button>";
+                                                        echo "<div class=\"clearfix\"></div>";
+                                                        echo "<hr style=\"border: 2px solid #b8d2e5; border-radius: 5px;\">";
+                                                        echo "";
+                                                        echo "</div>";
+                                                    echo "</div>";
+                                                echo "</div>";
                                             echo "</div>";
                                         echo "</div>";
-                                     echo "</div>";
-                                echo "</div>";
-                            echo "</div>";
-                        echo "<div class=\"row\" id=\"commentSection\">";
-              
-
+                                    echo "<div class=\"row\" id=\"commentSection\">";
+                                }
+                            }
+                        }
+                                    
+                    }
                     /*
                     delimiter &ZV
                     create procedure showComentarios(in p_cursoid int)

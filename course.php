@@ -15,12 +15,10 @@ include_once 'navbar/navbar.php';
     
     <link rel="stylesheet" href="course/star.css">
     <!--<script src="course/star.js"></script>-->
+    <link rel="stylesheet" href="course/input.css">
 
     <!--Toggle de los cursos-->
     <script> 
-
-        
-
 
         $(document).ready()
         {  
@@ -82,7 +80,8 @@ include_once 'navbar/navbar.php';
 
  
         window.setTimeout(function(){
-              /*---------------------------------------ESTRELLAS-------------------------------- */
+
+            /*----------------------------------------------------------------------ESTRELLAS--------------------------------------------- */
 
             $(function(){ /* DOM ready */ 
                 $('.VerMas').click(function(){ 
@@ -134,6 +133,9 @@ include_once 'navbar/navbar.php';
             
             });
                 
+            /*----------------------------------------------------------------------COMENTAR--------------------------------------------- */
+
+
             $( "#btnComment" ).click(function() 
             {
             
@@ -182,6 +184,152 @@ include_once 'navbar/navbar.php';
                     alert("Debe escribir un comentario")
                 }
             });
+
+            /*----------------------------------------------------------------------BORRAR--------------------------------------------- */
+
+
+            $( "#DeleteCourse" ).click(function() 
+            {
+
+                    var queryString = window.location.search;
+                    var urlParams = new URLSearchParams(queryString);
+                    searchText = urlParams.get('course');
+
+                    var jwt = getCookie('jwt');
+                    $.post("api/validate_token.php", JSON.stringify({ jwt:jwt }))
+                    .done(function(result) {
+                        userMail = result.data.email;
+                        userName = result.data.firstname;
+                        
+                        $.ajax({
+                        url: "course/deleteCourse.php",
+                        type : "POST",
+                        data: {'course':searchText}, 
+                        success : function(result) {
+
+                            alert(result);
+                            //$("#commentSection").append(result);
+                                  
+                            
+                        },
+                        error: function(xhr, resp, text){
+                            // on error, tell the user sign up failed
+                            //
+                            
+                            if(text == "Gone")
+                            {
+                                window.location = ' index.php';
+                            }
+                            else
+                            {
+                                window.location = ' error/404.html';
+                            }
+                            console.log("Error al crear cuenta  " + text);
+                            console.log("Response text  " + xhr.responseText);
+                            //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+                        }
+                        });
+                    
+                    });
+            });
+
+            /*----------------------------------------------------------------------EDITAR--------------------------------------------- */
+            $( "#EditCourse" ).click(function() 
+            {
+                $('#nameEdit').css('display','inline-block');
+                $('#descEdit').css('display','inline-block');
+
+                $('#SaveCourse').css('display','inline-block');
+                $('#CancelEditCourse').css('display','inline-block');
+
+                $(this).css('display','none');
+
+                $("#displayName").css('display','none');
+                $("#displayDesc").css('display','none');
+               
+
+            });
+            
+            $( "#SaveCourse" ).click(function() 
+            {
+
+                var newName = document.getElementById("nameEdit").value;
+                var newDesc = document.getElementById("descEdit").value;
+                var queryString = window.location.search;
+                var urlParams = new URLSearchParams(queryString);
+                searchText = urlParams.get('course');
+
+                var jwt = getCookie('jwt');
+                $.post("api/validate_token.php", JSON.stringify({ jwt:jwt }))
+                .done(function(result) {
+                   
+                    
+                    $.ajax({
+                    url: "course/editCourse.php",
+                    type : "POST",
+                    data: {'name':newName, 'desc':newDesc, 'idCurso':searchText}, 
+                    success : function(result) {
+
+                        //alert(result);
+
+                        $('#displayName').html(newName);
+                        $('#displayDesc').html(newDesc);
+
+
+                        $('#nameEdit').css('display','none');
+                        $('#descEdit').css('display','none');
+
+                        $('#SaveCourse').css('display','none');
+                        $('#CancelEditCourse').css('display','none');
+
+                        $('#EditCourse').css('display','inline-block');
+
+                        $("#displayName").css('display','inline-block');
+                        $("#displayDesc").css('display','inline-block');
+                        //$("#commentSection").append(result);
+                              
+                        
+                    },
+                    error: function(xhr, resp, text){
+                        // on error, tell the user sign up failed
+                        //
+    
+                        
+                        if(text == "Gone")
+                        {
+                            alert("Error al editar curso, intente de nuevo");
+                        }
+                        /*else
+                        {
+                            window.location = ' error/404.html';
+                        }*/
+                        console.log("Error al crear cuenta  " + text);
+                        console.log("Response text  " + xhr.responseText);
+                        //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+                    }
+                    });
+                
+                });
+            });
+
+            $( "#CancelEditCourse" ).click(function() 
+            {
+                $('#nameEdit').css('display','none');
+                $('#descEdit').css('display','none');
+
+                $('#SaveCourse').css('display','none');
+                $('#CancelEditCourse').css('display','none');
+
+                $('#EditCourse').css('display','inline-block');
+
+                $("#displayName").css('display','inline-block');
+                $("#displayDesc").css('display','inline-block');
+
+            });
+            
+
+
+
         }, 600);
 
 

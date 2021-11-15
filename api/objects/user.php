@@ -15,6 +15,7 @@ class User{
     public $typeAccount;
     public $gender;
     public $birthday;
+    public $registro;
     
     
  
@@ -72,13 +73,13 @@ class User{
     //PARA LOG IN
     function emailExists(){
 
-        $call =  $this->conn->prepare('CALL userEmailExists(:email, @id, @nombre, @apellido, @contrasena, @tipo, @genero, @fechanac)');
+        $call =  $this->conn->prepare('CALL userEmailExists(:email, @id, @nombre, @apellido, @contrasena, @tipo, @genero, @fechanac, @p_fechareg)');
         $call->bindParam(':email', $this->email, PDO::PARAM_STR);       
 
         if($call->execute())
         {
                  
-            $select = $this->conn->query('SELECT @id, @nombre, @apellido, @contrasena, @tipo, @genero, @fechanac');
+            $select = $this->conn->query('SELECT @id, @nombre, @apellido, @contrasena, @tipo, @genero, @fechanac, @p_fechareg');
             $result = $select->fetch(PDO::FETCH_ASSOC);
         
             //var_dump($result);
@@ -92,6 +93,7 @@ class User{
                 $this->typeAccount = $result['@tipo'];
                 $this->gender = $result['@genero'];
                 $this->birthday = $result['@fechanac']; 
+                $this->registro = $result['@p_fechareg']; 
 
                 return true;
             }else{return false;}

@@ -1,0 +1,18 @@
+.form-control.modify {
+    border: 0;
+    outline: 0;
+    border-bottom: 2px solid #eee;
+    font-size: 16px;
+    color: #ccc;
+    background-color: transparent
+}
+
+.form-control.modify:focus {
+    border: 0;
+    color: #fff;
+    background-color: transparent;
+    border-color: #fff;
+    outline: 0;
+    border-bottom: 2px solid #fff;
+    box-shadow: 0 0 0 0.2rem transparent
+}
