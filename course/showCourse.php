@@ -90,7 +90,6 @@
                         echo "</p>";
                         echo "</video>";
                     }
-      
 
                     echo "<div class=\"card-body\" style=\"padding-left: 10%;\">";
                     echo "<div class=\"row\">";
@@ -135,10 +134,10 @@
                     echo "<div class=\"col pl-0\" style=\"margin-top: 10%\"><span class=\"text-muted font-small d-block mb-2\">Calificacion</span> <span class=\"h5 text-dark font-weight-bold\">$calificacionCourse</span></div>";
 
 
-                    echo "<span cclass=\"h5 text-dark font-weight-bold\"></span>";
+                    echo "<span class=\"h5 text-dark font-weight-bold\"></span>";
 
                     echo "<div class=\"d-flex justify-content-between\">";
-                    echo "<div class=\"col pl-0\"><span class=\"text-muted font-small d-block mb-2\">Precio</span> <span class=\"h5 text-dark font-weight-bold\">$$cursoCosto</span></div>";
+                    echo "<div class=\"col pl-0\"><span class=\"text-muted font-small d-block mb-2\">Precio</span> <span class=\"h5 text-dark font-weight-bold\">$<span class=\"h5 text-dark font-weight-bold precioIndividual\">$cursoCosto</span></span></div>";
                     echo "<div class=\"col pr-0\"><span class=\"text-muted font-small d-block mb-2\">Niveles</span> <span class=\"h5 text-dark font-weight-bold\">$cursoNiveles</span></div>";
                     echo "</div>";
 
@@ -146,7 +145,7 @@
                     {
                 
                  
-                        echo "<button type=\"button\" class=\"btn btn-primary\" style=\"margin-top: 10%;\" data-toggle=\"modal\" data-target=\"#ModalPay\" >Comprar</button>";
+                        echo "<button type=\"button\" class=\"btn btn-primary btnComprar\" style=\"margin-top: 10%;\" data-toggle=\"modal\" data-target=\"#ModalPay\" >Comprar</button>";
                  
                     }
                     if($userId==$usuarioIdResult)
@@ -183,21 +182,22 @@
                     echo "</div>";
                     echo "</div>";
                     echo "</div>";
+                    
                     echo "<!-- Modal Comprar -->";
                     echo "<div class=\"modal fade\" id=\"modalPurchased\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"exampleModalCenterTitle\" aria-hidden=\"true\">";
-                    echo "<div class=\"modal-dialog modal-dialog-centered\" role=\"document\">";
-                    echo "<div class=\"modal-content\">";
-                    echo "<div class=\"modal-header\">";
-                    echo "<h4 class=\"modal-title\">Comprar curso</h4>";
-                    echo "</div>";
-                    echo "<div class=\"modal-body\">";
-                    echo "Curso comprado con exito";
-                    echo "</div>";
-                    echo "<div class=\"modal-footer\">";
-                    echo "<button type=\"button\" class=\"btn btn-success\" data-dismiss=\"modal\">OK</button>";
-                    echo "</div>";
-                    echo "</div>";
-                    echo "</div>";
+                        echo "<div class=\"modal-dialog modal-dialog-centered\" role=\"document\">";
+                            echo "<div class=\"modal-content\">";
+                                echo "<div class=\"modal-header\">";
+                                    echo "<h4 class=\"modal-title\">Comprar curso</h4>";
+                                echo "</div>";
+                                echo "<div class=\"modal-body\">";
+                                    echo "Curso comprado con exito";
+                                echo "</div>";
+                                echo "<div class=\"modal-footer\">";
+                                    echo "<button type=\"button\" class=\"btn btn-success\" data-dismiss=\"modal\">OK</button>";
+                                echo "</div>";
+                            echo "</div>";
+                        echo "</div>";
                     echo "</div>";
                     echo "</div>";
                     echo "</div>";
@@ -322,8 +322,10 @@
                                     echo "<div class=\"DescripcionCurso\" style=\"background-color: #b8d2e5; display: none; padding:2%; margin-bottom: 2%;\" >";
                                     echo "<h5>$nivelContenido</h5>";
                                     echo "<br>";
-                                    echo "<h5>Costo del nivel: $$nivelCosto</h5>";
-                                    echo "<button data-toggle=\"modal\" data-target=\"#modalPurchased\" class=\"btn btn-primary btn-category\" style=\"margin-top: 2%;\">Obtener este nivel</button>";
+                                    echo "<div>";
+                                    echo "<h5>Costo del nivel: $<span class=\"precioIndividual\">$nivelCosto</span></h5>";
+                                    echo "</div>";
+                                    echo "<button data-toggle=\"modal\" data-target=\"#modalPurchased\" class=\"btn btn-primary btn-category btnComprar\" style=\"margin-top: 2%;\">Obtener este nivel</button>";
                                     echo "<a class=\"btn btn-primary btn-category\" href=\"http://localhost:8012/Acodemia/level.php?course=$searchWord&level=$nivelId\">Ir al nivel</a>";
                                     echo "</div>";
                                     echo "</div>";
@@ -357,8 +359,10 @@
                                     echo "<div class=\"DescripcionCurso\" style=\"background-color: #b8d2e5; display: none; padding:2%; margin-bottom: 2%;\" >";
                                     echo "<h5>$nivelContenido</h5>";
                                     echo "<br>";
-                                    echo "<h5>Costo del nivel: $$nivelCosto</h5>";
-                                    echo "<button type=\"button\" class=\"btn btn-primary btn-category\" data-toggle=\"modal\" data-target=\"#ModalPay\" >Comprar este nivel</button>";
+                                    echo "<div>";
+                                    echo "<h5>Costo del nivel: $<span class=\"precioIndividual\">$nivelCosto</span></h5>";
+                                    echo "</div>";
+                                    echo "<button type=\"button\" class=\"btn btn-primary btn-category btnComprar\" data-toggle=\"modal\" data-target=\"#ModalPay\" >Comprar este nivel</button>";
                                     echo "<a class=\"btn btn-primary btn-category\" href=\"http://localhost:8012/Acodemia/level.php?course=$searchWord&level=$nivelId\">Ir al nivel</a>";
                                     echo "</div>";
                                     echo "</div>";
@@ -564,6 +568,7 @@
                     echo "";
                     echo "</div>";
                     echo "";
+                    echo "<div class=\"form-group\" id=\"PrecioObjetoComprado\" style=\"display: none;\"></div>";
                     echo "</div>";
 
     

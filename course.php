@@ -327,6 +327,15 @@ include_once 'navbar/navbar.php';
 
             });
             
+            $( ".btnComprar" ).click(function() 
+            {
+                var precio = ($(this).siblings("div").find(".precioIndividual").html());
+                $('#PrecioObjetoComprado').html(precio);
+                
+
+            });
+
+            
 
 
 
@@ -410,6 +419,7 @@ include_once 'navbar/navbar.php';
             <div class="modal-body" style="padding: 0px;" >
                 <div class="card" style="color: black; margin: 0px;">
                     <div class="card-header">
+
                         <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">
                             <!-- Credit card form tabs -->
                             <ul role="tablist" class="nav bg-light nav-pills rounded nav-fill mb-3">
@@ -417,6 +427,7 @@ include_once 'navbar/navbar.php';
                                 <li class="nav-item"> <a data-toggle="pill" href="#paypal" class="nav-link "> <i class="fab fa-paypal mr-2"></i> Paypal </a> </li>
                             </ul>
                         </div> <!-- End -->
+
                         <!-- Credit card form content -->
                         <div class="tab-content">
                             <!-- credit card info-->
@@ -450,23 +461,24 @@ include_once 'navbar/navbar.php';
                                         <button type="button" class="subscribe btn btn-primary btn-block shadow-sm"> Confirm Payment </button>
                                 </form>
                             </div>
-                        </div> <!-- End -->
+                            <!-- End -->
+                        </div> 
+
+
                         <!-- Paypal info -->
                         <div id="paypal" class="tab-pane fade pt-3">
-                          
-                        <div id="paypal-payment-button">
-                        </div>
-                        
 
-                        <p class="text-muted"> Note: After clicking on the button, you will be directed to a secure gateway for payment. After completing the payment process, you will be redirected back to the website to view details of your order. </p>
-                            
-        
-
+                            <div id="paypal-payment-button"></div>
+                            <p class="text-muted"> Note: After clicking on the button, you will be directed to a secure gateway for payment. After completing the payment process, you will be redirected back to the website to view details of your order. </p>
                         </div> <!-- End -->
+
                         <!-- End -->
                     </div>
                 </div>
            </div>
+
+
+
         </div>
     </div>
     
