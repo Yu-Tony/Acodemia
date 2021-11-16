@@ -7,7 +7,7 @@
         style: {
           shape: 'pill',
           color: 'blue',
-          layout: 'vertical',
+          layout: 'horizontal',
           label: 'paypal',
           
         },
@@ -24,22 +24,12 @@
                   }
               },
               items: [{
-                  name: 'Hafer',
+                  name: getNameProducts(),
                   unit_amount: {value: getTotalPrice(), currency_code: 'MXN'},
-                  quantity: '1',
-                  sku: 'haf001'
+                  quantity: '1'
               }]
           }]
-            /*purchase_units: [{
-              reference_id: "ACDMA",
-              description: "Cursos Acodemia",
-              "amount":{ "currency_code": 'MXN',"value": 32},
-                  "items": [{
-                      "name": 'Hola'
-                  }]
-            }]*/
-
-            
+                
           });
         },
 
@@ -52,19 +42,71 @@
             // Show a success message within this page, e.g.
             const element = document.getElementById('paypal-payment-button');
             element.innerHTML = '';
-            element.innerHTML = '<h3>Thank you for your payment!</h3>';
+            element.innerHTML = '<h3>GRACIAS POR SU PAGO</h3>';
 
             var jwt = getCookie('jwt');
             $.post("api/validate_token.php", JSON.stringify({ jwt:jwt })).done(function(result) {
         
  
-              document.getElementById("emailP").value = result.data.email;
+              var email = result.data.email;
+              var temp = localStorage.getItem("tipoCompra");
+              var id = localStorage.getItem("id");
 
-    
+              if(temp=="Curso")
+              {
+                $.ajax({
+                  url: "Payment/comprarCurso.php",
+                  type : "POST",
+                  data: {'idCurso': id,'mail': email, 'metodo': 2 }, 
+                  success : function(result) {
 
-    
+                    //console.log(result);  
 
-       
+                    localStorage.clear();                      
+                      
+                  },
+                  error: function(xhr, resp, text){
+                      
+                    if(text == "Gone")
+                    {
+                        alert("Error al hacer el pago, intente de nuevo");
+                    }
+
+                    console.log("Error al crear cuenta  " + text);
+                    console.log("Response text  " + xhr.responseText);
+                    localStorage.clear();  
+               
+                  }
+                });
+              }
+              else
+              { 
+                $.ajax({
+                  url: "Payment/comprarNivel.php",
+                  type : "POST",
+                  data: {'idNivel': id,'mail': email, 'metodo': 2 }, 
+                  success : function(result) {
+
+          
+                    //console.log(result); 
+                          
+                    localStorage.clear();                  
+                      
+                  },
+                  error: function(xhr, resp, text){
+                    if(text == "Gone")
+                    {
+                        alert("Error al hacer el pago, intente de nuevo");
+                    }
+
+                    console.log("Error al crear cuenta  " + text);
+                    console.log("Response text  " + xhr.responseText);
+                    localStorage.clear(); 
+                  }
+                });
+
+              }
+              
             })
 
 
@@ -83,27 +125,16 @@
 
 
 
-function getTotalPrice() {
-
-  //var Price = $(this).parent().find('#CursoPrecio').html();
-
-  return($('#PrecioObjetoComprado').html());
-  //var Price=document.getElementById("number").value;  
-
+  function getTotalPrice() {
+    //var Price = $(this).parent().find('#CursoPrecio').html();
+    var temp = localStorage.getItem("precio");
+    return(temp);
   }
 
-  /*      createOrder: function(data, actions) {
-          return actions.order.create({
-            purchase_units: [{
-              reference_id: "ACDMA",
-              description: "Cursos Acodemia",
-              "amount":{ currency_code: 'MXN',value: getTotalPrice()},
-                  items: [{
-                      name: getName()
-                  }]
-            }]
-          });
-        }*/
+  function getNameProducts() {
+    var temp = localStorage.getItem("name");
+    return(temp);
+  }
 
 
 

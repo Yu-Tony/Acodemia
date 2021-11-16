@@ -12,6 +12,7 @@
     $searchWord = $_POST['course'];
     $userMail = $_POST['mail'];
     $userId =0;
+    $cursoComprado = 0;
 
     if($userMail!=0)
     {
@@ -63,16 +64,17 @@
         {
             foreach ($busqueda as $result) 
             {
-                $cursoNombre = $result['cursoNombre'];
-                $cursoDescripcion = $result['cursoDescripcion'];
-                $cursoCosto = $result['cursoCosto'];
-                $cursoNiveles = $result['cursoNiveles'];
-                $cursoFechaPublicacion = $result['cursoFechaPublicacion'];
-                $cursoVideoIntroductorio = $result['cursoVideoIntroductorio'];
-                $cursoMiniatura = $result['cursoMiniatura'];
-                $cursoEstado = $result['cursoEstado'];
-                $usuarioNombre = $result['usuarioNombre'];
-                $usuarioIdResult =  $result['usuarioId'];
+                //									
+                $cursoNombre = $result['dNombre'];
+                $cursoDescripcion = $result['dDesc'];
+                $cursoCosto = $result['dCosto'];
+                $cursoNiveles = $result['dNiveles'];
+                $cursoFechaPublicacion = $result['dFecha'];
+                $cursoVideoIntroductorio = $result['dVideo'];
+                $cursoMiniatura = $result['dImage'];
+                $cursoEstado = $result['dEstado'];
+                $usuarioNombre = $result['dUsername'];
+                $usuarioIdResult =  $result['dUserId'];
 
                 if($cursoEstado==1)
                 {
@@ -141,11 +143,46 @@
                     echo "<div class=\"col pr-0\"><span class=\"text-muted font-small d-block mb-2\">Niveles</span> <span class=\"h5 text-dark font-weight-bold\">$cursoNiveles</span></div>";
                     echo "</div>";
 
-                    if(($cursoCosto!=0) && ($userMail!=0))
+                    /**delimiter &ZV
+                    create procedure compraCursoVerificar(in p_user int, in p_curso int)
+                    begin
+                        select count(ventaCursoId) from Ventas_curso where usuarioId = p_user and cursoId = p_curso;
+                    end &ZV
+                    */
+
+                    $call =  $db->prepare('CALL compraCursoVerificar(:p_user, :p_curso)');
+                    $call->bindParam(':p_user', $userId, PDO::PARAM_INT); 
+                    $call->bindParam(':p_curso', $searchWord, PDO::PARAM_INT);
+
+                    if($call->execute())
+                    {
+                        $comentariosCurso = $call->fetchAll(PDO::FETCH_ASSOC);
+                        
+                        if($comentariosCurso!=null)
+                        {
+                            foreach ($comentariosCurso as $comentarios) 
+                            { 
+
+                                $existe= $comentarios['count(ventaCursoId)'];
+
+                                if($existe==0)
+                                {
+                                    $cursoComprado = 0;
+                                }
+                                else
+                                {
+                                    $cursoComprado = 1;
+                                }
+                                                                                                       
+                            } 
+                        }
+                    }
+
+                    if(($cursoCosto!=0) && ($userMail!=0) && ($cursoComprado == 0))
                     {
                 
                  
-                        echo "<button type=\"button\" class=\"btn btn-primary btnComprar\" style=\"margin-top: 10%;\" data-toggle=\"modal\" data-target=\"#ModalPay\" >Comprar</button>";
+                        echo "<button type=\"button\" class=\"btn btn-primary btnCurso btnComprar\" style=\"margin-top: 10%;\" data-toggle=\"modal\" data-target=\"#ModalPay\" >Comprar</button>";
                  
                     }
                     if($userId==$usuarioIdResult)
@@ -298,15 +335,14 @@
 
                          
             
-                                if( $nivelCosto==0)
+                                if( $nivelCosto==0 || ($cursoComprado==1))
                                 {
                                     echo "<!--Nivel gratis-->";
                                     echo "<div class=\"row\" style=\"color: black;\">";
                                     echo "";
-                                    echo "<div class=\"col-lg-5 col-8\" style=\" background-color: #80b5e2;\">";
-                                    echo "<h4>";
-                                    echo $nivelNombre;
-                                    echo "</h4>";
+                                    echo "<div class=\"col-lg-5 col-8 divName\" style=\" background-color: #80b5e2;\">";
+                                    echo "<h4 class=\"nombreNivelDisplay\">$nivelNombre</h4>";
+                                    echo "<h4 class=\"nivelIdComprado\" style=\"display: none;\">$nivelId</h4>";
                                     echo "</div>";
                                     echo "";
                                     echo "<div class=\"col-lg-1 col-4\" style=\"background-color: #80b5e2;\">";
@@ -325,7 +361,6 @@
                                     echo "<div>";
                                     echo "<h5>Costo del nivel: $<span class=\"precioIndividual\">$nivelCosto</span></h5>";
                                     echo "</div>";
-                                    echo "<button data-toggle=\"modal\" data-target=\"#modalPurchased\" class=\"btn btn-primary btn-category btnComprar\" style=\"margin-top: 2%;\">Obtener este nivel</button>";
                                     echo "<a class=\"btn btn-primary btn-category\" href=\"http://localhost:8012/Acodemia/level.php?course=$searchWord&level=$nivelId\">Ir al nivel</a>";
                                     echo "</div>";
                                     echo "</div>";
@@ -340,10 +375,9 @@
                                     echo "";
                                     echo "<div class=\"row\" style=\"color: black;\">";
                                     echo "";
-                                    echo "<div class=\"col-lg-5 col-8\" style=\" background-color: #80b5e2;\">";
-                                    echo "<h4>";
-                                    echo $nivelNombre;
-                                    echo "</h4>";
+                                    echo "<div class=\"col-lg-5 col-8 divName\" style=\" background-color: #80b5e2;\">";
+                                    echo "<h4 class=\"nombreNivelDisplay\">$nivelNombre</h4>";
+                                    echo "<h4 class=\"nivelIdComprado\" style=\"display: none;\">$nivelId</h4>";
                                     echo "</div>";
                                     echo "";
                                     echo "<div class=\"col-lg-1 col-4\" style=\"background-color: #80b5e2;\">";
@@ -362,8 +396,44 @@
                                     echo "<div>";
                                     echo "<h5>Costo del nivel: $<span class=\"precioIndividual\">$nivelCosto</span></h5>";
                                     echo "</div>";
-                                    echo "<button type=\"button\" class=\"btn btn-primary btn-category btnComprar\" data-toggle=\"modal\" data-target=\"#ModalPay\" >Comprar este nivel</button>";
-                                    echo "<a class=\"btn btn-primary btn-category\" href=\"http://localhost:8012/Acodemia/level.php?course=$searchWord&level=$nivelId\">Ir al nivel</a>";
+
+                                    /*delimiter &ZV
+                                    create procedure compraNivelVerificar(in p_user int, in p_nivel int)
+                                    begin
+                                        select count(ventaNivelId) from Ventas_nivel where usuarioId = p_user and nivelId = p_nivel;
+                                    end &ZV
+                                    */
+
+                                    
+                                    $call =  $db->prepare('CALL compraNivelVerificar(:p_user, :p_nivel)');
+                                    $call->bindParam(':p_user', $userId, PDO::PARAM_INT); 
+                                    $call->bindParam(':p_nivel', $nivelId, PDO::PARAM_INT);
+
+                                    if($call->execute())
+                                    {
+                                        $comentariosCurso = $call->fetchAll(PDO::FETCH_ASSOC);
+                                        
+                                        if($comentariosCurso!=null)
+                                        {
+                                            foreach ($comentariosCurso as $comentarios) 
+                                            { 
+
+                                                $existe= $comentarios['count(ventaNivelId)'];
+
+                                                if($existe==0)
+                                                {
+                                                    echo "<button type=\"button\" class=\"btn btn-primary btn-category btnNivel btnComprar\" data-toggle=\"modal\" data-target=\"#ModalPay\" >Comprar este nivel</button>";
+                                                }
+                                                else
+                                                {
+                                                    echo "<a class=\"btn btn-primary btn-category\" href=\"http://localhost:8012/Acodemia/level.php?course=$searchWord&level=$nivelId\">Ir al nivel</a>";
+
+                                                }
+                                                                                                                       
+                                            } 
+                                        }
+                                    }
+
                                     echo "</div>";
                                     echo "</div>";
                                     echo "";
@@ -568,12 +638,8 @@
                     echo "";
                     echo "</div>";
                     echo "";
-                    echo "<div class=\"form-group\" id=\"PrecioObjetoComprado\" style=\"display: none;\"></div>";
                     echo "</div>";
 
-    
-    
-            
                    
                 }
                 else
@@ -604,8 +670,3 @@
 
 
 ?>
-
-Warning: Undefined variable $result in C:\xampp\htdocs\Acodemia\course\showCourse.php on line 38
-
-Warning: Trying to access array offset on value of type null in C:\xampp\htdocs\Acodemia\course\showCourse.php on line 38
-

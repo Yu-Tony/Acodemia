@@ -23,46 +23,72 @@ include_once 'navbar/navbar.php';
             var queryString = window.location.search;
             var urlParams = new URLSearchParams(queryString);
             var searchText = urlParams.get('level');
-
-            $.ajax({
-                url: "level/showLevel.php",
-                type : "POST",
-                data: {'level': searchText}, 
-                success : function(result) {
-
-                    //alert(result);
-                    $("#levelPrincipal").html(result);                         
-                    
-                },
-                error: function(xhr, resp, text){
-                    // on error, tell the user sign up failed
-                    window.location = ' error/404.html';
-                    console.log("Error al crear cuenta  " + text);
-                    console.log("Response text  " + xhr.responseText);
-                    //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
-                }
-            });
-
             var searchCourse = urlParams.get('course');
 
-            $.ajax({
-                url: "level/showLevelsInLevel.php",
-                type : "POST",
-                data: {'course': searchCourse}, 
-                success : function(result) {
+            var jwt = getCookie('jwt');
+            $.post("api/validate_token.php", JSON.stringify({ jwt:jwt }))
+            .done(function(result) {
 
-                    //alert(result);
-                    $("#allLevels").html(result);                         
-                    
-                },
-                error: function(xhr, resp, text){
-                    // on error, tell the user sign up failed
-                    window.location = ' error/404.html';
-                    console.log("Error al crear cuenta  " + text);
-                    console.log("Response text  " + xhr.responseText);
-                    //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
-                }
+                var userMail = result.data.email;
+                
+                $.ajax({
+                    url: "level/showLevel.php",
+                    type : "POST",
+                    data: {'level': searchText, 'course': searchCourse, 'mail': userMail}, 
+                    success : function(result) {
+
+                        //alert(result);
+                        $("#levelPrincipal").html(result);                         
+                        
+                    },
+                    error: function(xhr, resp, text){
+                        // on error, tell the user sign up failed
+                        window.location = ' error/404.html';
+                        console.log("Error al crear cuenta  " + text);
+                        console.log("Response text  " + xhr.responseText);
+                        //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+                    }
+                });
+
+    
+
+                $.ajax({
+                    url: "level/showLevelsInLevel.php",
+                    type : "POST",
+                    data: {'course': searchCourse, 'course': searchCourse, 'mail': userMail}, 
+                    success : function(result) {
+
+                        //alert(result);
+                        $("#allLevels").html(result);                         
+                        
+                    },
+                    error: function(xhr, resp, text){
+
+                        if(text == "Gone")
+                        {
+                            window.location = 'http://localhost:8012/Acodemia/';
+                        }
+                        else
+                        {
+                            window.location = ' error/404.html';
+                        }
+                        // on error, tell the user sign up failed
+                        
+                        console.log("Error al crear cuenta  " + text);
+                        console.log("Response text  " + xhr.responseText);
+                        //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+                    }
+                });
+            
+            })
+            .fail(function() {
+          
+                window.location = 'http://localhost:8012/Acodemia/';
+        
+               
             });
+
+
         }
 
 
@@ -74,6 +100,42 @@ include_once 'navbar/navbar.php';
                     else $(this).parent().parent().find('.DescripcionCurso').css('display','none'); 
                 }); 
             }); 
+
+            $( "#Terminar" ).click(function() 
+            {
+                var userMail=0;
+                var queryString = window.location.search;
+                var urlParams = new URLSearchParams(queryString);
+                var searchText = urlParams.get('level');
+
+                var jwt = getCookie('jwt');
+                $.post("api/validate_token.php", JSON.stringify({ jwt:jwt }))
+                .done(function(result) {
+
+                    var userMail = result.data.email;
+                    
+                    $.ajax({
+                        url: "level/completarLevel.php",
+                        type : "POST",
+                        data: {'level': searchText,'mail': userMail}, 
+                        success : function(result) {
+
+                            alert("Nivel terminado");
+                            //$("#levelPrincipal").html(result);                         
+                            
+                        },
+                        error: function(xhr, resp, text){
+                            // on error, tell the user sign up failed
+                           alert("Error al tratar de terminar el nivel, intente de nuevo");
+                            console.log("Error al crear cuenta  " + text);
+                            console.log("Response text  " + xhr.responseText);
+                            //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+                        }
+                    });
+                
+                })
+
+            });
         }, 600);
 
     </script>

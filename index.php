@@ -33,6 +33,24 @@ include_once 'navbar/navbar.php';
                     //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
                 }
             });
+
+            $.ajax({
+                url: "Main/topSeller.php",
+                type : "POST",
+                success : function(result) {
+
+                    //alert(result);
+                    $("#topSeller").html(result);                         
+                    
+                },
+                error: function(xhr, resp, text){
+                    // on error, tell the user sign up failed
+                    window.location = ' error/404.html';
+                    console.log("Error al crear cuenta  " + text);
+                    console.log("Response text  " + xhr.responseText);
+                    //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+                }
+            });
         }
     </script>
 
@@ -75,11 +93,12 @@ include_once 'navbar/navbar.php';
             <li class="nav-item flex-sm-fill">
               <a id="home2-tab" data-toggle="tab" href="#home2" role="tab" aria-controls="home2" aria-selected="true" class="nav-link text-uppercase mr-sm-3 rounded-0 active">Cursos Mejor Calificados</a>
             </li>
+
             <li class="nav-item flex-sm-fill">
               <a id="profile2-tab" data-toggle="tab" href="#profile2" role="tab" aria-controls="profile2" aria-selected="false" class="nav-link text-uppercase mr-sm-3 rounded-0">Cursos Mas Vendidos</a>
             </li>
           
-          </ul>
+        </ul>
 
           <div id="myTab2Content" class="tab-content">
             <div id="home2" role="tabpanel" aria-labelledby="home-tab" class="tab-pane fade px-4 py-5 show active">
@@ -111,145 +130,17 @@ include_once 'navbar/navbar.php';
 
                    <!-- ---------------Carousel------------------------------>
                    <!--https://codingyaar.com/bootstrap-4-carousel-multiple-items-responsive/-->
-                   <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" style=" padding-left: 5%; padding-right: 5%;">
-                        <div class="carousel-inner" >
-
-                            <div class="carousel-item active">
-                                <!--Card-->
-                                <div class="cards-wrapper">
-                                    <div class="card carousel">
-                                        <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
-                                        <div class="card-body">
-                                            <a href="course.php">
-                                                <h5 class="font-weight-normal">Titulo del curso 1</h5>
-                                            </a>
-                                            <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
-                                            <div class="d-flex my-4">
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i></div>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
-                                                <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card carousel d-none d-md-block">
-                                        <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
-                                        <div class="card-body">
-                                            <a href="#">
-                                                <h5 class="font-weight-normal">Titulo del curso 2</h5>
-                                            </a>
-                                            <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
-                                            <div class="d-flex my-4">
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i></div>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
-                                                <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card carousel d-none d-md-block">
-                                        <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
-                                        <div class="card-body">
-                                            <a href="#">
-                                                <h5 class="font-weight-normal">Titulo del curso 3</h5>
-                                            </a>
-                                            <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
-                                            <div class="d-flex my-4">
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-secondary"></i></div>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
-                                                <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <div class="carousel-item">
-                                <div class="cards-wrapper">
-                                    <div class="card carousel">
-                                        <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
-                                        <div class="card-body">
-                                            <a href="#">
-                                                <h5 class="font-weight-normal">Titulo del curso 4</h5>
-                                            </a>
-                                            <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
-                                            <div class="d-flex my-4">
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i></div>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
-                                                <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card carousel d-none d-md-block">
-                                        <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
-                                        <div class="card-body">
-                                            <a href="#">
-                                                <h5 class="font-weight-normal">Titulo del curso 5</h5>
-                                            </a>
-                                            <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
-                                            <div class="d-flex my-4">
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i></div>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
-                                                <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card carousel d-none d-md-block">
-                                        <img src="Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img-top" alt="...">
-                                        <div class="card-body">
-                                            <a href="#">
-                                                <h5 class="font-weight-normal">Titulo del curso 6</h5>
-                                            </a>
-                                            <div class="post-meta"><span class="small lh-120">Breve descripcion del lo que se trata el curso</span></div>
-                                            <div class="d-flex my-4">
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i>
-                                                <i class="star fas fa-star text-warning"></i></div>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="col pl-0"><span class="text-muted font-small d-block mb-2">Precio</span> <span class="h5 text-dark font-weight-bold">$300.00</span></div>
-                                                <div class="col pr-0"><span class="text-muted font-small d-block mb-2">Niveles</span> <span class="h5 text-dark font-weight-bold">8</span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
+                   <div id="carouselExampleControls2" class="carousel slide" data-ride="carousel" style=" padding-left: 5%; padding-right: 5%;">
+                        <div class="carousel-inner" id="topSeller" >
                         </div>
 
                         <!--Controles carrusel-->
-                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" style="margin-left: 2%;">
+                        <a class="carousel-control-prev" href="#carouselExampleControls2" role="button" data-slide="prev" style="margin-left: 2%;">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="sr-only">Previous</span>
                         </a>
 
-                        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next" style="margin-right: 2%;">
+                        <a class="carousel-control-next" href="#carouselExampleControls2" role="button" data-slide="next" style="margin-right: 2%;">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="sr-only">Next</span>
                         </a>

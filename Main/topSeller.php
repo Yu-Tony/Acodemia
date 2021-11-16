@@ -1,4 +1,14 @@
 <?php
+/*create procedure bestSellers()
+begin
+	create or replace view BestSellers as
+    select c.cursoId as cursoId, c.cursoNombre as cursoNombre, c.cursoMiniatura as cursoMiniatura, c.cursoDescripcion as cursoDescripcion, 
+    c.cursoCosto as cursoCosto, c.cursoNiveles as cursoNiveles, count(vc.ventaNivelId) as ventasCantidad
+    from Curso as c inner join Ventas_curso as vc on c.cursoId = vc.cursoId group by c.cursoId order by count(vc.ventaNivelId) desc limit 6;
+		
+	select cursoId, cursoNombre, cursoMiniatura, cursoDescripcion, cursoCosto, cursoNiveles, ventasCantidad from BestSellers;
+	drop view BestSellers;
+end &ZV*/
 
 require_once '../api/config/database.php'; 
     
@@ -8,7 +18,7 @@ $data = json_decode(file_get_contents("php://input"));
 $database = new Database();
 $db = $database->getConnection();
 
-$call = 'call topRated()';
+$call = 'call bestSellers()';
     
 // prepare
 $stmt = $db->prepare($call);
@@ -108,6 +118,4 @@ if($stmt->execute())
     }
 			
 }
-
-
 ?>

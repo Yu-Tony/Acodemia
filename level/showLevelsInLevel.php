@@ -13,6 +13,35 @@ $db = $database->getConnection();
 
 $searchWord = $_POST['course'];
 
+$mail = $_POST['mail'];
+$cursoComprado = 0;
+$userId =0;
+
+
+if($mail!=0)
+{
+    $call = 'call userGetId(?,@idUser)';
+
+    // prepare
+    $stmt = $db->prepare($call);
+
+
+    $stmt->bindParam(1, $mail);
+
+
+    // execute
+    
+    if($stmt->execute())
+    {
+        $sql = "SELECT @idUser";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+
+        list($userId) = $stmt->fetch(PDO::FETCH_NUM);
+                 
+    }
+}
+
 //print_r($_POST);
 
 $call =  $db->prepare('CALL showNiveles(:p_cursoid)');
@@ -39,21 +68,23 @@ if($call->execute())
 
          
 
-            if( $nivelCosto==0)
+            if( $nivelCosto==0|| ($cursoComprado==1))
             {
                 echo "<div class=\"row\" style=\"color: black;\">";
                     echo "<div class=\"col-8\" style=\" background-color: #80b5e2;\">";
                         echo "<h4>$nivelNombre</h4>";
                     echo "</div>";
                     echo "<div class=\"col-4\" style=\"background-color: #80b5e2;\">";
+                    if(($mail!=0))
+                    {
                         echo "<button style=\"margin-top: 6%;\" type=\"button\" class=\"btn btn-primary VerMas\"><i class=\"fa fa-plus\"></i></button>";
+                    }         
                     echo "</div>";
                     echo "<div class=\"col-12\">";
                         echo "<div class=\"DescripcionCurso\" style=\"background-color: #b8d2e5; display: none; padding:2%; margin-bottom: 2%;\" >";
                             echo "<h5>$nivelContenido</h5>";
                             echo "<br>";
                             echo "<h5>Costo del nivel: $$nivelCosto</h5>";
-                            echo "<button data-toggle=\"modal\" data-target=\"#modalPurchased\" class=\"btn btn-primary btn-category\" style=\"margin-top: 2%;\">Obtener este nivel</button>";
                             echo "<a class=\"btn btn-primary btn-category\" href=\"http://localhost:8012/Acodemia/level.php?course=$searchWord&level=$nivelId\">Ir al nivel</a>";
                         echo "</div>";
                     echo "</div>";
@@ -67,15 +98,54 @@ if($call->execute())
                         echo "<h4>$nivelNombre</h4>";
                     echo "</div>";
                     echo "<div class=\"col-4\" style=\"background-color: #80b5e2;\">";
+                    if(($mail!=0))
+                    {
                         echo "<button style=\"margin-top: 6%;\" type=\"button\" class=\"btn btn-primary VerMas\"><i class=\"fa fa-plus\"></i></button>";
-                    echo "</div>";
+                    }                             echo "</div>";
                     echo "<div class=\"col-sm-12\">";
                         echo "<div class=\"DescripcionCurso\" style=\"background-color: #b8d2e5; display: none; padding:2%; margin-bottom: 2%;\" >";
                             echo "<h5>$nivelContenido</h5>";
                             echo "<br>";
                             echo "<h5>Costo del nivel: $$nivelCosto</h5>";
-                            echo "<button type=\"button\" class=\"btn btn-primary btn-category\" data-toggle=\"modal\" data-target=\"#ModalPay\" >Comprar este nivel</button>";
-                            echo "<a class=\"btn btn-primary btn-category\" href=\"http://localhost:8012/Acodemia/level.php?course=$searchWord&level=$nivelId\">Ir al nivel</a>";
+
+                             /*delimiter &ZV
+                create procedure compraNivelVerificar(in p_user int, in p_nivel int)
+                begin
+                    select count(ventaNivelId) from Ventas_nivel where usuarioId = p_user and nivelId = p_nivel;
+                end &ZV
+                */
+
+                
+                $call =  $db->prepare('CALL compraNivelVerificar(:p_user, :p_nivel)');
+                $call->bindParam(':p_user', $userId, PDO::PARAM_INT); 
+                $call->bindParam(':p_nivel', $nivelId, PDO::PARAM_INT);
+
+                if($call->execute())
+                {
+                    $comentariosCurso = $call->fetchAll(PDO::FETCH_ASSOC);
+                    
+                    if($comentariosCurso!=null)
+                    {
+                        foreach ($comentariosCurso as $comentarios) 
+                        { 
+
+                            $existe= $comentarios['count(ventaNivelId)'];
+
+                            if($existe==0)
+                            {
+                                echo "<button type=\"button\" class=\"btn btn-primary btn-category btnNivel btnComprar\" data-toggle=\"modal\" data-target=\"#ModalPay\" >Comprar este nivel</button>";
+                            }
+                            else
+                            {
+                                echo "<a class=\"btn btn-primary btn-category\" href=\"http://localhost:8012/Acodemia/level.php?course=$searchWord&level=$nivelId\">Ir al nivel</a>";
+
+                            }
+                                                                                                   
+                        } 
+                    }
+                }
+
+
                         echo "</div>";
                     echo "</div>";
                 echo "</div>";
@@ -86,6 +156,7 @@ if($call->execute())
         } 
     }
 }
+
 
 ?>
 

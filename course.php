@@ -16,6 +16,7 @@ include_once 'navbar/navbar.php';
     <link rel="stylesheet" href="course/star.css">
     <!--<script src="course/star.js"></script>-->
     <link rel="stylesheet" href="course/input.css">
+    <script src="Payment/card.js"></script>
 
     <!--Toggle de los cursos-->
     <script> 
@@ -330,13 +331,135 @@ include_once 'navbar/navbar.php';
             $( ".btnComprar" ).click(function() 
             {
                 var precio = ($(this).siblings("div").find(".precioIndividual").html());
-                $('#PrecioObjetoComprado').html(precio);
-                
+                localStorage.setItem("precio", precio);
+    
+                if($(this).hasClass("btnCurso"))
+                {
+                   
+                    var cursoName = $('#displayName').html();
+                    localStorage.setItem("name", cursoName);
 
+                    localStorage.setItem("tipoCompra", "Curso");
+
+                    var queryString = window.location.search;
+                    var urlParams = new URLSearchParams(queryString);
+                    var searchText = urlParams.get('course');
+                    localStorage.setItem("id", searchText);
+
+                    console.log(localStorage);
+
+                }
+
+                if($(this).hasClass("btnNivel"))
+                {
+                    var nivelName =$(this).parent().parent().siblings(".divName").find(".nombreNivelDisplay").html();
+                    localStorage.setItem("name", nivelName);
+
+                    localStorage.setItem("tipoCompra", "Nivel");
+
+                    var nivelId =$(this).parent().parent().siblings(".divName").find(".nivelIdComprado").html();
+                    localStorage.setItem("id", nivelId);
+                    
+                    console.log(localStorage);
+                }
+                
+//
             });
 
-            
+            /*----------------------------------------------------------------------A;OS PARA LA TARJETA--------------------------------------------- */
+            $('#yearpicker').html('<option value="">Seleccionar un año</option>');
+            var html = '';
+                    for (var i =new Date().getFullYear(); i <= 2040; i++) {
+                        html += '<option value="' + i + '">' + i + '</option>';
+                    }
+                    $('#yearpicker').append(html);
 
+            /*----------------------------------------------------------------------COMPRAR CON TARJETA--------------------------------------------- */
+
+             $('#CardPayment').on('submit', function(e){
+                e.preventDefault();
+                
+                var jwt = getCookie('jwt');
+                $.post("api/validate_token.php", JSON.stringify({ jwt:jwt })).done(function(result) {
+                
+        
+                    var email = result.data.email;
+                    var temp = localStorage.getItem("tipoCompra");
+                    var id = localStorage.getItem("id");
+
+                    if(temp=="Curso")
+                    {
+                        $.ajax({
+                        url: "Payment/comprarCurso.php",
+                        type : "POST",
+                        data: {'idCurso': id,'mail': email, 'metodo': 1 }, 
+                        success : function(result) {
+
+                            //console.log(result);  
+                      
+                            $("#ResultPayment").html("Pago realizado exitosamente. Gracias por su compra");       
+  
+                            $(':input','#ModalPay')
+                            .not(':button, :submit, :reset, :hidden')
+                            .val('')
+                            .prop('checked', false)
+                            .prop('selected', false);
+
+                            localStorage.clear();                      
+                            
+                        },
+                        error: function(xhr, resp, text){
+                            
+                            if(text == "Gone")
+                            {
+                                alert("Error al hacer el pago, intente de nuevo");
+                            }
+
+                            console.log("Error al crear cuenta  " + text);
+                            console.log("Response text  " + xhr.responseText);
+                            localStorage.clear();  
+                    
+                        }
+                        });
+                    }
+                    else
+                    { 
+                        $.ajax({
+                        url: "Payment/comprarNivel.php",
+                        type : "POST",
+                        data: {'idNivel': id,'mail': email, 'metodo': 1 }, 
+                        success : function(result) {
+
+                
+                            $("#ResultPayment").html("Pago realizado exitosamente. Gracias por su compra");       
+                           
+                          
+                            $(':input','#ModalPay')
+                            .not(':button, :submit, :reset, :hidden')
+                            .val('')
+                            .prop('checked', false)
+                            .prop('selected', false);
+                                
+                            localStorage.clear();                  
+                            
+                        },
+                        error: function(xhr, resp, text){
+                            if(text == "Gone")
+                            {
+                                alert("Error al hacer el pago, intente de nuevo");
+                            }
+
+                            console.log("Error al crear cuenta  " + text);
+                            console.log("Response text  " + xhr.responseText);
+                            localStorage.clear(); 
+                        }
+                        });
+
+                    }
+                    
+                    })
+
+                }); 
 
 
         }, 600);
@@ -432,33 +555,68 @@ include_once 'navbar/navbar.php';
                         <div class="tab-content">
                             <!-- credit card info-->
                             <div id="credit-card" class="tab-pane fade show active pt-3">
-                                <form role="form" style="margin: 0px;" onsubmit="event.preventDefault()">
-                                    <div class="form-group"> <label for="username">
-                                            <h6>Card Owner</h6>
-                                        </label> <input type="text" name="username" placeholder="Card Owner Name" required class="form-control "> </div>
-                                    <div class="form-group"> <label for="cardNumber">
-                                            <h6>Card number</h6>
+                                <form role="form" style="margin: 0px;" id="CardPayment" onsubmit="event.preventDefault()">
+                                    <div class="form-group"> 
+                                        <label for="username">
+                                            <h6>Nombre del titular</h6>
+                                        </label> 
+                                        <input type="text" pattern="[a-zA-Z]*" id="cardName" name="username" placeholder="Nombre del titular de la tarjeta" required class="form-control"  oninput="validateCardName();"> 
+                                    </div>
+
+                                    <div class="form-group"> 
+                                        <label for="cardNumber">
+                                            <h6>Numero de tarjeta</h6>
                                         </label>
-                                        <div class="input-group"> <input type="text" name="cardNumber" placeholder="Valid card number" class="form-control " required>
-                                            <div class="input-group-append"> <span class="input-group-text text-muted"> <i class="fab fa-cc-visa mx-1"></i> <i class="fab fa-cc-mastercard mx-1"></i> <i class="fab fa-cc-amex mx-1"></i> </span> </div>
+                                        <div class="input-group"> 
+                                            <input type="number" name="cardNumber" id="cardNumber" placeholder="Número de tarjeta valido" class="form-control" oninput="validateCardNumber();" required>
+                                            <div class="input-group-append"> 
+                                                <span class="input-group-text text-muted"> 
+                                                    <i class="fab fa-cc-visa mx-1"></i> 
+                                                    <i class="fab fa-cc-mastercard mx-1"></i>
+                                                    <i class="fab fa-cc-amex mx-1"></i> 
+                                                </span> 
+                                            </div>
                                         </div>
                                     </div>
+
                                     <div class="row">
                                         <div class="col-sm-8">
                                             <div class="form-group"> <label><span class="hidden-xs">
-                                                        <h6>Expiration Date</h6>
+                                                        <h6>fecha de expiración</h6>
                                                     </span></label>
-                                                <div class="input-group"> <input type="number" placeholder="MM" name="" class="form-control" required> <input type="number" placeholder="YY" name="" class="form-control" required> </div>
+                                                <div class="input-group"> 
+                                                    <select required>
+                                                        <option value="">Selecciona un mes</option>
+                                                        <option value="01">Enero</option>
+                                                        <option value="02">Febrero </option>
+                                                        <option value="03">Marzo</option>
+                                                        <option value="04">Abril</option>
+                                                        <option value="05">Mayo</option>
+                                                        <option value="06">Junio</option>
+                                                        <option value="07">Julio</option>
+                                                        <option value="08">Agosto</option>
+                                                        <option value="09">Septiembre</option>
+                                                        <option value="10">Octubre</option>
+                                                        <option value="11">Noviembre</option>
+                                                        <option value="12">Diciembre</option>
+                                                    </select>
+    
+                                                    <select required name="yearpicker" id="yearpicker"></select>
+                                                    
+                                                </div>
                                             </div>
                                         </div>
+
                                         <div class="col-sm-4">
-                                            <div class="form-group mb-4"> <label data-toggle="tooltip" title="Three digit CV code on the back of your card">
-                                                    <h6>CVV <i class="fa fa-question-circle d-inline"></i></h6>
-                                                </label> <input type="text" required class="form-control"> </div>
+                                            <div class="form-group mb-4"> <label data-toggle="tooltip" title="Los 3 dígitos atrás de tu tarjeta">
+                                                    <h6>Codigo de seguridad <i class="fa fa-question-circle d-inline"></i></h6>
+                                                </label> <input id="CVV"  maxlength="3" pattern="\d{3}" type="password" placeholder="3 dígitos" required class="form-control" oninput="validateCardCVV();"> </div>
                                         </div>
+                                        
                                     </div>
+                                    <div id="ResultPayment" style="backgrund-color: rgb(119,221,119);"></div>
                                     <div class="card-footer"> 
-                                        <button type="button" class="subscribe btn btn-primary btn-block shadow-sm"> Confirm Payment </button>
+                                        <button type="submit" class="subscribe btn btn-primary btn-block shadow-sm"> Confirmar Pago </button>
                                 </form>
                             </div>
                             <!-- End -->
@@ -481,6 +639,8 @@ include_once 'navbar/navbar.php';
 
         </div>
     </div>
+
+
     
  
 
