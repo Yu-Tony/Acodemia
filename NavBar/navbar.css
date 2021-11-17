@@ -99,7 +99,8 @@
 }
 
 .dropdown-menu {
-  min-height: 200%;
+  max-height: 280px !important;
+  overflow-y: auto !important;
 }
 
 #bootstrap-edits .add-to-ul {

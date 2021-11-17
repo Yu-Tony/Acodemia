@@ -1,17 +1,23 @@
-<!DOCTYPE html>
+<?php
 
-<head>
-<title></title>
-</head>
+//https://stackoverflow.com/questions/1683794/retrieving-multiple-result-sets-with-stored-procedure-in-php-mysqli
 
-<body>
+require_once '../api/config/database.php'; 
 
-<form action="testNav.php" method="post" enctype="multipart/form-data">
-<label for="file"><span>Filename:</span></label>
-<input type="file" name="file" id="file" /> 
-<br />
-<input type="submit" name="submit" value="Submit" />
-</form>
+$database = new Database();
+$db = $database->getConnection();
 
-</body>
-</html>
+$stmt = $db->prepare('CALL Prueba1()');
+$stmt->execute();
+// read first result set
+while ($row = $stmt->fetch()) {
+    printf("%d\n", $row[0]);
+}
+$stmt->nextRowset();
+// read second result set
+while ($row = $stmt->fetch()) {
+    printf("%d\n", $row[0]);
+}
+
+
+?>

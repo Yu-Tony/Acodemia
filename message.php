@@ -20,6 +20,37 @@ include_once 'navbar/navbar.php';
 
     $(document).ready(function() {
 
+      var jwt = getCookie('jwt');
+        $.post("api/validate_token.php", JSON.stringify({ jwt:jwt }))
+        .done(function(result) {
+
+          var userMail = result.data.email;
+          var queryString = window.location.search;
+          var urlParams = new URLSearchParams(queryString);
+          var chat = urlParams.get('chat');
+          var otherUser = 0;
+
+          $.ajax({
+            url: "Messages/getMessages.php",
+              type : "POST",
+              data: {'idChat': chat, 'mail': userMail, 'idOtherUser':otherUser}, 
+              success : function(result) {
+                  //alert(result);
+              
+                  $( "#ChatMessages" ).html( result );
+
+              },
+              error: function(xhr, resp, text){
+                  // on error, tell the user sign up failed
+                  alert("Error al enviar el mensaje. Intente de nuevo");
+                  console.log("Error al crear cuenta  " + text);
+                  console.log("Response text  " + xhr.responseText);
+          
+              }
+          });
+
+        })
+
 
 
       $( "#sendMessage" ).click(function() 
@@ -69,7 +100,38 @@ include_once 'navbar/navbar.php';
 
       });
 
+      getMessagesChat();
+
     });
+
+
+    function getMessagesChat()
+        {
+            var jwt = getCookie('jwt');
+                $.post("api/validate_token.php", JSON.stringify({ jwt:jwt })).done(function(result) 
+                {
+                  var MailAccount = result.data.email;
+                  $.ajax({
+                    url: "NavBar/getUsersMessages.php",
+                    type : "POST",
+                    data: {'mail': MailAccount}, 
+                    success : function(result) {
+                      
+                      $("#messageChats").html(result);
+                   
+                     
+                        
+                    },
+                    error: function(xhr, resp, text){
+                        // on error, tell the user sign up failed
+                        //window.location = ' error/404.html';
+                        console.log("Error al crear cuenta  " + text);
+                        console.log("Response text  " + xhr.responseText);
+                        //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+                    }
+                  });
+                });
+        }
 
 
     </script>
@@ -90,24 +152,8 @@ include_once 'navbar/navbar.php';
             <div class="msg_history" id="ChatMessages">
 
 
-                    <div class="incoming_msg">
-                      <div class="incoming_msg_img"> <img class="img-msg" src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                      <div class="received_msg">
-                        <div class="received_withd_msg">
-                          John Suh
-                          <p>We work directly with our designers and suppliers,
-                            and sell direct to you, which means quality, exclusive
-                            products, at a price anyone can afford.</p>
-                          <span class="time_date"> 11:01 AM    |    Today</span></div>
-                      </div>
-                    </div>
-
-                    <div class="outgoing_msg">
-                      <div class="sent_msg">
-                        Jisung Park
-                        <p>Outgoing text</p>
-                        <span class="time_date"> 11:01 AM    |    Today</span> </div>
-                    </div>
+                  
+             
 
                     
             </div>

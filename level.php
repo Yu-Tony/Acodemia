@@ -19,6 +19,8 @@ include_once 'navbar/navbar.php';
         $(document).ready()
         {  
          
+         getMessagesChat();
+
             var userMail=0;
             var queryString = window.location.search;
             var urlParams = new URLSearchParams(queryString);
@@ -91,6 +93,36 @@ include_once 'navbar/navbar.php';
 
 
         }
+
+        
+        function getMessagesChat()
+        {
+            var jwt = getCookie('jwt');
+                $.post("api/validate_token.php", JSON.stringify({ jwt:jwt })).done(function(result) 
+                {
+                  var MailAccount = result.data.email;
+                  $.ajax({
+                    url: "NavBar/getUsersMessages.php",
+                    type : "POST",
+                    data: {'mail': MailAccount}, 
+                    success : function(result) {
+                      
+                      $("#messageChats").html(result);
+                   
+                     
+                        
+                    },
+                    error: function(xhr, resp, text){
+                        // on error, tell the user sign up failed
+                        //window.location = ' error/404.html';
+                        console.log("Error al crear cuenta  " + text);
+                        console.log("Response text  " + xhr.responseText);
+                        //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+                    }
+                  });
+                });
+        }
+
 
 
         window.setTimeout(function(){

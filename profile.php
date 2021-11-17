@@ -26,6 +26,7 @@ include_once 'navbar/navbar.php';
       
       showUpdateAccountForm();
       getTypeAccount();
+      getMessagesChat();
 
       
       
@@ -68,26 +69,27 @@ include_once 'navbar/navbar.php';
           var parametros = {
                   "valorID" : result.data.id
           };
-        $.ajax({
-                data:  parametros, //datos que se envian a traves de ajax
-                url:   'profile/view.php', //archivo que recibe la peticion
-                type:  'post', //método de envio
-                beforeSend: function () {
-                 
-                        //$("#resultado").html("Procesando, espere por favor...");
-                },
-                success:  function (response) { //una vez que el archivo recibe el request lo procesa y lo devuelve
-                  $("#resultado").html(response);
-                        //alert(response);
-                        //alert("wooo");
-                },
-                error: function(xhr, resp, text){
-                // on error, tell the user sign up failed
-                console.log("Error al cargar imagen  " + text);
-                console.log("otro coso  " + xhr.responseText);
-              
-            }
-        });
+          
+          $.ajax({
+                  data:  parametros, //datos que se envian a traves de ajax
+                  url:   'profile/view.php', //archivo que recibe la peticion
+                  type:  'post', //método de envio
+                  beforeSend: function () {
+                  
+                          //$("#resultado").html("Procesando, espere por favor...");
+                  },
+                  success:  function (response) { //una vez que el archivo recibe el request lo procesa y lo devuelve
+                    $("#resultado").html(response);
+                          //alert(response);
+                          //alert("wooo");
+                  },
+                  error: function(xhr, resp, text){
+                  // on error, tell the user sign up failed
+                  console.log("Error al cargar imagen  " + text);
+                  console.log("otro coso  " + xhr.responseText);
+                
+              }
+          });
 
 
    
@@ -114,7 +116,7 @@ include_once 'navbar/navbar.php';
             $('.historial-escuela').css('display','inline');
             $('.historial-alumnos').css('display','none');
   
-            /* $.ajax({
+             $.ajax({
                url: "Profile/historialMaestros.php",
                type : "POST",
                data: {'mail': MailAccount, 'page': historyPage}, 
@@ -131,7 +133,7 @@ include_once 'navbar/navbar.php';
                    console.log("Response text  " + xhr.responseText);
                    //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
                }
-            });*/
+            });
           }
           else
           {
@@ -354,6 +356,36 @@ include_once 'navbar/navbar.php';
     }); 
    
 
+   
+    function getMessagesChat()
+        {
+            var jwt = getCookie('jwt');
+                $.post("api/validate_token.php", JSON.stringify({ jwt:jwt })).done(function(result) 
+                {
+                  var MailAccount = result.data.email;
+                  $.ajax({
+                    url: "NavBar/getUsersMessages.php",
+                    type : "POST",
+                    data: {'mail': MailAccount}, 
+                    success : function(result) {
+                      
+                      $("#messageChats").html(result);
+                   
+                     
+                        
+                    },
+                    error: function(xhr, resp, text){
+                        // on error, tell the user sign up failed
+                        //window.location = ' error/404.html';
+                        console.log("Error al crear cuenta  " + text);
+                        console.log("Response text  " + xhr.responseText);
+                        //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+                    }
+                  });
+                });
+        }
+
+
   </script>
 
 </head>
@@ -551,20 +583,23 @@ include_once 'navbar/navbar.php';
                           <div class="row" style="color: black;">
                     
                             <div class="col-sm-12" style=" background-color: transparent;">
-                              <div class="row" id="historialEscuela">
+                              <div class="row"  id="historialEscuela">
 
                                 <div class="col-sm-12" style="margin-bottom:2%">
-                                  <div class="card" style="background-color:#9ed5fb; margin: 0px;">
+                                  <div class="card" style="background-color:#9ed5fb; margin: 0px;" >
                                     <div class="card-body" style="margin-bottom: 3%">
-                                      <div class="row">
+                                      <div class="row" >
 
+                                      <!--imagen y nombre-->
                                         <div class="col-sm-4">
                                           <div class="row" style="margin-bottom: 3%;"> <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img" alt="..."></div>
                                           <div class="row"><h6>Titulo del curso</h6></div>
                                         </div>
 
+                                         <!--espacio-->
                                         <div class="col-sm-2"></div>
 
+                                         <!--datos de precio, porcentaje, etc-->
                                         <div class="col-sm-6" style="text-align: right;">
                                       
                                             <button style="margin-top: 6%; margin-bottom: 5%; width: 50%;" type="button" class="btn btn-primary VerMas"><i class="fa fa-plus"></i></button>
@@ -582,6 +617,7 @@ include_once 'navbar/navbar.php';
                                           
                                         </div>
 
+                                         <!--espacio de la mini card-->
                                         <div class="col-sm-12" >
                                           <div class="DescripcionCurso" style="background-color: #b8d2e5; display: none; margin-bottom: 2%;" >
                                             
@@ -608,33 +644,7 @@ include_once 'navbar/navbar.php';
                                 
                                           </div>
                                         </div>
-                                        
-                                        <div class="col-sm-12" >
-                                          <div class="DescripcionCurso" style="background-color: #b8d2e5; display: none; margin-bottom: 2%;" >
-                                            
-                                            <div class="row p-2"> 
-
-                                              <div class="col-4 col-lg-4">
-                                                <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img" alt="...">
-                                                <br>
-                                                <h6>Nombre del alumno</h6>
-                                           
-                                              </div>
-
-                                              <div class="col-lg-8 col-12" style="text-align: right;">
-                                                Feha de inscripción
-                                                <br>
-                                                28% completado
-                                                <br>
-                                                $1,000.00
-                                                <br>
-                                                Pago con tarjeta
-                                              </div>
-
-                                            </div>
-                                
-                                          </div>
-                                        </div>
+            
 
                                             <!--Navigation-->      
                                         <div class="col-sm-12" >
@@ -675,11 +685,7 @@ include_once 'navbar/navbar.php';
                                 
                                           </div>
                                         </div>
-                                        
-                                        <!---->
 
-                                
-                                        
                                     </div>
                                     </div>
                                   </div>

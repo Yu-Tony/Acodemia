@@ -278,8 +278,14 @@
                     </div>";
                     echo "</div>";
                     echo "<div class=\"text-left \" style=\"padding-top:20%;\">";
-                    echo "<h6 class=\"subtitle-text\">$usuarioNombre<button onClick=\"window.location.href='http://localhost:8012/Acodemia/message.php?user=$usuarioIdResult';\" style=\"width: 10%; margin-left: 2%; margin-top: 0px;\" class=\"btn btn-secondary\"><i class=\"fas fa-envelope\"></i></button></h6>";
+                    if(( $userMail!=0)&&($tipo==0))
+                    {
+                        echo "<h6 class=\"subtitle-text\">$usuarioNombre<button onClick=\"window.location.href='http://localhost:8012/Acodemia/message.php?user=$usuarioIdResult';\" style=\"width: 10%; margin-left: 2%; margin-top: 0px;\" class=\"btn btn-secondary\"><i class=\"fas fa-envelope\"></i></button></h6>";
+
+                    }
+
                     echo "</div>";
+
                     echo "</div>";
                     echo "<div class=\"col-12 col-sm-4\" ></div>";
                     echo "</div>";

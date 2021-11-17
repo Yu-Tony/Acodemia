@@ -160,6 +160,31 @@
                 document.getElementById("NavUserNotLog").style.display = "none";
 
                 getTypeAccount();
+
+                var jwt = getCookie('jwt');
+                $.post("api/validate_token.php", JSON.stringify({ jwt:jwt })).done(function(result) 
+                {
+                  var MailAccount = result.data.email;
+                  $.ajax({
+                    url: "NavBar/getUsersMessages.php",
+                    type : "POST",
+                    data: {'mail': MailAccount}, 
+                    success : function(result) {
+                      
+                      $("#messageChats").html(result);
+                   
+                     
+                        
+                    },
+                    error: function(xhr, resp, text){
+                        // on error, tell the user sign up failed
+                        //window.location = ' error/404.html';
+                        console.log("Error al crear cuenta  " + text);
+                        console.log("Response text  " + xhr.responseText);
+                        //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+                    }
+                  });
+                });
                
             },
             error: function(xhr, resp, text){
@@ -173,6 +198,8 @@
                 login_form.find('input').val('');
             }
         });
+
+
 
         return false;
     });
@@ -307,10 +334,10 @@
                 <div class="navbar-nav" id="NavUserLog" style="display: none;">
                     <button type="button" style="width: 200px;margin: 0 auto;display: none;" onClick="window.location.href='http://localhost:8012/Acodemia/create.php';" class="btn btn-primary" id="btn-crear-curso" >Crear Curso</button>
 
-                    <div class="btn-group">
+                  <div class="btn-group">
        
                       <button type="button"  id="UserNameLog" style="width: 200%; margin-left: 5%;" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img style="height:35px;" src="https://64.media.tumblr.com/2d670bdba5057dddf2e747e441412798/e6c29b6fecca43a4-cf/s1280x1920/28e06a4b3ab18fff6e733cb9a3701c3eadc731a4.jpg" class="avatar" alt="Avatar"> 
+                        <img style="height:35px;" src="https://64.media.tumblr.com/2d670bdba5057dddf2e747e441412798/e6c29b6fecca43a4-cf/s1280x1920/28e06a4b3ab18fff6e733cb9a3701c3eadc731a4.jpg" class="avatar" alt="Avatar"> 
                       </button>
                       <div class="dropdown-menu dropdown-menu-right">
                         <a href="http://localhost:8012/Acodemia/profile.php" class="dropdown-item"><i class="fa fa-user-o"></i> Perfil</a></a>
@@ -318,6 +345,24 @@
                         <a href="#" class="dropdown-item" onclick="LogOut()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesion</a></a>
                       </div>
                   </div>
+
+                   <!--Dropdown https://www.codeply.com/p/shJzHGE84z-->
+                   
+            <div class="navbar-nav">
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" style="color: whitesmoke;">Mensajes</a>
+
+                    <ul class="dropdown-menu add-to-ul" aria-labelledby="navbarDropdownMenuLink" id="messageChats">
+
+
+
+                    </ul>
+                </div>
+            </div>
+
+ <!--Dropdown-->
+
+                  
                 </div>
              
  
