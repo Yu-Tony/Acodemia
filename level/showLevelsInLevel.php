@@ -12,8 +12,8 @@ $db = $database->getConnection();
 ////////////////////////////
 
 $searchWord = $_POST['course'];
-
 $mail = $_POST['mail'];
+$tipo = $_POST['tipo'];
 $cursoComprado = 0;
 $userId =0;
 
@@ -39,6 +39,35 @@ if($mail!=0)
 
         list($userId) = $stmt->fetch(PDO::FETCH_NUM);
                  
+    }
+}
+
+
+$call =  $db->prepare('CALL compraCursoVerificar(:p_user, :p_curso)');
+$call->bindParam(':p_user', $userId, PDO::PARAM_INT); 
+$call->bindParam(':p_curso', $searchWord, PDO::PARAM_INT);
+
+if($call->execute())
+{
+    $comentariosCurso = $call->fetchAll(PDO::FETCH_ASSOC);
+    
+    if($comentariosCurso!=null)
+    {
+        foreach ($comentariosCurso as $comentarios) 
+        { 
+
+            $existe= $comentarios['count(ventaCursoId)'];
+
+            if($existe==0)
+            {
+                $cursoComprado = 0;
+            }
+            else
+            {
+                $cursoComprado = 1;
+            }
+                                                                                   
+        } 
     }
 }
 
@@ -85,7 +114,11 @@ if($call->execute())
                             echo "<h5>$nivelContenido</h5>";
                             echo "<br>";
                             echo "<h5>Costo del nivel: $$nivelCosto</h5>";
-                            echo "<a class=\"btn btn-primary btn-category\" href=\"http://localhost:8012/Acodemia/level.php?course=$searchWord&level=$nivelId\">Ir al nivel</a>";
+                            if($tipo==0)
+                            {
+                              echo "<a class=\"btn btn-primary btn-category\" href=\"http://localhost:8012/Acodemia/level.php?course=$searchWord&level=$nivelId\">Ir al nivel</a>";
+
+                            }
                         echo "</div>";
                     echo "</div>";
                 echo "</div>";
@@ -131,16 +164,19 @@ if($call->execute())
 
                             $existe= $comentarios['count(ventaNivelId)'];
 
-                            if($existe==0)
+                            if($tipo == 0)
                             {
-                                echo "<button type=\"button\" class=\"btn btn-primary btn-category btnNivel btnComprar\" data-toggle=\"modal\" data-target=\"#ModalPay\" >Comprar este nivel</button>";
+                                if($existe==0)
+                                {
+                                    echo "<button type=\"button\" class=\"btn btn-primary btn-category btnNivel btnComprar\" data-toggle=\"modal\" data-target=\"#ModalPay\" >Comprar este nivel</button>";
+                                }
+                                else
+                                {
+                                    echo "<a class=\"btn btn-primary btn-category\" href=\"http://localhost:8012/Acodemia/level.php?course=$searchWord&level=$nivelId\">Ir al nivel</a>";
+    
+                                }
                             }
-                            else
-                            {
-                                echo "<a class=\"btn btn-primary btn-category\" href=\"http://localhost:8012/Acodemia/level.php?course=$searchWord&level=$nivelId\">Ir al nivel</a>";
-
-                            }
-                                                                                                   
+                                                                      
                         } 
                     }
                 }

@@ -36,11 +36,12 @@ include_once 'navbar/navbar.php';
                 $.post("api/validate_token.php", JSON.stringify({ jwt:jwt }))
                 .done(function(result) {
                     userMail = result.data.email;
+                    var tipo=result.data.typeAccount;
                     
                     $.ajax({
                         url: "course/showCourse.php",
                         type : "POST",
-                        data: {'course': searchText,'mail': userMail }, 
+                        data: {'course': searchText,'mail': userMail, 'tipo': tipo }, 
                         success : function(result) {
 
               

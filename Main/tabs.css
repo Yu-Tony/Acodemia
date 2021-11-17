@@ -14,11 +14,21 @@
    
 }
 
+
+  
+.nav-link.text-uppercase {
+  color: rgb(228, 249, 255) !important;
+
+}
+
 .with-arrow .nav-link.active {
     position: relative;
     background-color:  #143669;
+    color: rgb(228, 249, 255) !important;
   }
   
+  
+
   .with-arrow .nav-link.active::after {
     content: '';
     border-left: 6px solid transparent;
@@ -30,4 +40,4 @@
     transform: translateX(-50%);
     display: block;
   }
-  
+

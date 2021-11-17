@@ -30,6 +30,7 @@ include_once 'navbar/navbar.php';
             .done(function(result) {
 
                 var userMail = result.data.email;
+                var tipo=result.data.typeAccount;
                 
                 $.ajax({
                     url: "level/showLevel.php",
@@ -55,7 +56,7 @@ include_once 'navbar/navbar.php';
                 $.ajax({
                     url: "level/showLevelsInLevel.php",
                     type : "POST",
-                    data: {'course': searchCourse, 'course': searchCourse, 'mail': userMail}, 
+                    data: {'course': searchCourse, 'course': searchCourse, 'mail': userMail, 'tipo': tipo}, 
                     success : function(result) {
 
                         //alert(result);
@@ -121,6 +122,8 @@ include_once 'navbar/navbar.php';
                         success : function(result) {
 
                             alert("Nivel terminado");
+                            document.getElementById('Terminar').style.visibility = 'hidden';
+                            //
                             //$("#levelPrincipal").html(result);                         
                             
                         },

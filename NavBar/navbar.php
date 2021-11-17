@@ -149,7 +149,7 @@
             success : function(result){
        
                 // store jwt to cookie
-                setCookie("jwt", result.jwt, 1);
+                setCookie("jwt", result.jwt, 10);
                 console.log("sucess");
                 // show home page & tell the user it was a successful login
                 /*showHomePage();*/

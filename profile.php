@@ -18,6 +18,7 @@ include_once 'navbar/navbar.php';
 
       var AccountTypeGlobal = 0;
       var MailAccount = 0;
+      var historyPage = 1;
 
     //--------------------------------Comenzar imagen--------------------//
     $(document).ready()
@@ -25,6 +26,8 @@ include_once 'navbar/navbar.php';
       
       showUpdateAccountForm();
       getTypeAccount();
+
+      
       
     }
     
@@ -107,15 +110,52 @@ include_once 'navbar/navbar.php';
          // alert(result.data.typeAccount);
           if(AccountTypeGlobal==1)
           {
-            console.log("TYPE 1");
+           console.log("TYPE 1");
             $('.historial-escuela').css('display','inline');
             $('.historial-alumnos').css('display','none');
+  
+            /* $.ajax({
+               url: "Profile/historialMaestros.php",
+               type : "POST",
+               data: {'mail': MailAccount, 'page': historyPage}, 
+               success : function(result) {
+                $('#historialEscuela').html(result);
+                   //alert(result);
+                   //$("#levelPrincipal").html(result);                         
+                   
+               },
+               error: function(xhr, resp, text){
+                   // on error, tell the user sign up failed
+                   window.location = ' error/404.html';
+                   console.log("Error al crear cuenta  " + text);
+                   console.log("Response text  " + xhr.responseText);
+                   //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+               }
+            });*/
           }
           else
           {
             console.log("TYPE 0");
             $('.historial-escuela').css('display','none');
             $('.historial-alumnos').css('display','inline');
+            $.ajax({
+               url: "Profile/historialAlumnos.php",
+               type : "POST",
+               data: {'mail': MailAccount, 'page': historyPage}, 
+               success : function(result) {
+                  $('#historialAlumno').html(result);
+                   //alert(result);
+                   //$("#levelPrincipal").html(result);                         
+                   
+               },
+               error: function(xhr, resp, text){
+                   // on error, tell the user sign up failed
+                   window.location = ' error/404.html';
+                   console.log("Error al crear cuenta  " + text);
+                   console.log("Response text  " + xhr.responseText);
+                   //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+               }
+            });
           }
 
         })
@@ -253,6 +293,66 @@ include_once 'navbar/navbar.php';
             }
         }
     
+ //-------------------------------------------------------------------------------------------------------------------------------------------//
+    $(document).on('click','#NextAlumno', function() {
+      historyPage = historyPage + 1;
+     
+      $.ajax({
+               url: "Profile/historialAlumnos.php",
+               type : "POST",
+               data: {'mail': MailAccount, 'page': historyPage}, 
+               success : function(result) {
+
+                $('#historialAlumno').html(result);
+                  
+                   //$("#levelPrincipal").html(result);                         
+                   
+               },
+               error: function(xhr, resp, text){
+                   // on error, tell the user sign up failed
+                   historyPage = historyPage - 1;
+                   
+                   //window.location = ' error/404.html';
+                   console.log("Error al crear cuenta  " + text);
+                   console.log("Response text  " + xhr.responseText);
+                   //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+               }
+      });
+
+    }); 
+
+    $(document).on('click','#PrevAlumno', function() {
+
+      if(historyPage>1)
+        {
+   
+          historyPage = historyPage - 1;
+         
+          $.ajax({
+               url: "Profile/historialAlumnos.php",
+               type : "POST",
+               data: {'mail': MailAccount, 'page': historyPage}, 
+               success : function(result) {
+
+                $('#historialAlumno').html(result);
+                  
+                   //$("#levelPrincipal").html(result);                         
+                   
+               },
+               error: function(xhr, resp, text){
+                   // on error, tell the user sign up failed
+                   historyPage = historyPage + 1;
+                   
+                   //window.location = ' error/404.html';
+                   console.log("Error al crear cuenta  " + text);
+                   console.log("Response text  " + xhr.responseText);
+                   //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+               }
+      });
+        }
+     
+    }); 
+   
 
   </script>
 
@@ -388,56 +488,19 @@ include_once 'navbar/navbar.php';
                   <!--Historial de cursos-->
             
                   <div class="row historial-alumnos" style="display: none; margin-top: 5%;  margin-bottom:5%">
+                  
                     <div class="col-sm-12" style="padding: 0%; margin-top: 5%; margin-bottom: 5%;">
                       <div class="card" style="background-color: whitesmoke;">
-                        <div class="card-body">
-                          <h5 class="d-flex align-items-center mb-3">Historial de cursos</h5>
+                       <h5 class="d-flex align-items-center mb-3">Historial de cursos</h5>
+                        <div class="card-body" id="historialAlumno">
+                         
                 
                           <!--Cards historial-->
-                          <div class="row" style="padding-bottom: 2%;">
-                            <div class="col-sm-12">
-                              <div class="card" style="background-color:#9ed5fb;">
-                                <div class="card-body" style="margin-left:3%;">
-                                  <div class="row">
-                                    <div class="col-sm-4" style="margin-right: 3%;">
-                                      <div class="row" style="margin-bottom: 3%;"> <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img" alt="..."></div>
-                                      <div class="row"><a href="http://localhost:8012/Acodemia/course.php">Titulo del curso</a></div>
-                                    </div>
-                                    <div class="col-sm-6" >
-                                      <div class="row">Progreso 23%</div>
-                                      <div class="row">Fecha de inscripción 23/01/21</div>
-                                      <div class="row">Fecha de terminación del curso 02/05/21</div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            
-                          </div>
+                  
 
-                          <div class="row" style="padding-bottom: 2%;">
-                            <div class="col-sm-12">
-                              <div class="card" style="background-color:#9ed5fb;">
-                                <div class="card-body" style="margin-left:3%;">
-                                  <div class="row">
-                                    <div class="col-sm-4" style="margin-right: 3%;">
-                                      <div class="row" style="margin-bottom: 3%;"> <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img" alt="..."></div>
-                                      <div class="row"><a href="#">Titulo del curso</a></div>
-                                    </div>
-                                    <div class="col-sm-6" >
-                                      <div class="row">Progreso 23%</div>
-                                      <div class="row">Fecha de inscripcion 23/01/21</div>
-                                      <div class="row">Ultima vez que se accedió 02/05/21</div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            
-                          </div>
-                          
 
-                           <!--Navigation-->
+                        </div>
+                          <!--Navigation-->
                           <div class="row" style="margin-top: 5%;">
                             <div class="col-4"></div>
 
@@ -446,18 +509,15 @@ include_once 'navbar/navbar.php';
                                   <ul class="pagination">
 
                                     <li class="page-item">
-                                      <a class="page-link" href="#" aria-label="Previous">
+                                      <a class="page-link"  id="PrevAlumno" aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                         <span class="sr-only">Previous</span>
                                       </a>
                                     </li>
 
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
 
                                     <li class="page-item">
-                                      <a class="page-link" href="#" aria-label="Next">
+                                      <a class="page-link" id="NextAlumno" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                         <span class="sr-only">Next</span>
                                       </a>
@@ -470,9 +530,9 @@ include_once 'navbar/navbar.php';
                             <div class="col-4"></div>
                           </div>
 
-                        </div>
                       </div>
                     </div>
+
                   </div>
       
              
@@ -485,14 +545,14 @@ include_once 'navbar/navbar.php';
                     <div class="col-sm-12" style="padding: 0%; margin-top: 5%; margin-bottom: 5%;">
                       
                       <div class="card" style="background-color: whitesmoke; ">
+                       <h5 class="d-flex align-items-center mb-3">Historial de cursos</h5>
                         <div class="card-body">
-                          <h5 class="d-flex align-items-center mb-3">Historial de cursos</h5>
-                
                                 <!--Curso-->
                           <div class="row" style="color: black;">
                     
                             <div class="col-sm-12" style=" background-color: transparent;">
-                              <div class="row" >
+                              <div class="row" id="historialEscuela">
+
                                 <div class="col-sm-12" style="margin-bottom:2%">
                                   <div class="card" style="background-color:#9ed5fb; margin: 0px;">
                                     <div class="card-body" style="margin-bottom: 3%">
@@ -630,110 +690,6 @@ include_once 'navbar/navbar.php';
                                     <div class="card-body" style="margin-bottom: 3%">
                                       <div class="row">
 
-                                        <div class="col-sm-4">
-                                          <div class="row" style="margin-bottom: 3%;"> <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img" alt="..."></div>
-                                          <div class="row"><h6>Titulo del curso</h6></div>
-                                        </div>
-
-                                        <div class="col-sm-2"></div>
-
-                                        <div class="col-sm-6" style="text-align: right;">
-                                      
-                                            <button style="margin-top: 6%; margin-bottom: 5%; width: 50%;" type="button" class="btn btn-primary VerMas"><i class="fa fa-plus"></i></button>
-                                            <br>
-                                            Alumnos 33
-                                            <br>
-                                            33% terminado
-                                            <hr>
-                                            <div  style="text-align: right;"> Pagos con tarjeta: $2,000.00</div>
-
-                                            <div  style="text-align: right;"> Pagos con PayPal: $2,000.00</div>
-                                            <hr>
-                                            Total: $4,000.00
-
-                                          
-                                        </div>
-
-                                        <div class="col-sm-12" >
-                                          <div class="DescripcionCurso" style="background-color: #b8d2e5; display: none; margin-bottom: 2%;" >
-                                            
-                                            <div class="row p-2"> 
-
-                                              <div class="col-3">
-                                                <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img" alt="...">
-                                                <br>
-                                                <h6>Nombre del alumno</h6>
-                                           
-                                              </div>
-
-                                              <div class="col-9" style="text-align: right;">
-                                                Feha de inscripción
-                                                <br>
-                                                28% completado
-                                                <br>
-                                                $1,000.00
-                                                <br>
-                                                Pago con tarjeta
-                                              </div>
-
-                                            </div>
-                                
-                                          </div>
-                                        </div>
-
-
-                                                         <!--Navigation-->      
-                                       <div class="col-sm-12" >
-                                          <div class="DescripcionCurso" style=" display: none; margin-bottom: 2%;" >
-               
-                                            <div class="row">
-                                              <div class="col-4"></div>
-
-                                              <div class="col-4">
-                                                <nav aria-label="Page navigation example">
-                                                  <ul class="pagination">
-
-                                                    <li class="page-item">
-                                                      <a class="page-link" href="#" aria-label="Previous">
-                                                        <span aria-hidden="true">&laquo;</span>
-                                                        <span class="sr-only">Previous</span>
-                                                      </a>
-                                                    </li>
-
-                                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-
-                                                    <li class="page-item">
-                                                      <a class="page-link" href="#" aria-label="Next">
-                                                        <span aria-hidden="true">&raquo;</span>
-                                                        <span class="sr-only">Next</span>
-                                                      </a>
-                                                    </li>
-
-                                                  </ul>
-                                                </nav>
-                                              </div>
-
-                                              <div class="col-4"></div>
-                                            </div>
-
-                                
-                                          </div>
-                                        </div>
-                                        
-                                        <!---->
-
-                                    </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div class="col-sm-12" style="margin-bottom:2%">
-                                  <div class="card" style="background-color:#9ed5fb; margin: 0px;">
-                                    <div class="card-body" style="margin-bottom: 3%">
-                                      <div class="row">
-
                                         <div class="col-sm-6"></div>
 
 
@@ -752,48 +708,41 @@ include_once 'navbar/navbar.php';
                                     </div>
                                   </div>
                                 </div>
-
-
-                                   
                                 
                               </div>       
-                            </div>               
+                            </div>       
+
                           </div>
-                          
-                 
 
-                            <!--Navigation-->
-                          <div class="row" style="margin-top: 5%;">
-                            <div class="col-4"></div>
+                              <!--Navigation-->
+                              <div class="row" style="margin-top: 5%;">
+                                <div class="col-4"></div>
 
-                            <div class="col-4">
-                              <nav aria-label="Page navigation example">
-                                  <ul class="pagination">
+                                <div class="col-4">
+                                  <nav aria-label="Page navigation example">
+                                      <ul class="pagination">
 
-                                    <li class="page-item">
-                                      <a class="page-link" href="#" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                        <span class="sr-only">Previous</span>
-                                      </a>
-                                    </li>
+                                        <li class="page-item">
+                                          <a class="page-link"  id="PrevEscuela" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                            <span class="sr-only">Previous</span>
+                                          </a>
+                                        </li>
 
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
 
-                                    <li class="page-item">
-                                      <a class="page-link" href="#" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                        <span class="sr-only">Next</span>
-                                      </a>
-                                    </li>
+                                        <li class="page-item">
+                                          <a class="page-link" id="NextEscuela" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                            <span class="sr-only">Next</span>
+                                          </a>
+                                        </li>
 
-                                  </ul>
-                                </nav>
-                            </div>
+                                      </ul>
+                                    </nav>
+                                </div>
 
-                            <div class="col-4"></div>
-                          </div>
+                                <div class="col-4"></div>
+                              </div>
 
                         </div>
                       </div>

@@ -11,6 +11,7 @@
 
     $searchWord = $_POST['course'];
     $userMail = $_POST['mail'];
+    $tipo = $_POST['tipo'];
     $userId =0;
     $cursoComprado = 0;
 
@@ -38,6 +39,34 @@
 		}
     }
     
+    
+    $call =  $db->prepare('CALL compraCursoVerificar(:p_user, :p_curso)');
+    $call->bindParam(':p_user', $userId, PDO::PARAM_INT); 
+    $call->bindParam(':p_curso', $searchWord, PDO::PARAM_INT);
+
+    if($call->execute())
+    {
+        $comentariosCurso = $call->fetchAll(PDO::FETCH_ASSOC);
+        
+        if($comentariosCurso!=null)
+        {
+            foreach ($comentariosCurso as $comentarios) 
+            { 
+
+                $existe= $comentarios['count(ventaCursoId)'];
+
+                if($existe==0)
+                {
+                    $cursoComprado = 0;
+                }
+                else
+                {
+                    $cursoComprado = 1;
+                }
+                                                                                       
+            } 
+        }
+    }
 
     /*
     delimiter &ZV
@@ -76,7 +105,9 @@
                 $usuarioNombre = $result['dUsername'];
                 $usuarioIdResult =  $result['dUserId'];
 
-                if($cursoEstado==1)
+                
+
+                if(($cursoEstado==1) || ($cursoComprado==1))
                 {
                     echo "<div class=\"row\" >";
                     echo "<div class=\"col-lg-8\"></div>";
@@ -150,41 +181,29 @@
                     end &ZV
                     */
 
-                    $call =  $db->prepare('CALL compraCursoVerificar(:p_user, :p_curso)');
-                    $call->bindParam(':p_user', $userId, PDO::PARAM_INT); 
-                    $call->bindParam(':p_curso', $searchWord, PDO::PARAM_INT);
 
+                    $call =  $db->prepare('CALL cursoTerminado(:p_user, :p_curso)');
+                    $call->bindParam(':p_user', $userId, PDO::PARAM_INT); 
+                    $call->bindParam(':p_curso', $searchWord, PDO::PARAM_INT); 
+                    
                     if($call->execute())
                     {
-                        $comentariosCurso = $call->fetchAll(PDO::FETCH_ASSOC);
+                        $nivelesCurso = $call->fetchAll(PDO::FETCH_ASSOC);
                         
-                        if($comentariosCurso!=null)
+                        if($nivelesCurso==null)
                         {
-                            foreach ($comentariosCurso as $comentarios) 
-                            { 
-
-                                $existe= $comentarios['count(ventaCursoId)'];
-
-                                if($existe==0)
-                                {
-                                    $cursoComprado = 0;
-                                }
-                                else
-                                {
-                                    $cursoComprado = 1;
-                                }
-                                                                                                       
-                            } 
+                            if(($cursoCosto!=0) && ($userMail!=0) && ($cursoComprado == 0) && ($tipo==0))
+                            {
+                        
+                         
+                                echo "<button type=\"button\" class=\"btn btn-primary btnCurso btnComprar\" style=\"margin-top: 10%;\" data-toggle=\"modal\" data-target=\"#ModalPay\" >Comprar</button>";
+                         
+                            }
                         }
                     }
 
-                    if(($cursoCosto!=0) && ($userMail!=0) && ($cursoComprado == 0))
-                    {
-                
-                 
-                        echo "<button type=\"button\" class=\"btn btn-primary btnCurso btnComprar\" style=\"margin-top: 10%;\" data-toggle=\"modal\" data-target=\"#ModalPay\" >Comprar</button>";
-                 
-                    }
+
+       
                     if($userId==$usuarioIdResult)
                     {
        
@@ -259,7 +278,7 @@
                     </div>";
                     echo "</div>";
                     echo "<div class=\"text-left \" style=\"padding-top:20%;\">";
-                    echo "<h6 class=\"subtitle-text\">$usuarioNombre<button onClick=\"window.location.href='http://localhost:8012/Acodemia/message.php';\" style=\"width: 10%; margin-left: 2%; margin-top: 0px;\" class=\"btn btn-secondary\"><i class=\"fas fa-envelope\"></i></button></h6>";
+                    echo "<h6 class=\"subtitle-text\">$usuarioNombre<button onClick=\"window.location.href='http://localhost:8012/Acodemia/message.php?user=$usuarioIdResult';\" style=\"width: 10%; margin-left: 2%; margin-top: 0px;\" class=\"btn btn-secondary\"><i class=\"fas fa-envelope\"></i></button></h6>";
                     echo "</div>";
                     echo "</div>";
                     echo "<div class=\"col-12 col-sm-4\" ></div>";
@@ -333,7 +352,7 @@
                                 $nivelVideo= $niveles['nivelVideo'];
                                 $nivelPDF= $niveles['nivelPDF'];
 
-                         
+                            
             
                                 if( $nivelCosto==0 || ($cursoComprado==1))
                                 {
@@ -361,7 +380,11 @@
                                     echo "<div>";
                                     echo "<h5>Costo del nivel: $<span class=\"precioIndividual\">$nivelCosto</span></h5>";
                                     echo "</div>";
-                                    echo "<a class=\"btn btn-primary btn-category\" href=\"http://localhost:8012/Acodemia/level.php?course=$searchWord&level=$nivelId\">Ir al nivel</a>";
+                                    if($tipo==0)
+                                    {
+                                       echo "<a class=\"btn btn-primary btn-category\" href=\"http://localhost:8012/Acodemia/level.php?course=$searchWord&level=$nivelId\">Ir al nivel</a>";
+
+                                    }
                                     echo "</div>";
                                     echo "</div>";
                                     echo "";
@@ -420,15 +443,19 @@
 
                                                 $existe= $comentarios['count(ventaNivelId)'];
 
-                                                if($existe==0)
+                                                if($tipo==0)
                                                 {
-                                                    echo "<button type=\"button\" class=\"btn btn-primary btn-category btnNivel btnComprar\" data-toggle=\"modal\" data-target=\"#ModalPay\" >Comprar este nivel</button>";
+                                                    if($existe==0)
+                                                    {
+                                                        echo "<button type=\"button\" class=\"btn btn-primary btn-category btnNivel btnComprar\" data-toggle=\"modal\" data-target=\"#ModalPay\" >Comprar este nivel</button>";
+                                                    }
+                                                    else
+                                                    {
+                                                        echo "<a class=\"btn btn-primary btn-category\" href=\"http://localhost:8012/Acodemia/level.php?course=$searchWord&level=$nivelId\">Ir al nivel</a>";
+    
+                                                    }
                                                 }
-                                                else
-                                                {
-                                                    echo "<a class=\"btn btn-primary btn-category\" href=\"http://localhost:8012/Acodemia/level.php?course=$searchWord&level=$nivelId\">Ir al nivel</a>";
-
-                                                }
+                                               
                                                                                                                        
                                             } 
                                         }
@@ -501,75 +528,98 @@
                     echo "<!--Escribir comentario-->";
                     echo "<div class=\"container\">";
 
-                                        /*delimiter &ZV
-                    create procedure comentarioHecho(in p_user int, in p_curso int)
+                    /*
+                    delimiter &ZV
+                    create procedure cursoTerminado(in p_user int, in p_curso int)
                     begin
-                        select count(comentarioId) from Comentario where usuarioId = p_user and cursoId = p_curso;
-                    end &ZV
-                    */
+                        select historialCursoConcluido from Historial_curso where usuarioId = p_user and cursoId = p_curso;
+                    end &ZV */
 
-                    $call =  $db->prepare('CALL comentarioHecho(:p_user, :p_curso)');
+              
+                    $call =  $db->prepare('CALL cursoTerminado(:p_user, :p_curso)');
                     $call->bindParam(':p_user', $userId, PDO::PARAM_INT); 
                     $call->bindParam(':p_curso', $searchWord, PDO::PARAM_INT); 
-
+                    
                     if($call->execute())
                     {
-                        $result = $call->fetchAll(PDO::FETCH_ASSOC);
-                        if($result!=null)
+                        $nivelesCurso = $call->fetchAll(PDO::FETCH_ASSOC);
+                        
+                        if($nivelesCurso!=null)
                         {
-                            foreach ($result as $comment) 
-                            { 
-                                $comentarios= $comment['count(comentarioId)'];
-                                //print_r($comentarios);
+                          
+                              /*delimiter &ZV
+                            create procedure comentarioHecho(in p_user int, in p_curso int)
+                            begin
+                                select count(comentarioId) from Comentario where usuarioId = p_user and cursoId = p_curso;
+                            end &ZV
+                            */
 
-                                if(($comentarios==0)&&($userMail!=0))
+                            $call =  $db->prepare('CALL comentarioHecho(:p_user, :p_curso)');
+                            $call->bindParam(':p_user', $userId, PDO::PARAM_INT); 
+                            $call->bindParam(':p_curso', $searchWord, PDO::PARAM_INT); 
+
+                            if($call->execute())
+                            {
+                                $result = $call->fetchAll(PDO::FETCH_ASSOC);
+                                if($result!=null)
                                 {
-                                    echo "<div class=\"row\" id=\"ponerComentario\">";
-                                        echo "<h6 style=\"color: whitesmoke;\">Escribe un comentario</h6>";
-                                        echo "<div class=\"col-md-12 col-sm-12\">";
-                                            echo "<div class=\"comment-wrapper\">";
-                                                echo "<div class=\"panel panel-info\">";
-                                                    echo "<div class=\"panel-body\">";
-                                                        echo "<textarea class=\"form-control\" id=\"commentArea\" placeholder=\"write a comment...\" rows=\"3\"></textarea>";
-                                                        echo "<br>";
-                                                        echo "<h6 style=\"color: whitesmoke;\">Deja una calificacion</h6>";
+                                    foreach ($result as $comment) 
+                                    { 
+                                        $comentarios= $comment['count(comentarioId)'];
+                                        //print_r($comentarios);
 
-                                                        echo "<div class='rating-stars text-center'>";
-                                                        echo "<ul id='stars'>";
-                                                        echo "<li class='star' title='Poor' data-value='1'>";
-                                                        echo "<i class='fa fa-star fa-fw'></i>";
-                                                        echo "</li>";
-                                                        echo "<li class='star' title='Fair' data-value='2'>";
-                                                        echo "<i class='fa fa-star fa-fw'></i>";
-                                                        echo "</li>";
-                                                        echo "<li class='star' title='Good' data-value='3'>";
-                                                        echo "<i class='fa fa-star fa-fw'></i>";
-                                                        echo "</li>";
-                                                        echo "<li class='star' title='Excellent' data-value='4'>";
-                                                        echo "<i class='fa fa-star fa-fw'></i>";
-                                                        echo "</li>";
-                                                        echo "<li class='star' title='WOW!!!' data-value='5'>";
-                                                        echo "<i class='fa fa-star fa-fw'></i>";
-                                                        echo "</li>";
-                                                        echo "</ul>";
-                                                        echo "</div>";
-                                                        
+                                        if(($comentarios==0)&&($userMail!=0))
+                                        {
+                                            echo "<div class=\"row\" id=\"ponerComentario\">";
+                                                echo "<h6 style=\"color: whitesmoke;\">Escribe un comentario</h6>";
+                                                echo "<div class=\"col-md-12 col-sm-12\">";
+                                                    echo "<div class=\"comment-wrapper\">";
+                                                        echo "<div class=\"panel panel-info\">";
+                                                            echo "<div class=\"panel-body\">";
+                                                                echo "<textarea class=\"form-control\" id=\"commentArea\" placeholder=\"write a comment...\" rows=\"3\"></textarea>";
+                                                                echo "<br>";
+                                                                echo "<h6 style=\"color: whitesmoke;\">Deja una calificacion</h6>";
 
-                                                        echo "<button type=\"button\" id=\"btnComment\" style=\"width: 30%;\" class=\"btn btn-primary pull-right\">Post</button>";
-                                                        echo "<div class=\"clearfix\"></div>";
-                                                        echo "<hr style=\"border: 2px solid #b8d2e5; border-radius: 5px;\">";
-                                                        echo "";
+                                                                echo "<div class='rating-stars text-center'>";
+                                                                echo "<ul id='stars'>";
+                                                                echo "<li class='star' title='Poor' data-value='1'>";
+                                                                echo "<i class='fa fa-star fa-fw'></i>";
+                                                                echo "</li>";
+                                                                echo "<li class='star' title='Fair' data-value='2'>";
+                                                                echo "<i class='fa fa-star fa-fw'></i>";
+                                                                echo "</li>";
+                                                                echo "<li class='star' title='Good' data-value='3'>";
+                                                                echo "<i class='fa fa-star fa-fw'></i>";
+                                                                echo "</li>";
+                                                                echo "<li class='star' title='Excellent' data-value='4'>";
+                                                                echo "<i class='fa fa-star fa-fw'></i>";
+                                                                echo "</li>";
+                                                                echo "<li class='star' title='WOW!!!' data-value='5'>";
+                                                                echo "<i class='fa fa-star fa-fw'></i>";
+                                                                echo "</li>";
+                                                                echo "</ul>";
+                                                                echo "</div>";
+                                                                
+
+                                                                echo "<button type=\"button\" id=\"btnComment\" style=\"width: 30%;\" class=\"btn btn-primary pull-right\">Post</button>";
+                                                                echo "<div class=\"clearfix\"></div>";
+                                                                echo "<hr style=\"border: 2px solid #b8d2e5; border-radius: 5px;\">";
+                                                                echo "";
+                                                                echo "</div>";
+                                                            echo "</div>";
                                                         echo "</div>";
                                                     echo "</div>";
                                                 echo "</div>";
-                                            echo "</div>";
-                                        echo "</div>";
-                                    echo "<div class=\"row\" id=\"commentSection\">";
+                                            echo "<div class=\"row\" id=\"commentSection\">";
+                                        }
+                                    }
                                 }
+                                            
                             }
                         }
-                                    
                     }
+
+
                     /*
                     delimiter &ZV
                     create procedure showComentarios(in p_cursoid int)
@@ -670,3 +720,5 @@
 
 
 ?>
+
+

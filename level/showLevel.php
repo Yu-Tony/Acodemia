@@ -40,28 +40,30 @@
 		}
     }
 
-    $call =  $db->prepare('CALL compraCursoVerificar(:p_user, :p_curso)');
-    $call->bindParam(':p_user', $userId, PDO::PARAM_INT); 
-    $call->bindParam(':p_curso', $course, PDO::PARAM_INT);
 
+    $call =  $db->prepare('CALL showNivel(:p_nivelid)');
+    $call->bindParam(':p_nivelid', $searchWord, PDO::PARAM_INT); 
+    
     if($call->execute())
     {
-        $comentariosCurso = $call->fetchAll(PDO::FETCH_ASSOC);
+        $nivelesCurso = $call->fetchAll(PDO::FETCH_ASSOC);
         
-        if($comentariosCurso!=null)
+        if($nivelesCurso!=null)
         {
-            foreach ($comentariosCurso as $comentarios) 
+            foreach ($nivelesCurso as $niveles) 
             { 
-
-                $existe= $comentarios['count(ventaCursoId)'];
-
-                if($existe==0)
+         
+                $nivelCosto= $niveles['nivelCosto'];
+                if(($nivelCosto==0)&&($userId!=0))
                 {
-                    //VER SI EL NIVEL ESTA COMPRADO
-                    $call =  $db->prepare('CALL compraNivelVerificar(:p_user, :p_nivel)');
+                    $NivelComprado=1;
+                }
+                else
+                {
+                    $call =  $db->prepare('CALL compraCursoVerificar(:p_user, :p_curso)');
                     $call->bindParam(':p_user', $userId, PDO::PARAM_INT); 
-                    $call->bindParam(':p_nivel', $searchWord, PDO::PARAM_INT);
-
+                    $call->bindParam(':p_curso', $course, PDO::PARAM_INT);
+                
                     if($call->execute())
                     {
                         $comentariosCurso = $call->fetchAll(PDO::FETCH_ASSOC);
@@ -70,33 +72,59 @@
                         {
                             foreach ($comentariosCurso as $comentarios) 
                             { 
-
-                                $existe= $comentarios['count(ventaNivelId)'];
-
+                
+                                $existe= $comentarios['count(ventaCursoId)'];
+                
                                 if($existe==0)
                                 {
-                                    //NO ESTA COMPRADO BYE
-                                    $NivelComprado=0;
+                                    //VER SI EL NIVEL ESTA COMPRADO
+                                    $call =  $db->prepare('CALL compraNivelVerificar(:p_user, :p_nivel)');
+                                    $call->bindParam(':p_user', $userId, PDO::PARAM_INT); 
+                                    $call->bindParam(':p_nivel', $searchWord, PDO::PARAM_INT);
+                
+                                    if($call->execute())
+                                    {
+                                        $comentariosCurso = $call->fetchAll(PDO::FETCH_ASSOC);
+                                        
+                                        if($comentariosCurso!=null)
+                                        {
+                                            foreach ($comentariosCurso as $comentarios) 
+                                            { 
+                
+                                                $existe= $comentarios['count(ventaNivelId)'];
+                
+                                                if($existe==0)
+                                                {
+                                                    //NO ESTA COMPRADO BYE
+                                                    $NivelComprado=0;
+                                                }
+                                                else
+                                                {
+                                                    //SI TIENE EL LVL COMPRADO
+                                                    $NivelComprado=1;
+                                                }
+                                                                                                                       
+                                            } 
+                                        }
+                                    }
                                 }
                                 else
                                 {
-                                    //SI TIENE EL LVL COMPRADO
+                                    //ESTA COMPRADO TODO EL CURSO ASI QUE TODO BIEN
                                     $NivelComprado=1;
                                 }
                                                                                                        
                             } 
                         }
                     }
+                
                 }
-                else
-                {
-                    //ESTA COMPRADO TODO EL CURSO ASI QUE TODO BIEN
-                    $NivelComprado=1;
-                }
-                                                                                       
+                          
             } 
         }
     }
+
+
 
     
     //print_r($_POST);
@@ -115,7 +143,7 @@ if( $NivelComprado==1)
     $call =  $db->prepare('CALL showNivel(:p_nivelid)');
     $call->bindParam(':p_nivelid', $searchWord, PDO::PARAM_INT); 
     
-   if($call->execute())
+    if($call->execute())
     {
         $nivelesCurso = $call->fetchAll(PDO::FETCH_ASSOC);
         
@@ -161,7 +189,28 @@ if( $NivelComprado==1)
                 
                 echo "";
                 echo "<hr style=\" border: 1px solid #b5d5f5; border-radius: 5px;\">";
-                echo "<button class=\"btn btn-primary\" id=\"Terminar\" style=\"width: 100%;\">Terminar Nivel</button>";
+                /*
+                delimiter &ZV
+                create procedure nivelTerminado(in p_user int, in p_nivel int)
+                begin
+                    select historialNivelCompletado from Historial_nivel where usuarioId = p_user and nivelId = p_nivel;
+                end &ZV */
+
+                $call =  $db->prepare('CALL nivelTerminado(:p_user, :p_nivel)');
+                $call->bindParam(':p_user', $userId, PDO::PARAM_INT); 
+                $call->bindParam(':p_nivel', $searchWord, PDO::PARAM_INT); 
+                
+                if($call->execute())
+                {
+                    $nivelesCurso = $call->fetchAll(PDO::FETCH_ASSOC);
+                    
+                    if($nivelesCurso==null)
+                    {
+                        echo "<button class=\"btn btn-primary\" id=\"Terminar\" style=\"width: 100%;\">Terminar Nivel</button>";
+
+                    }
+                }
+
                 
 
                                             
