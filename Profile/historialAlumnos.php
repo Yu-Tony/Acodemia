@@ -75,6 +75,8 @@ if($call->execute())
                $cursoFechaInicio = $result['hFechaInicio'];
                $cursoFechaFinal= $result['hFechaFinal'];
                $cursoMiniatura= $result['hMiniatura'];
+               $cursoConcluido= $result['hConcluido'];
+               
 
                
 
@@ -91,13 +93,25 @@ if($call->execute())
                echo "<div class=\"row\"><a href=\"http://localhost:8012/Acodemia/course.php?course=$cursoId\">$cursoNombre</a></div>";
                echo "</div>";
                echo "<div class=\"col-sm-6\" >";
+
                echo "<div class=\"row\">Progreso $cursoPorcentaje%</div>";
                echo "<div class=\"row\">Fecha de inscripción $cursoFechaInicio</div>";
                if($cursoFechaFinal!=null)
                {
                 echo "<div class=\"row\">Fecha de terminación del curso $cursoFechaFinal</div>";
                }
+
+
                echo "</div>";
+
+               echo "<div class=\"classIdDiploma\" style=\"display: none;\">$cursoId</div>";
+
+               if($cursoConcluido==1)
+               {
+                echo "<button type=\"button\" class=\"btn btn-primary btnDiploma\" style=\"margin-top: 10%; width: 30%;\" data-toggle=\"modal\" data-target=\"#ModalDip\" >Obtener diploma</button>";
+
+               }
+
                echo "</div>";
                echo "</div>";
                echo "</div>";

@@ -60,11 +60,11 @@ if($call->execute())
 
             if($usuarioId1==$userId)
             {
-                echo "  <li class=\"dropdown-item\"><a href=\"http://localhost:8012/Acodemia/message.php?chat=$chatId\">$usname2</a></li>";
+                echo "  <li class=\"dropdown-item\"><a href=\"http://localhost:8012/Acodemia/message.php?chat=$chatId&user=$usuarioId2\">$usname2</a></li>";
             }
             else
             {
-                echo "  <li class=\"dropdown-item\"><a href=\"http://localhost:8012/Acodemia/message.php?chat=$chatId\">$usname1</a></li>";
+                echo "  <li class=\"dropdown-item\"><a href=\"http://localhost:8012/Acodemia/message.php?chat=$chatId&user=$usuarioId1\">$usname1</a></li>";
             }
 
         }

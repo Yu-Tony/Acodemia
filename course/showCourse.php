@@ -107,7 +107,7 @@
 
                 
 
-                if(($cursoEstado==1) || ($cursoComprado==1))
+                if(($cursoEstado==1) || ($cursoComprado==1) || ($usuarioIdResult==$userId))
                 {
                     echo "<div class=\"row\" >";
                     echo "<div class=\"col-lg-8\"></div>";
@@ -308,15 +308,12 @@
                     echo "<div class=\"row\" style=\"padding-bottom: 2%;\">";
                     echo "<div class=\"col-lg-12 col-12 text-left\" style=\"padding-top:2%; \">";
                     echo "";
-                    echo "<h5 style=\"color: whitesmoke;\" class=\"subtitle-text\">Progreso del curso : 75%</h5>";
+
                     echo "";
                     echo "</div>";
                     echo "<div class=\"col-lg-6 col-12\">";
-                    echo "<div class=\"progress\" style=\"z-index: 5px;\">";
-                    echo "<div class=\"progress-bar progress-bar-striped progress-bar-animated\" role=\"progressbar\" aria-valuenow=\"75\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 75%\"></div>";
-                    echo "</div>";
+     
                     echo "";
-                    echo "<button type=\"button\" class=\"btn btn-primary\" style=\"margin-top: 10%; width: 30%;\" data-toggle=\"modal\" data-target=\"#ModalDip\" >Obtener diploma</button>";
                     echo "";
                     echo "</div>";
                     echo "";

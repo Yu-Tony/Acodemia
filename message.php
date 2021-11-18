@@ -28,7 +28,7 @@ include_once 'navbar/navbar.php';
           var queryString = window.location.search;
           var urlParams = new URLSearchParams(queryString);
           var chat = urlParams.get('chat');
-          var otherUser = 0;
+          var otherUser = urlParams.get('user');
 
           $.ajax({
             url: "Messages/getMessages.php",

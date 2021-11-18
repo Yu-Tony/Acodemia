@@ -19,6 +19,7 @@ include_once 'navbar/navbar.php';
       var AccountTypeGlobal = 0;
       var MailAccount = 0;
       var historyPage = 1;
+      var historyPageAlumnos = 1;
 
     //--------------------------------Comenzar imagen--------------------//
     $(document).ready()
@@ -28,10 +29,51 @@ include_once 'navbar/navbar.php';
       getTypeAccount();
       getMessagesChat();
 
-      
+
+
+ 
       
     }
-    
+
+    $(document).on('click', '.btnDiploma', function() {
+
+      var nivelName =$(this).siblings(".classIdDiploma").html();
+
+      var jwt = getCookie('jwt');
+      $.post("api/validate_token.php", JSON.stringify({ jwt:jwt }))
+      .done(function(result) {
+          var userMail = result.data.email;
+        
+
+
+          $.ajax({
+              url: "diploma/getDiploma.php",
+              type : "POST",
+              data: {'course': nivelName,'mail': userMail}, 
+              success : function(result) {
+
+              //alert(result);
+                  $("#diplomaAlumno").html(result);                         
+
+              },
+              error: function(xhr, resp, text){
+                  // on error, tell the user sign up failed
+                  window.location = ' error/404.html';
+                  console.log("Error al crear cuenta  " + text);
+                  console.log("Response text  " + xhr.responseText);
+                  //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+              }
+          });
+        
+      })
+      .fail(function() {
+
+      });
+
+  
+    });
+
+
     //----------------------------Mostrar Info--------------------------//
      function showUpdateAccountForm(){
         // validate jwt to verify access
@@ -134,6 +176,25 @@ include_once 'navbar/navbar.php';
                    //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
                }
             });
+
+            /*$.ajax({
+               url: "Profile/historialMaestrosAlumnos.php",
+               type : "POST",
+               data: {'mail': MailAccount, 'page': historyPageAlumnos}, 
+               success : function(result) {
+                $('#historialEscuela').html(result);
+                   //alert(result);
+                   //$("#levelPrincipal").html(result);                         
+                   
+               },
+               error: function(xhr, resp, text){
+                   // on error, tell the user sign up failed
+                   window.location = ' error/404.html';
+                   console.log("Error al crear cuenta  " + text);
+                   console.log("Response text  " + xhr.responseText);
+                   //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+               }
+            });*/
           }
           else
           {
@@ -268,14 +329,24 @@ include_once 'navbar/navbar.php';
           });
       });
 
-    
+      window.setTimeout(function(){   
         $(function(){ /* DOM ready */ 
             $('.VerMas').click(function(){ 
-                if ( $(this).parent().parent().find('.DescripcionCurso').css('display') == 'none' ) 
-                    $(this).parent().parent().find('.DescripcionCurso').css('display','block'); 
-                else $(this).parent().parent().find('.DescripcionCurso').css('display','none'); 
+
+            
+               if ( $(this).parent().parent().find('.DescripcionCurso').css('display') == 'none' ) 
+                {
+                   $(this).parent().parent().find('.DescripcionCurso').css('display','block'); 
+                }
+                else{
+                  $(this).parent().parent().find('.DescripcionCurso').css('display','none'); 
+                } 
             }); 
         }); 
+
+
+      }, 600);
+    
 
 
         
@@ -356,47 +427,146 @@ include_once 'navbar/navbar.php';
     }); 
    
 
+    $(document).on('click','#NextEscuela', function() {
+      historyPage = historyPage + 1;
+     
+      $.ajax({
+               url: "Profile/historialMaestros.php",
+               type : "POST",
+               data: {'mail': MailAccount, 'page': historyPage}, 
+               success : function(result) {
+                $('#historialEscuela').html(result);
+                  
+                   //$("#levelPrincipal").html(result);                         
+                   
+               },
+               error: function(xhr, resp, text){
+                   // on error, tell the user sign up failed
+                   historyPage = historyPage - 1;
+                   
+                   //window.location = ' error/404.html';
+                   console.log("Error al crear cuenta  " + text);
+                   console.log("Response text  " + xhr.responseText);
+                   //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+               }
+      });
+
+      window.setTimeout(function(){   
+        $(function(){ /* DOM ready */ 
+            $('.VerMas').click(function(){ 
+
+            
+               if ( $(this).parent().parent().find('.DescripcionCurso').css('display') == 'none' ) 
+                {
+                   $(this).parent().parent().find('.DescripcionCurso').css('display','block'); 
+                }
+                else{
+                  $(this).parent().parent().find('.DescripcionCurso').css('display','none'); 
+                } 
+            }); 
+        }); 
+
+
+      }, 600);
+
+    }); 
+
+    $(document).on('click','#PrevEscuela', function() {
+
+      if(historyPage>1)
+        {
+   
+          historyPage = historyPage - 1;
+         
+          $.ajax({
+               url: "Profile/historialMaestros.php",
+               type : "POST",
+               data: {'mail': MailAccount, 'page': historyPage}, 
+               success : function(result) {
+                $('#historialEscuela').html(result);
+                  
+                   //$("#levelPrincipal").html(result);                         
+                   
+               },
+               error: function(xhr, resp, text){
+                   // on error, tell the user sign up failed
+                   historyPage = historyPage + 1;
+                   
+                   //window.location = ' error/404.html';
+                   console.log("Error al crear cuenta  " + text);
+                   console.log("Response text  " + xhr.responseText);
+                   //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+               }
+      });
+
+      window.setTimeout(function(){   
+        $(function(){ /* DOM ready */ 
+            $('.VerMas').click(function(){ 
+
+            
+               if ( $(this).parent().parent().find('.DescripcionCurso').css('display') == 'none' ) 
+                {
+                   $(this).parent().parent().find('.DescripcionCurso').css('display','block'); 
+                }
+                else{
+                  $(this).parent().parent().find('.DescripcionCurso').css('display','none'); 
+                } 
+            }); 
+        }); 
+
+
+      }, 600);
+        }
+     
+    }); 
+   
+
+     
    
     function getMessagesChat()
-        {
-            var jwt = getCookie('jwt');
-                $.post("api/validate_token.php", JSON.stringify({ jwt:jwt })).done(function(result) 
-                {
-                  var MailAccount = result.data.email;
-                  $.ajax({
-                    url: "NavBar/getUsersMessages.php",
-                    type : "POST",
-                    data: {'mail': MailAccount}, 
-                    success : function(result) {
-                      
-                      $("#messageChats").html(result);
-                   
-                     
-                        
-                    },
-                    error: function(xhr, resp, text){
-                        // on error, tell the user sign up failed
-                        //window.location = ' error/404.html';
-                        console.log("Error al crear cuenta  " + text);
-                        console.log("Response text  " + xhr.responseText);
-                        //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
-                    }
-                  });
-                });
-        }
+    {
+        var jwt = getCookie('jwt');
+            $.post("api/validate_token.php", JSON.stringify({ jwt:jwt })).done(function(result) 
+            {
+              var MailAccount = result.data.email;
+              $.ajax({
+                url: "NavBar/getUsersMessages.php",
+                type : "POST",
+                data: {'mail': MailAccount}, 
+                success : function(result) {
+                  
+                  $("#messageChats").html(result);
+               
+                 
+                    
+                },
+                error: function(xhr, resp, text){
+                    // on error, tell the user sign up failed
+                    //window.location = ' error/404.html';
+                    console.log("Error al crear cuenta  " + text);
+                    console.log("Response text  " + xhr.responseText);
+                    //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+                }
+              });
+            });
+    }
 
 
+ 
+        // 
+ 
+ 
   </script>
 
 </head>
 <body style="background-color: #0b1925;">
 
-    <div class="row">
-        <!--Espacio izq-->
-        <div class="col-2"></div>
+  <div class="row">
+    <!--Espacio izq-->
+    <div class="col-2"></div>
 
         <!--Principal-->
-        <div class="col-lg-8 col-12" style="background-color: #073352; padding-left: 4%; padding-right: 4%; color: black;">
+    <div class="col-lg-8 col-12" style="background-color: #073352; padding-left: 4%; padding-right: 4%; color: black;">
 
           <div class="container" style="margin-top: 5%; ">
             <div class="main-body">
@@ -585,7 +755,7 @@ include_once 'navbar/navbar.php';
                             <div class="col-sm-12" style=" background-color: transparent;">
                               <div class="row"  id="historialEscuela">
 
-                                <div class="col-sm-12" style="margin-bottom:2%">
+                                <div class="col-sm-12 arriba" style="margin-bottom:2%">
                                   <div class="card" style="background-color:#9ed5fb; margin: 0px;" >
                                     <div class="card-body" style="margin-bottom: 3%">
                                       <div class="row" >
@@ -624,8 +794,6 @@ include_once 'navbar/navbar.php';
                                             <div class="row p-2"> 
 
                                               <div class="col-4 col-lg-4">
-                                                <img src="http://localhost:8012/Acodemia/Media/reza-namdari-ZgZsKFnSbEA-unsplash.jpg" class="card-img" alt="...">
-                                                <br>
                                                 <h6>Nombre del alumno</h6>
                                            
                                               </div>
@@ -691,7 +859,7 @@ include_once 'navbar/navbar.php';
                                   </div>
                                 </div>
 
-                                <div class="col-sm-12" style="margin-bottom:2%">
+                                <div class="col-sm-12 abajo" style="margin-bottom:2%">
                                   <div class="card" style="background-color:#9ed5fb; margin: 0px;">
                                     <div class="card-body" style="margin-bottom: 3%">
                                       <div class="row">
@@ -735,7 +903,7 @@ include_once 'navbar/navbar.php';
                                           </a>
                                         </li>
 
-
+                                      
                                         <li class="page-item">
                                           <a class="page-link" id="NextEscuela" aria-label="Next">
                                             <span aria-hidden="true">&raquo;</span>
@@ -761,11 +929,44 @@ include_once 'navbar/navbar.php';
           </div>
 
 
-        </div>
+    </div>
 
          <!--Espacio der-->
-         <div class="col-2"></div>
+    <div class="col-2"></div>
+
+             <!-- Modal Diploma-->
+      <div class="modal fade" id="ModalDip" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+          <div class="modal-content">
+                        
+            <div class="modal-body" style="padding-top: 2%; padding-bottom: 2%;">
+                      
+              
+              <div class="row">
+  
+                <div id="box-search">
+                  <div class="thumbnail">
+                    <img src="http://localhost:8012/Acodemia/diploma/Diploma.png" class="img-fluid diploma" alt="Responsive image">
+                    <div style="color: white" class="caption" id="diplomaAlumno">
+                        
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+              
+                  
+          </div>
+        </div>
+      </div>
+
+
     </div>
+
+  </div>
 
 
     

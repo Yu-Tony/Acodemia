@@ -57,8 +57,10 @@ Este trae la miniatura, el nombre del curso, la cantidad de alumnos y el porcent
 // 			
 
 
-$call =  $db->prepare('CALL historialMaestroAlumnos(:p_user)');
+$call =  $db->prepare('CALL historialMaestroAlumnos(:p_user, :p_offset)');
 $call->bindParam(':p_user', $userId, PDO::PARAM_INT); 
+$call->bindParam(':p_offset', $limitFrom, PDO::PARAM_INT); 
+
 
 
 
@@ -107,22 +109,188 @@ if($call->execute())
                 echo "<br>";
                 echo " $cursoPorcentaje% terminado";
                 echo "<hr>";
-                echo "<div  style=\"text-align: right;\"> Pagos con tarjeta: $2,000.00</div>";
+
+                
+                $call =  $db->prepare('CALL historialMaestroVentas(:p_user)');
+                $call->bindParam(':p_user', $userId, PDO::PARAM_INT); 
+
+
+
+                if($call->execute())
+                {
+                    $busqueda = $call->fetchAll(PDO::FETCH_ASSOC);
+
+                    if($busqueda!=null)
+                    {
+                        foreach ($busqueda as $costos) 
+                        {
+                            
+                            $costosId = $costos['cursoId'];
+                            if($costosId == $cursoId)
+                            {
+                                $costosTarjeta = $costos['result1'];
+                                $costosPaypal = $costos['result2'];
+                                $costosTotal = $costos['result3'];
+
+                                $costosTarjetaDec = number_format($costosTarjeta, 2, '.', '');
+                                $costosTarjetaDec = number_format($costosTarjetaDec, 2, '.', ',');
+                                
+                                echo "<div  style=\"text-align: right;\"> Pagos con tarjeta: $$costosTarjetaDec</div>";
+                                echo "";
+
+                                $costosPaypalDec = number_format($costosPaypal, 2, '.', '');
+                                $costosPaypalDec = number_format($costosPaypalDec, 2, '.', ',');
+                                echo "<div  style=\"text-align: right;\"> Pagos con PayPal: $$costosPaypalDec</div>";
+                                echo "<hr>";
+
+                                $costosTotalDec = number_format($costosTotal, 2, '.', '');
+                                $costosTotalDec = number_format($costosTotalDec, 2, '.', ',');
+                                echo "Total: $$costosTotalDec";
+                            }
+
+                        }
+                    }
+                }
+
+              
                 echo "";
-                echo "<div  style=\"text-align: right;\"> Pagos con PayPal: $2,000.00</div>";
-                echo "<hr>";
-                echo "Total: $4,000.00";
                 echo "";
-                echo "";
+                echo "</div>";
+
+                $call =  $db->prepare('CALL historialMaestroEstudiantes(:p_curso)');
+                $call->bindParam(':p_curso', $cursoId, PDO::PARAM_INT); 
+
+                echo "<!--espacio de la mini card-->";
+                echo "<div class=\"col-sm-12\">";
+
+                if($call->execute())
+                {
+                    $busqueda = $call->fetchAll(PDO::FETCH_ASSOC);
+
+                    if($busqueda!=null)
+                    {
+                        foreach ($busqueda as $alumnos) 
+                        {
+                            $historialCursoFechaInicio = $alumnos['historialCursoFechaInicio'];
+                            $historialCursoPorcentaje = $alumnos['hc.historialCursoNivelesC/@niveles'];
+                            $ventaCursoMonto = $alumnos['ventaCursoMonto'];
+                            $ventaCursoFormaPago = $alumnos['ventaCursoFormaPago'];
+                            $usuarioNombre = $alumnos['usuarioNombre'];
+                            $usuarioApellido = $alumnos['usuarioApellido'];
+
+                          
+                            echo "<div class=\"DescripcionCurso\" style=\"background-color: #b8d2e5; display: none; margin-bottom: 2%;\" >";
+                            echo "";
+                            echo "<div class=\"row p-2\">";
+                            echo "";
+                            echo "<div class=\"col-4 col-lg-4\">";
+                            echo "<h6>$usuarioNombre $usuarioApellido</h6>";
+                            echo "";
+                            echo "</div>";
+                            echo "";
+                            echo "<div class=\"col-lg-8 col-12\" style=\"text-align: right;\">";
+                            $historialCursoFechaInicioN = date("d-m-Y", strtotime($historialCursoFechaInicio));
+
+                            $historialCursoFechaInicioN = date('d-M-Y',strtotime($historialCursoFechaInicioN));
+
+                            echo "Fecha de inscripción: $historialCursoFechaInicioN";
+                            echo "<br>";
+                            echo "$historialCursoPorcentaje% completado";
+                            echo "<br>";
+                            $ventaCursoMontoDec = number_format($ventaCursoMonto, 2, '.', '');
+                            $ventaCursoMontoDec = number_format($ventaCursoMontoDec, 2, '.', ',');
+                            echo "$$ventaCursoMontoDec";
+                            echo "<br>";
+                            echo "Tipo de pago: $ventaCursoFormaPago";
+                            echo "</div>";
+                            echo "";
+                            echo "</div>";
+                            echo "";
+                                echo "</div>";
+                               
+                                
+                            
+
+                        }
+                    }
+                }
+
+
+                
+                echo "</div>";
+
                 echo "</div>";
 
 
                 echo "</div>";
                 echo "</div>";
                 echo "</div>";
-                echo "</div>";
+
+
+                
+
 
             }
+
+            //----------------------------------------------------------------------------
+
+            $call =  $db->prepare('CALL historialMaestroGanancias(:p_user)');
+            $call->bindParam(':p_user', $userId, PDO::PARAM_INT); 
+
+
+
+            if($call->execute())
+            {
+                $busqueda = $call->fetchAll(PDO::FETCH_ASSOC);
+
+                if($busqueda!=null)
+                {
+                    foreach ($busqueda as $costosTotal) 
+                    {
+                        
+                     
+                      
+                        $costosTarjetaTotal = $costosTotal['result1'];
+                        $costosPaypalTotal = $costosTotal['result2'];
+                        $costosTotalTotal = $costosTotal['result3'];
+
+                        echo "<div class=\"col-sm-12 abajo\" style=\"margin-bottom:2%\">";
+                        echo "<div class=\"card\" style=\"background-color:#9ed5fb; margin: 0px;\">";
+                        echo "<div class=\"card-body\" style=\"margin-bottom: 3%\">";
+                        echo "<div class=\"row\">";
+                        echo "";
+                        echo "<div class=\"col-sm-6\"></div>";
+                        echo "";
+                        echo "";
+                        echo "<div class=\"col-sm-6\" style=\"text-align: right;\">";
+                        echo "<hr style=\" border: 1px solid #282E34; border-radius: 5px;\">";
+                        $costosTarjetaTotalDec = number_format($costosTarjetaTotal, 2, '.', '');
+                        $costosTarjetaTotalDec = number_format($costosTarjetaTotalDec, 2, '.', ',');
+                        echo "<div  style=\"text-align: right;\"> Pagos con tarjeta: $$costosTarjetaTotalDec</div>";
+                        echo "";
+                        $costosPaypalTotalDec = number_format($costosPaypalTotal, 2, '.', '');
+                        $costosPaypalTotalDec = number_format($costosPaypalTotalDec, 2, '.', ',');
+                        echo "<div  style=\"text-align: right;\"> Pagos con PayPal: $$costosPaypalTotalDec</div>";
+                        echo "<hr>";
+                        $costosTotalTotalDec = number_format($costosTotalTotal, 2, '.', '');
+                        $costosTotalTotalDec = number_format($costosTotalTotalDec, 2, '.', ',');
+                        echo "<div  style=\"text-align: right;\"> Total: $$costosTotalTotalDec</div>";
+                        echo "</div>";
+                        echo "";
+                        echo "";
+                        echo "";
+                        echo "</div>";
+                        echo "</div>";
+                        echo "</div>";
+                        echo "</div>";
+                    
+
+                    }
+                }
+            }
+
+
+ 
         }
 }
 ?>

@@ -527,39 +527,6 @@ include_once 'navbar/navbar.php';
 
     </div>
 
-    <!-- Modal Diploma-->
-    <div class="modal fade" id="ModalDip" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                <div class="modal-content">
-                   
-                    <div class="modal-body" style="padding-top: 2%; padding-bottom: 2%;">
-                
-        
-                    <div class="row">
-                       <!--
-                        <img src="http://localhost:8012/Acodemia/diploma/Diploma.png" class="img-fluid" alt="Responsive image">
-          -->
-
-          <div id="box-search">
-            <div class="thumbnail">
-                <img src="http://localhost:8012/Acodemia/diploma/Diploma.png" class="img-fluid diploma" alt="Responsive image">
-                <div class="caption">
-                    <h1>Certificado de finalización</h1>
-                    <h4>Se certifica que </h4>
-                    <h2>???</h2>
-                    <h6>Ha terminado satisfactoriamente el curso de ??? el dia ?? del mes ?? del año ????</h6>
-                </div>
-            </div>
-        </div>
-
-
-                    </div>
-        
-             
-                    </div>
-                   </div>
-                </div>
-    </div>
 
     <!--Modal Pay-->
     <!--https://bbbootstrap.com/snippets/payment-form-three-different-payment-options-13285516 -->

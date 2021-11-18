@@ -13,6 +13,8 @@ include_once 'navbar/navbar.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACodemia</title>
 
+    <link rel="shortcut icon" href="http://sstatic.net/stackoverflow/img/favicon.ico">
+
     <script> 
         $(document).ready()
         {  
@@ -41,6 +43,24 @@ include_once 'navbar/navbar.php';
 
                     //alert(result);
                     $("#topSeller").html(result);                         
+                    
+                },
+                error: function(xhr, resp, text){
+                    // on error, tell the user sign up failed
+                    window.location = ' error/404.html';
+                    console.log("Error al crear cuenta  " + text);
+                    console.log("Response text  " + xhr.responseText);
+                    //$('#response-sign').html("<div class='alert alert-danger'>Unable to sign up. Please contact admin.</div>");
+                }
+            });
+
+            $.ajax({
+                url: "Main/mostRecents.php",
+                type : "POST",
+                success : function(result) {
+
+                    //alert(result);
+                    $("#mostRecents").html(result);                         
                     
                 },
                 error: function(xhr, resp, text){
@@ -129,10 +149,15 @@ include_once 'navbar/navbar.php';
             <li class="nav-item flex-sm-fill">
               <a id="profile2-tab" data-toggle="tab" href="#profile2" role="tab" aria-controls="profile2" aria-selected="false" class="nav-link text-uppercase mr-sm-3 rounded-0">Cursos Mas Vendidos</a>
             </li>
+
+            <li class="nav-item flex-sm-fill">
+              <a id="recientes-tab" data-toggle="tab" href="#recientes" role="tab" aria-controls="receintes" aria-selected="false" class="nav-link text-uppercase mr-sm-3 rounded-0">Cursos Mas Recientes</a>
+            </li>
           
         </ul>
 
           <div id="myTab2Content" class="tab-content">
+               <!--Tab 1-->
             <div id="home2" role="tabpanel" aria-labelledby="home-tab" class="tab-pane fade px-4 py-5 show active">
                    <!-- ---------------Carousel------------------------------>
                    <!--https://codingyaar.com/bootstrap-4-carousel-multiple-items-responsive/-->
@@ -180,7 +205,29 @@ include_once 'navbar/navbar.php';
                    </div>
             </div>
 
-          
+           <!--Tab 3-->
+           <div id="recientes" role="tabpanel" aria-labelledby="recientes-tab" class="tab-pane fade px-4 py-5">
+
+            <!-- ---------------Carousel------------------------------>
+            <!--https://codingyaar.com/bootstrap-4-carousel-multiple-items-responsive/-->
+            <div id="carouselExampleControls3" class="carousel slide" data-ride="carousel" style=" padding-left: 5%; padding-right: 5%;">
+                <div class="carousel-inner" id="mostRecents" >
+                </div>
+
+                <!--Controles carrusel-->
+                <a class="carousel-control-prev" href="#carouselExampleControls3" role="button" data-slide="prev" style="margin-left: 2%;">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+                </a>
+
+                <a class="carousel-control-next" href="#carouselExampleControls3" role="button" data-slide="next" style="margin-right: 2%;">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+                </a>
+
+            </div>
+            </div>
+
           </div>
 
 
